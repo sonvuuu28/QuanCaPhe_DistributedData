@@ -1,0 +1,4 @@
+localhost
+QuanCaPhe
+sa
+123
