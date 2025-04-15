@@ -145,7 +145,7 @@ public class n03_KhachHangDAO {
 
     public ArrayList<KhachHangDTO> listAll() {
         ArrayList<KhachHangDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.KhachHang";
+        String sql = "SELECT * FROM KhachHang";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -166,7 +166,7 @@ public class n03_KhachHangDAO {
     public ArrayList<KhachHangDTO> search(String ma, String ten, Date ngaysinh, String gioitinh, Long chitieu, String sdt) {
         ArrayList<KhachHangDTO> list = new ArrayList<>();
         ArrayList<Object> params = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.KhachHang WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM KhachHang WHERE 1=1");
 
         if (ma != null && !ma.trim().isEmpty()) {
             sql.append(" AND MaKhachHang LIKE ?");

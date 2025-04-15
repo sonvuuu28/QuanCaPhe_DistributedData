@@ -14,8 +14,8 @@ public class n07_NguyenLieuDAO {
     public NguyenLieuDTO searchNguyenLieuByMa(String ma, String maCN) {
         NguyenLieuDTO pn = null;
         String sql = "select * \n"
-                + "from LINK.QuanCaPhe.dbo.NguyenLieu nl \n"
-                + "join LINK.QuanCaPhe.dbo.NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
+                + "from NguyenLieu nl \n"
+                + "join NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
                 + "where nl.MaNguyenLieu = ? ";
         if (maCN != null) {
             sql += " and MaChiNhanh = ? ";

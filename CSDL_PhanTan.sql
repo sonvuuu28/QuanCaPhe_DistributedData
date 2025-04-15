@@ -2,25 +2,26 @@
 use QuanCaPhe
 
 /*
-DROP TABLE IF EXISTS [ChiTietPhieuNhap];
-DROP TABLE IF EXISTS [ChiTietHoaDon];
-DROP TABLE IF EXISTS [ChiTietPhieuXuatKho];
-DROP TABLE IF EXISTS [LichLam];
-DROP TABLE IF EXISTS [CaLam];
-DROP TABLE IF EXISTS [PhanQuyen];
-DROP TABLE IF EXISTS [TaiKhoan];
-DROP TABLE IF EXISTS [PhieuNhap];
-DROP TABLE IF EXISTS [HoaDon];
-DROP TABLE IF EXISTS [PhieuXuatKho];
-DROP TABLE IF EXISTS [KhachHang];
-DROP TABLE IF EXISTS [KhuyenMai];
-DROP TABLE IF EXISTS [UuDaiThanhVien];
-DROP TABLE IF EXISTS [Mon];
-DROP TABLE IF EXISTS [LoaiMon];
-DROP TABLE IF EXISTS [NguyenLieu];
-DROP TABLE IF EXISTS [NhaCungCap];
-DROP TABLE IF EXISTS [NhanVien]
-DROP TABLE IF EXISTS [ChiNhanh];
+DROP TABLE IF EXISTS ChiTietPhieuNhap;
+DROP TABLE IF EXISTS ChiTietHoaDon;
+DROP TABLE IF EXISTS ChiTietPhieuXuatKho;
+DROP TABLE IF EXISTS LichLam;
+DROP TABLE IF EXISTS CaLam;
+DROP TABLE IF EXISTS TaiKhoan;
+DROP TABLE IF EXISTS PhanQuyen;
+DROP TABLE IF EXISTS PhieuNhap;
+DROP TABLE IF EXISTS HoaDon;
+DROP TABLE IF EXISTS PhieuXuatKho;
+DROP TABLE IF EXISTS KhachHang;
+DROP TABLE IF EXISTS KhuyenMai;
+DROP TABLE IF EXISTS UuDaiThanhVien;
+DROP TABLE IF EXISTS Mon;
+DROP TABLE IF EXISTS LoaiMon;
+DROP TABLE IF EXISTS NguyenLieuKho;
+DROP TABLE IF EXISTS NguyenLieu;
+DROP TABLE IF EXISTS NhaCungCap;
+DROP TABLE IF EXISTS NhanVien
+DROP TABLE IF EXISTS ChiNhanh;
 */
 
 CREATE TABLE ChiNhanh (
@@ -75,8 +76,8 @@ CREATE TABLE NguyenLieuKho (
 	MaNguyenLieu NVARCHAR(50),
 	KhoiLuong FLOAT,
 	MaChiNhanh NVARCHAR(10),
-	FOREIGN KEY (MaNguyenLieu) REFERENCES NguyenLieu(MaNguyenLieu),
-	CONSTRAINT UQ_NguyenLieuKho UNIQUE (MaChiNhanh, MaNguyenLieu)
+	PRIMARY KEY (MaNguyenLieu, MaChiNhanh), 
+	FOREIGN KEY (MaNguyenLieu) REFERENCES NguyenLieu(MaNguyenLieu)
 );
 
 CREATE TABLE KhuyenMai (
@@ -111,6 +112,7 @@ CREATE TABLE PhanQuyen (
 	NhaCungCap BIT,
 	NhanVien BIT,
 	ThongKe BIT,
+	DoUuTien INT,
 	TrangThai BIT
 );
 
@@ -129,13 +131,14 @@ CREATE TABLE NhanVien (
 	FOREIGN KEY (MaChiNhanh) REFERENCES ChiNhanh(MaChiNhanh)
 );
 
-CREATE TABLE [LichLam] (
-	[MaCaLam] nvarchar(50) ,
-	[MaNhanVien] nvarchar(50),
-	[NgayLam] date,
-	PRIMARY KEY ([MaCaLam], [MaNhanVien], [NgayLam]), 
-	FOREIGN KEY ([MaCaLam]) REFERENCES [CaLam]([MaCaLam]),
-	FOREIGN KEY ([MaNhanVien]) REFERENCES [NhanVien]([MaNhanVien])
+CREATE TABLE LichLam (
+	MaCaLam nvarchar(50) ,
+	MaNhanVien nvarchar(50),
+	MaChiNhanh nvarchar(10),
+	NgayLam date,
+	PRIMARY KEY (MaCaLam, MaNhanVien, NgayLam), 
+	FOREIGN KEY (MaCaLam) REFERENCES CaLam(MaCaLam),
+	FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
 );
 
 CREATE TABLE TaiKhoan (
@@ -151,26 +154,20 @@ CREATE TABLE TaiKhoan (
 	FOREIGN KEY (MaPhanQuyen) REFERENCES PhanQuyen(MaPhanQuyen)
 );
 
---
--- 🛒 QUẢN LÝ BÁN HÀNG
---
 CREATE TABLE HoaDon (
 	MaHoaDon NVARCHAR(255) PRIMARY KEY,
 	NgayLapHoaDon DATE,
 	TongTienHoaDon BIGINT,
 	MaNhanVien NVARCHAR(50),
 	MaKhachHang NVARCHAR(50),
-	--MaUuDai NVARCHAR(50),
 	MaKhuyenMai NVARCHAR(50),
 	MaKhuyenMaiMember NVARCHAR(50),
 	MaChiNhanh NVARCHAR(10),
 	FOREIGN KEY (MaChiNhanh) REFERENCES ChiNhanh(MaChiNhanh),
 	FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
 	FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
-	--FOREIGN KEY (MaUuDai) REFERENCES UuDaiThanhVien(MaUuDai),
 	FOREIGN KEY (MaKhuyenMai) REFERENCES KhuyenMai(MaKhuyenMai),
 	FOREIGN KEY (MaKhuyenMaiMember) REFERENCES KhuyenMai(MaKhuyenMai)
-
 );
 
 CREATE TABLE ChiTietHoaDon (

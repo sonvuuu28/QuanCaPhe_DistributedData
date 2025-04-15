@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 public class n04_NhapHang_ThanhToanGUI extends javax.swing.JFrame {
 
     private n04_NhapHangGUI frame;
+    public String maCN;
 
     public String maNCC;
 
@@ -21,8 +22,9 @@ public class n04_NhapHang_ThanhToanGUI extends javax.swing.JFrame {
         this.maNCC = maNCC;
     }
 
-    public n04_NhapHang_ThanhToanGUI(n04_NhapHangGUI frame) {
+    public n04_NhapHang_ThanhToanGUI(n04_NhapHangGUI frame, String maCN) {
         this.frame = frame;
+        this.maCN = maCN;
         initComponents();
         buttonEvents();
         Utils.getInstance().dragPanel(PanelNoiDung, this);
@@ -422,13 +424,6 @@ public class n04_NhapHang_ThanhToanGUI extends javax.swing.JFrame {
         BtnThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                String maCN = null;
-                if (frame.frame.maCN == null) {
-                    ChonCN dialog = new ChonCN(new javax.swing.JFrame(), true);
-                    dialog.setLocationRelativeTo(null);
-                    dialog.setVisible(true);
-                    maCN = dialog.maCN;
-                }
                 if (maCN != null) {
                     if (ncc.getText().equals("")) {
                         JOptionPane.showMessageDialog(null, "Vui lòng chọn nhà cung cấp?", "Xác nhận", JOptionPane.WARNING_MESSAGE);

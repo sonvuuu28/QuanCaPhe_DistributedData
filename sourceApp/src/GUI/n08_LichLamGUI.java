@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 public class n08_LichLamGUI extends javax.swing.JPanel {
+
     public n01_TrangChuGUI frame;
     private Date date;
 
@@ -311,12 +312,24 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
     private void reset() {
         n08_LichLamBUS.getInstance().listAllCa(tableCa);
         TimKiem.setText("Tìm tuần theo ngày");
-        n08_LichLamBUS.getInstance().setUp(start, end, table, frame.maCN);
+
+        if (frame.maCN == null) {
+            n08_LichLamBUS.getInstance().setUp(start, end, table, boxCN.getSelectedItem().toString());
+        } else {
+            n08_LichLamBUS.getInstance().setUp(start, end, table, frame.maCN);
+        }
     }
 
     public void resetXepLich(Date ngay) {
+        if (ngay == null) {
+            ngay = Date.valueOf(LocalDate.now());
+        }
         n08_LichLamBUS.getInstance().setLabel_StartEndDate(start, end, ngay);
-        n08_LichLamBUS.getInstance().listAll(table, ngay, frame.maCN);
+        if (frame.maCN == null) {
+            n08_LichLamBUS.getInstance().listAll(table, ngay, boxCN.getSelectedItem().toString());
+        } else {
+            n08_LichLamBUS.getInstance().listAll(table, ngay, frame.maCN);
+        }
         n08_LichLamBUS.getInstance().setHeaderTable_StartEndDate(table, ngay);
     }
 
@@ -324,13 +337,22 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
         comboboxCN(frame.maCN);
         reset();
 
+        boxCN.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                    if (ngay == null || ngay.getDate() == null) {
+                        resetXepLich(Date.valueOf(LocalDate.now()));
+                    } else {
+                        resetXepLich(new Date(ngay.getDate().getTime()));
+                    }
+                }
+            }
+        });
+
         ngay.getDateEditor().addPropertyChangeListener("date", evt -> {
             if (ngay.getDate() != null) {
                 date = new Date(ngay.getDate().getTime());
                 TimKiem.setText(Util.Utils.getInstance().SQLDateString_Transform_normalDateString(date + "") + "");
-//                n08_LichLamBUS.getInstance().setLabel_StartEndDate(start, end, date);
-//                n08_LichLamBUS.getInstance().listAll(table, date, frame.maCN);
-//                n08_LichLamBUS.getInstance().setHeaderTable_StartEndDate(table, date);
                 resetXepLich(date);
             }
         });
@@ -381,19 +403,24 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
 
         BtnXep.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                n08_LichLam_XepLichGUI a = new n08_LichLam_XepLichGUI(n08_LichLamGUI.this);
+                n08_LichLam_XepLichGUI a = null;
+                if (frame.maCN == null) {
+                    a = new n08_LichLam_XepLichGUI(n08_LichLamGUI.this, boxCN.getSelectedItem().toString());
+                } else {
+                    a = new n08_LichLam_XepLichGUI(n08_LichLamGUI.this, frame.maCN);
+                }
                 a.setVisible(true);
                 a.setLocationRelativeTo(null);
             }
         });
-        
+
     }
-    
+
     private void comboboxCN(String maCN) {
         if (maCN != null) {
             boxCN.setVisible(false);
         } else {
-            n11_NhanVienBUS.getInstance().comboBoxChiNhanh_khongTong(boxCN, null);
+            n11_NhanVienBUS.getInstance().comboBoxChiNhanh(boxCN, null);
             resetXepLich(Date.valueOf(LocalDate.now()));
         }
     }

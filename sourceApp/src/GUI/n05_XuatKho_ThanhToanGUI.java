@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 public class n05_XuatKho_ThanhToanGUI extends javax.swing.JFrame {
 
     private n05_XuatKhoGUI frame;
-
+    public String maCN;
     public String maNCC;
 
     public String getMaNCC() {
@@ -20,8 +20,9 @@ public class n05_XuatKho_ThanhToanGUI extends javax.swing.JFrame {
         this.maNCC = maNCC;
     }
 
-    public n05_XuatKho_ThanhToanGUI(n05_XuatKhoGUI frame) {
+    public n05_XuatKho_ThanhToanGUI(n05_XuatKhoGUI frame, String maCN) {
         this.frame = frame;
+        this.maCN = maCN;
         initComponents();
         buttonEvents();
         Utils.getInstance().dragPanel(Inner, this);
@@ -328,20 +329,12 @@ public class n05_XuatKho_ThanhToanGUI extends javax.swing.JFrame {
 
     private void buttonEvents() {
         String maNV = frame.frame.getMaNV();
-        String maCN = frame.frame.getMaCN();
 
         n05_XuatKhoBUS.getInstance().setUp_n05_XuatKho_ThanhToanGUI(ma, ngayLap, nv, maNV);
 
         BtnThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                String maCN = null;
-                if (frame.frame.maCN == null) {
-                    ChonCN dialog = new ChonCN(new javax.swing.JFrame(), true);
-                    dialog.setLocationRelativeTo(null);
-                    dialog.setVisible(true);
-                    maCN = dialog.maCN;
-                }
                 if (maCN != null) {
                     int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận xuất kho?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
@@ -355,31 +348,40 @@ public class n05_XuatKho_ThanhToanGUI extends javax.swing.JFrame {
                     }
                 }
             }
-        });
+        }
+        );
 
-        labelCancel.addMouseListener(new java.awt.event.MouseAdapter() {
+        labelCancel.addMouseListener(
+                new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt
+            ) {
                 dispose();
             }
-        });
+        }
+        );
 
-        BtnCancel.addMouseListener(new java.awt.event.MouseAdapter() {
+        BtnCancel.addMouseListener(
+                new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(java.awt.event.MouseEvent evt
+            ) {
                 BtnCancel.setBackground(new Color(255, 102, 102));
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(java.awt.event.MouseEvent evt
+            ) {
                 BtnCancel.setBackground(new Color(255, 51, 51));
             }
 
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt
+            ) {
                 dispose();
             }
-        });
+        }
+        );
 
     }
 

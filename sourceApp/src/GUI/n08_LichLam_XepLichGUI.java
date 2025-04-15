@@ -13,9 +13,11 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
 
     public n08_LichLamGUI frame;
     private Date date;
+    public String maCN;
 
-    public n08_LichLam_XepLichGUI(n08_LichLamGUI frame) {
+    public n08_LichLam_XepLichGUI(n08_LichLamGUI frame, String maCN) {
         this.frame = frame;
+        this.maCN = maCN;
         initComponents();
         buttonEvents();
         Utils.getInstance().dragPanel(PanelNoiDung, this);
@@ -486,7 +488,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
     }
 
     private void buttonEvents() {
-        n08_LichLamBUS.getInstance().setUp_XepLichLamGUI_combobox(nv, t2, t3, t4, t5, t6, t7, cn);
+        n08_LichLamBUS.getInstance().setUp_XepLichLamGUI_combobox(nv, t2, t3, t4, t5, t6, t7, cn, maCN);
         reset(null);
         BtnCancel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -526,7 +528,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
                             + "không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
                     if (response == JOptionPane.YES_OPTION) {
-                        if (n08_LichLamBUS.getInstance().insert(date, frame.frame.maCN)) {
+                        if (n08_LichLamBUS.getInstance().insert(date, maCN)) {
                             frame.resetXepLich(date);
                             reset(date);
                         }
@@ -559,7 +561,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
     }
 
     public void addOrUpdateBtn(Date date) {
-        Boolean bus = n08_LichLamBUS.getInstance().checkExistLichLam(date, frame.frame.maCN);
+        Boolean bus = n08_LichLamBUS.getInstance().checkExistLichLam(date, maCN);
         if (bus) {
             BtnThem.setVisible(false);
             BtnUpdate.setVisible(true);

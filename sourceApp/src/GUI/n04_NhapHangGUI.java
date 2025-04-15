@@ -430,7 +430,13 @@ public class n04_NhapHangGUI extends javax.swing.JPanel {
                 if (table1.getRowCount() == 0) {
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn danh sách nguyên liệu cần nhập kho!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    n04_NhapHang_ThanhToanGUI a = new n04_NhapHang_ThanhToanGUI(n04_NhapHangGUI.this);
+                    String macn = null;
+                    if (frame.maCN == null) {
+                        macn = boxCN.getSelectedItem().toString();
+                    } else {
+                        macn = frame.maCN;
+                    }
+                    n04_NhapHang_ThanhToanGUI a = new n04_NhapHang_ThanhToanGUI(n04_NhapHangGUI.this, macn);
                     a.setVisible(true);
                     a.setLocationRelativeTo(null);
                 }

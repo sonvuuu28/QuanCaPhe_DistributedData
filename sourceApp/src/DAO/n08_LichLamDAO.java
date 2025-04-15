@@ -64,10 +64,19 @@ public class n08_LichLamDAO {
         return exists;
     }
 
-    public ArrayList<NhanVienDTO> listNhanVien() {
+    public ArrayList<NhanVienDTO> listNhanVien(String MaCN) {
+        if (MaCN.equals("Tổng")) {
+            MaCN = null;
+        }
         ArrayList<NhanVienDTO> ds = new ArrayList<>();
+        String sql = "";
+        if (MaCN == null) {
+            sql = "select * from NhanVien where [TrangThaiNhanVien] = 1 and MaChiNhanh is Null ";
 
-        String sql = "select * from NhanVien where [TrangThaiNhanVien] = 1";
+        } else {
+            sql = "select * from NhanVien where [TrangThaiNhanVien] = 1 and MaChiNhanh = '" + MaCN + "'";
+
+        }
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -124,52 +133,67 @@ public class n08_LichLamDAO {
     }
 
     public ArrayList<String> listAll(Date Ngay, String MaCN) {
+        if (MaCN.equals("Tổng")) {
+            MaCN = null;
+        }
         ArrayList<String> list = new ArrayList<>();
-        String sql = "DECLARE @start DATE = ?;\n"
+        String sql = "DECLARE @given DATE = ?  \n"
+                + "DECLARE @monday DATE = DATEADD(DAY, 2 - DATEPART(WEEKDAY, @given), @given);\n"
+                + "\n"
+                + "DECLARE @tuesday   DATE = DATEADD(DAY, 1, @monday);\n"
+                + "DECLARE @wednesday DATE = DATEADD(DAY, 2, @monday);\n"
+                + "DECLARE @thursday  DATE = DATEADD(DAY, 3, @monday);\n"
+                + "DECLARE @friday    DATE = DATEADD(DAY, 4, @monday);\n"
+                + "DECLARE @saturday  DATE = DATEADD(DAY, 5, @monday);\n"
+                + "DECLARE @sunday    DATE = DATEADD(DAY, 6, @monday);\n"
                 + "\n"
                 + "SELECT \n"
                 + "    nv.TenNhanVien,\n"
-                + "    COALESCE(c2.TenCaLam, '') AS thu2,\n"
-                + "    COALESCE(c3.TenCaLam, '') AS thu3,\n"
-                + "    COALESCE(c4.TenCaLam, '') AS thu4,\n"
-                + "    COALESCE(c5.TenCaLam, '') AS thu5,\n"
-                + "    COALESCE(c6.TenCaLam, '') AS thu6,\n"
-                + "    COALESCE(c7.TenCaLam, '') AS thu7,\n"
-                + "    COALESCE(c8.TenCaLam, '') AS chunhat\n"
-                + "FROM \n"
-                + "    LINK.QuanCaPhe.dbo.NhanVien nv\n"
+                + "    COALESCE(c2.TenCaLam, '') AS thu2,    -- Lịch của thứ Hai\n"
+                + "    COALESCE(c3.TenCaLam, '') AS thu3,    -- Lịch của thứ Ba\n"
+                + "    COALESCE(c4.TenCaLam, '') AS thu4,    -- Lịch của thứ Tư\n"
+                + "    COALESCE(c5.TenCaLam, '') AS thu5,    -- Lịch của thứ Năm\n"
+                + "    COALESCE(c6.TenCaLam, '') AS thu6,    -- Lịch của thứ Sáu\n"
+                + "    COALESCE(c7.TenCaLam, '') AS thu7,    -- Lịch của thứ Bảy\n"
+                + "    COALESCE(c8.TenCaLam, '') AS chunhat  -- Lịch của Chủ Nhật\n"
+                + "FROM NhanVien nv\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = @start) AS t2 ON nv.MaNhanVien = t2.MaNhanVien\n"
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @monday) AS t2 ON nv.MaNhanVien = t2.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 1, @start)) AS t3 ON nv.MaNhanVien = t3.MaNhanVien\n"
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @tuesday) AS t3 ON nv.MaNhanVien = t3.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 2, @start)) AS t4 ON nv.MaNhanVien = t4.MaNhanVien\n"
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @wednesday) AS t4 ON nv.MaNhanVien = t4.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 3, @start)) AS t5 ON nv.MaNhanVien = t5.MaNhanVien\n"
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @thursday) AS t5 ON nv.MaNhanVien = t5.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 4, @start)) AS t6 ON nv.MaNhanVien = t6.MaNhanVien\n"
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @friday) AS t6 ON nv.MaNhanVien = t6.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 5, @start)) AS t7 ON nv.MaNhanVien = t7.MaNhanVien\n"
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @saturday) AS t7 ON nv.MaNhanVien = t7.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 6, @start)) AS cn ON nv.MaNhanVien = cn.MaNhanVien\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c2 ON t2.MaCaLam = c2.MaCaLam\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c3 ON t3.MaCaLam = c3.MaCaLam\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c4 ON t4.MaCaLam = c4.MaCaLam\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c5 ON t5.MaCaLam = c5.MaCaLam\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c6 ON t6.MaCaLam = c6.MaCaLam\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c7 ON t7.MaCaLam = c7.MaCaLam\n"
-                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c8 ON cn.MaCaLam = c8.MaCaLam\n"
-                + "WHERE \n";
-        if (MaCN != null) {
-            sql += " nv.MaChiNhanh = ? and ";
+                + "    (SELECT * FROM LichLam WHERE NgayLam = @sunday) AS cn ON nv.MaNhanVien = cn.MaNhanVien\n"
+                + "LEFT JOIN CaLam AS c2 ON t2.MaCaLam = c2.MaCaLam\n"
+                + "LEFT JOIN CaLam AS c3 ON t3.MaCaLam = c3.MaCaLam\n"
+                + "LEFT JOIN CaLam AS c4 ON t4.MaCaLam = c4.MaCaLam\n"
+                + "LEFT JOIN CaLam AS c5 ON t5.MaCaLam = c5.MaCaLam\n"
+                + "LEFT JOIN CaLam AS c6 ON t6.MaCaLam = c6.MaCaLam\n"
+                + "LEFT JOIN CaLam AS c7 ON t7.MaCaLam = c7.MaCaLam\n"
+                + "LEFT JOIN CaLam AS c8 ON cn.MaCaLam = c8.MaCaLam\n";
+        if (MaCN == null) {
+            sql += "WHERE  nv.MaChiNhanh is null AND \n";
+
+        } else {
+            sql += "WHERE  nv.MaChiNhanh = ? AND \n";
+
         }
-        sql
-                += "    -- Nếu xem lịch tương lai, chỉ lấy nhân viên chưa nghỉ\n"
-                + "    (@start >= GETDATE() AND nv.NgayNghiViec IS NULL)\n"
-                + "    -- Nếu xem lịch quá khứ, vẫn lấy nhân viên đã nghỉ nhưng có ca làm\n"
-                + "    OR (@start < GETDATE() AND EXISTS (\n"
-                + "        SELECT 1 FROM LichLam WHERE LichLam.MaNhanVien = nv.MaNhanVien AND NgayLam >= @start AND NgayLam < DATEADD(DAY, 7, @start)\n"
-                + "    ))\n"
+        sql += "    ( \n"
+                + "        (@given >= GETDATE() AND nv.NgayNghiViec IS NULL) \n"
+                + "        OR (@given < GETDATE() AND EXISTS ( \n"
+                + "            SELECT 1 FROM LichLam \n"
+                + "            WHERE LichLam.MaNhanVien = nv.MaNhanVien \n"
+                + "              AND NgayLam >= @monday \n"
+                + "              AND NgayLam < DATEADD(DAY, 7, @monday) \n"
+                + "        )) \n"
+                + "    ) \n"
                 + "ORDER BY nv.MaNhanVien;";
 
         try {
@@ -181,7 +205,6 @@ public class n08_LichLamDAO {
             }
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                // Lấy dữ liệu từ các cột trong kết quả truy vấn
                 String TenNhanVien = rs.getString("TenNhanVien");
                 String thu2 = rs.getString("thu2");
                 String thu3 = rs.getString("thu3");
@@ -191,7 +214,6 @@ public class n08_LichLamDAO {
                 String thu7 = rs.getString("thu7");
                 String chunhat = rs.getString("chunhat");
 
-                // Kết hợp dữ liệu thành một chuỗi
                 String lichLam = String.join(", ", TenNhanVien, thu2, thu3, thu4, thu5, thu6, thu7, chunhat);
                 list.add(lichLam);
             }
@@ -203,14 +225,25 @@ public class n08_LichLamDAO {
         return list;
     }
 
-    public boolean insert(Date date, String MaChiNhanh) {
+    public boolean insert(Date date, String MaCN) {
+        ArrayList<NhanVienDTO> dsNV = new ArrayList<>();
+        if (MaCN.equals("Tổng")) {
+            MaCN = null;
+            dsNV = listNhanVien("Tổng");
+        } else {
+            dsNV = listNhanVien(MaCN);
+        }
         List<Date> weeks = Util.Utils.getInstance().getDate_DaysInWeek(date);
-        ArrayList<NhanVienDTO> dsNV = listAllNhanVien();
         StringBuilder sql = new StringBuilder();
         for (NhanVienDTO nv : dsNV) {
             for (int i = 6; i >= 0; i--) {
-                sql.append("EXEC insertLichLam '").append(nv.getMa()).append("', '").append("CLOFF")
-                        .append("', '").append(weeks.get(i)).append("', '").append(MaChiNhanh).append("'\n");
+                if (MaCN == null) {
+                    sql.append("EXEC insertLichLam '").append(nv.getMa()).append("', '").append("CLOFF")
+                            .append("', '").append(weeks.get(i)).append("', ").append(MaCN).append("\n");
+                } else {
+                    sql.append("EXEC insertLichLam '").append(nv.getMa()).append("', '").append("CLOFF")
+                            .append("', '").append(weeks.get(i)).append("', '").append(MaCN).append("'\n");
+                }
             }
         }
 
@@ -222,29 +255,6 @@ public class n08_LichLamDAO {
             ex.printStackTrace();
             return false;
         }
-    }
-
-    public ArrayList<NhanVienDTO> listAllNhanVien() {
-        ArrayList<NhanVienDTO> list = new ArrayList<>();
-        String sql = "select * from NhanVien where TrangThaiNhanVien = 1\n";
-        try {
-            Connection c = JDBCUtil.getConnection();
-            PreparedStatement st = c.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                NhanVienDTO a = new NhanVienDTO(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
-                        rs.getString("GioiTinhNhanVien"), rs.getString("SoDienThoaiNhanVien"), rs.getDate("NgaySinhNhanVien"),
-                        rs.getString("ChucVuNhanVien"), rs.getString("DiaChi"), rs.getLong("LuongNhanVien"),
-                        rs.getBoolean("TrangThaiNhanVien"), rs.getString("MaChiNhanh"), rs.getDate("NgayNghiViec")
-                );
-                list.add(a);
-            }
-            JDBCUtil.closeConnection(c);
-        } catch (SQLException e) {
-            System.out.println(e);
-            System.out.println("listAllNhanVien error");
-        }
-        return list;
     }
 
     public boolean update(Date date, String maNV, List<CaLamDTO> dsCa) {

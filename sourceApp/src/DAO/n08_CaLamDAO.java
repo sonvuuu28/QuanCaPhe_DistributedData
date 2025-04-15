@@ -13,7 +13,7 @@ public class n08_CaLamDAO {
 
     public CaLamDTO searchCaLamByMa(String ma) {
         CaLamDTO a = null;
-        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.CaLam WHERE MaCaLam LIKE ?";
+        String sql = "SELECT * from CaLam WHERE MaCaLam LIKE ?";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -27,7 +27,7 @@ public class n08_CaLamDAO {
             }
             JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
-            System.out.println("searchLoaiMonByMa" + e.getMessage());
+            System.out.println("searchCaLamByMa" + e.getMessage());
         }
         return a;
     }
@@ -152,7 +152,7 @@ public class n08_CaLamDAO {
 
     public ArrayList<CaLamDTO> listAll() {
         ArrayList<CaLamDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.CaLam where MaCaLam != 'CLOFF' ";
+        String sql = "SELECT * FROM CaLam where MaCaLam != 'CLOFF' ";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -176,7 +176,7 @@ public class n08_CaLamDAO {
 
         ArrayList<CaLamDTO> list = new ArrayList<>();
         // Khởi tạo với WHERE 1=1 để nối các điều kiện
-        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.CaLam WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM CaLam WHERE 1=1");
 
         if (Ma != null && !Ma.isEmpty()) {
             sql.append(" AND MaCaLam LIKE ?");

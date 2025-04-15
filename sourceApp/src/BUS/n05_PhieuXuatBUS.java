@@ -23,7 +23,7 @@ public class n05_PhieuXuatBUS {
         NhanVienDTO nhanVien = n02_HoaDonDAO.getInstance().searchNhanVienByMa(hd.getMaNV());
         ngayLap.setText("Ngày lập: " + Util.Utils.getInstance().SQLDateString_Transform_normalDateString(hd.getNgayLap() + ""));
         cn.setText(hd.getMaCN());
-        nv.setText("NV: " + nhanVien);
+        nv.setText("" + nhanVien);
     }
 
     public void listCTPX(JTable table, PhieuXuatDTO px, String maCN) {

@@ -43,8 +43,8 @@ public class n08_LichLamBUS {
     }
 
     public void setUp_XepLichLamGUI_combobox(JComboBox nv, JComboBox<CaLamDTO> t2, JComboBox<CaLamDTO> t3, JComboBox<CaLamDTO> t4,
-            JComboBox<CaLamDTO> t5, JComboBox<CaLamDTO> t6, JComboBox<CaLamDTO> t7, JComboBox<CaLamDTO> cn) {
-        ArrayList<NhanVienDTO> dsNV = n08_LichLamDAO.getInstance().listNhanVien();
+            JComboBox<CaLamDTO> t5, JComboBox<CaLamDTO> t6, JComboBox<CaLamDTO> t7, JComboBox<CaLamDTO> cn, String maCN) {
+        ArrayList<NhanVienDTO> dsNV = n08_LichLamDAO.getInstance().listNhanVien(maCN);
         ArrayList<CaLamDTO> dsCa = n08_LichLamDAO.getInstance().listCaLam();
 
         for (NhanVienDTO dto : dsNV) {
