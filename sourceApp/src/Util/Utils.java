@@ -148,6 +148,27 @@ public class Utils {
             }
         });
     }
+    
+    public void dragPanel(JPanel panel, JDialog frame) {
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                initialClick = e.getPoint();
+            }
+        });
+
+        panel.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (initialClick != null) {
+                    // Tính toán vị trí mới của frame
+                    int x = frame.getLocation().x + e.getX() - initialClick.x;
+                    int y = frame.getLocation().y + e.getY() - initialClick.y;
+                    frame.setLocation(x, y);
+                }
+            }
+        });
+    }
 
     public void sdt(JTextField sdt) {
         sdt.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -184,6 +205,18 @@ public class Utils {
             }
         });
     }
+//
+//    public static void delayAction(int delayMillis, Runnable action) {
+//        javax.swing.Timer timer = new javax.swing.Timer(delayMillis, new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                ((javax.swing.Timer) e.getSource()).stop();
+//                action.run();
+//            }
+//        });
+//        timer.setRepeats(false); // Đảm bảo chỉ chạy 1 lần
+//        timer.start();
+//    }
 
     public static void main(String[] args) {
 //        System.out.println(Utils.getInstance().SQLDateString_Transform_normalDateString(new Date(System.currentTimeMillis()) + ""));

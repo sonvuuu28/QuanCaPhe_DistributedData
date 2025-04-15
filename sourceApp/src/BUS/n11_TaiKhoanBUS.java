@@ -97,11 +97,11 @@ public class n11_TaiKhoanBUS {
         return check;
     }
 
-    public void comboboxPhanQuyen(JComboBox<String> phanQuyen) {
-        ArrayList<Object[]> ds = n11_TaiKhoanDAO.getInstance().listPhanQuyen();
+    public void comboboxPhanQuyen(JComboBox<String> phanQuyen, String maNV) {
+        ArrayList<Object[]> ds = n11_TaiKhoanDAO.getInstance().listPhanQuyen(maNV);
 
         for (Object[] quyen : ds) {
-            phanQuyen.addItem(quyen[1].toString()); // Lấy "Tên quyền" từ danh sách
+            phanQuyen.addItem(quyen[1].toString()); 
         }
     }
 

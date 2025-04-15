@@ -2,70 +2,73 @@ package Util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.*;
-
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class JDBCUtil {
+    private static String serverName;
+    private static String portNumber; 
+    private static String dbname;
+    private static String username;
+    private static String password;
 
-    private static String hostname; //mặc định là localhost
-    private static String dbname; //tên database
-    private static String username; //tên tài khoản
-    private static String password; //mật khẩu
+    public static void setServer(String serverWithPort) {
+        if (serverWithPort.contains(":")) {
+            String[] parts = serverWithPort.split(":");
+            serverName = parts[0];
+            portNumber = parts[1];
+        } else {
+            serverName = serverWithPort;
+            portNumber = "1433"; 
+        }
+        readFileText();
+    }
 
     public static Connection getConnection() {
         Connection c = null;
-        readFileText();
-        if (checkNullValues()) {
-            return c;
-        }
+        if (checkNullValues()) return null;
+
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbUrl = "jdbc:sqlserver://" + hostname + ":1433;DatabaseName=" + dbname + ";encrypt= true;trustServerCertificate=true";
+
+            String dbUrl = "jdbc:sqlserver://" + serverName + ":" + portNumber
+                    + ";databaseName=" + dbname + ";encrypt=true;trustServerCertificate=true";
+
             c = DriverManager.getConnection(dbUrl, username, password);
-//            System.out.println("Connection is established with " + c.getCatalog());
-        } catch (ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
-            System.out.println("Connection lost =(" + ex);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return c;
     }
 
     public static void closeConnection(Connection c) {
         try {
-            if (c != null) {
-                c.close();
-            }
+            if (c != null) c.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private static void readFileText() {
-        try {
-            FileInputStream fileInputStream = new FileInputStream("connect.txt");
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-            hostname = bufferedReader.readLine();
-            dbname = bufferedReader.readLine();
-            username = bufferedReader.readLine();
-            password = bufferedReader.readLine();
-
-            if (password == null) {
-                password = "";
-            }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("connect.txt")))) {
+            dbname = reader.readLine();
+            username = reader.readLine();
+            password = reader.readLine();
+            if (password == null) password = "";
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static boolean checkNullValues() {
-        return hostname == null || dbname == null || username == null;
+        return serverName == null || dbname == null || username == null;
     }
-    
+
     public static void main(String[] args) {
+        JDBCUtil.setServer("LAPTOP-VNOPB5Q7\\NODE1:1434");
         Connection c = JDBCUtil.getConnection();
         JDBCUtil.closeConnection(c);
     }

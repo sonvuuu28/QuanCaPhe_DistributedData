@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class n12_ThongKeDAO {
 
@@ -13,18 +14,23 @@ public class n12_ThongKeDAO {
         return new n12_ThongKeDAO();
     }
 
-    public Long getDoanhThuToday(String maCN) {
-        Long doanhThu = null;
+    public HashMap<String, Long> getDoanhThuToday(String maCN) {
+        HashMap<String, Long> doanhThu = new HashMap<>();
         String sql = "select sum(TongTienHoaDon) as doanhThu\n"
                 + "from HoaDon \n"
-                + "where NgayLapHoaDon = convert(date, getDate()) and MaChiNhanh = ?";
+                + "where NgayLapHoaDon = convert(date, getDate()) ";
+        if (maCN != null) {
+            sql += " AND MaChiNhanh = ?";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                doanhThu = rs.getLong("doanhThu");
+                doanhThu.put("doanhThu", rs.getLong("doanhThu"));
             }
             JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
@@ -38,12 +44,18 @@ public class n12_ThongKeDAO {
         String sql = "set datefirst 1\n"
                 + "select sum(TongTienHoaDon) as doanhThu\n"
                 + "from HoaDon\n"
-                + "where MaChiNhanh = ? and NgayLapHoaDon >= dateadd(day, 1 - datepart(weekday,getdate()), convert(date, getdate())) \n"
-                + "and NgayLapHoaDon <= dateadd(day, 7 - datepart(weekday,getdate()), convert(date, getdate()));";
+                + "where NgayLapHoaDon >= dateadd(day, 1 - datepart(weekday,getdate()), convert(date, getdate())) \n"
+                + "and NgayLapHoaDon <= dateadd(day, 7 - datepart(weekday,getdate()), convert(date, getdate())) ";
+        if (maCN != null) {
+            sql += " AND MaChiNhanh = ?";
+        }
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getLong("doanhThu");
@@ -61,11 +73,16 @@ public class n12_ThongKeDAO {
                 + "declare @end date = eomonth(getdate())\n"
                 + "SELECT SUM(TongTienHoaDon) AS doanhThu\n"
                 + "FROM HoaDon\n"
-                + "WHERE MaChiNhanh = ? AND NgayLapHoaDon >= @start AND NgayLapHoaDon <= @end";
+                + "WHERE NgayLapHoaDon >= @start AND NgayLapHoaDon <= @end ";
+        if (maCN != null) {
+            sql += " AND MaChiNhanh = ?";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getLong("doanhThu");
@@ -81,11 +98,17 @@ public class n12_ThongKeDAO {
         Long doanhThu = null;
         String sql = "SELECT SUM(TongTienHoaDon) AS DoanhThu\n"
                 + "FROM HoaDon\n"
-                + "WHERE MaChiNhanh = ? AND NgayLapHoaDon >= DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AND NgayLapHoaDon <= DATEFROMPARTS(YEAR(GETDATE()),12,31)";
+                + "WHERE NgayLapHoaDon >= DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AND NgayLapHoaDon <= DATEFROMPARTS(YEAR(GETDATE()),12,31)  ";
+        if (maCN != null) {
+            sql += " AND MaChiNhanh = ?";
+        }
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getLong("doanhThu");
@@ -97,66 +120,81 @@ public class n12_ThongKeDAO {
         return doanhThu;
     }
 
-    public int getSLHoaDonToday(String maCN) {
-        int doanhThu = 0;
-        String sql = "select count(*) as sl\n"
-                + "from HoaDon \n"
-                + "where NgayLapHoaDon = convert(date, getDate()) and MaChiNhanh = ?";
+    public HashMap<String, Integer> getSLHoaDonToday(String maCN) {
+        HashMap<String, Integer> result = new HashMap<>();
+        String sql = "SELECT COUNT(*) AS soHoaDon "
+                + "FROM HoaDon "
+                + "WHERE NgayLapHoaDon = CONVERT(date, GETDATE())";
+        if (maCN != null) {
+            sql += " AND MaChiNhanh = ?";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                doanhThu = rs.getInt("sl");
+                result.put("soHoaDon", rs.getInt("soHoaDon"));
             }
             JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
-            System.out.println("getSLHoaDonToday" + e.getMessage());
+            System.out.println("getSLHoaDonToday: " + e.getMessage());
         }
-        return doanhThu;
+        return result;
     }
 
-    public int getSLMonToday(String maCN) {
-        int doanhThu = 0;
-        String sql = "select sum(SoLuong) as sl\n"
-                + "from ChiTietHoaDon as cthd\n"
-                + "join HoaDon as hd on cthd.MaHoaDon = hd.MaHoaDon\n"
-                + "where NgayLapHoaDon = convert(date, getDate()) and MaChiNhanh = ?";
+    public HashMap<String, Integer> getSLMonToday(String maCN) {
+        HashMap<String, Integer> result = new HashMap<>();
+        String sql = "SELECT ISNULL(SUM(cthd.SoLuong), 0) AS soLuongMon "
+                + "FROM ChiTietHoaDon AS cthd "
+                + "JOIN HoaDon AS hd ON cthd.MaHoaDon = hd.MaHoaDon "
+                + "WHERE hd.NgayLapHoaDon = CONVERT(date, GETDATE())";
+        if (maCN != null) {
+            sql += " AND hd.MaChiNhanh = ?";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                doanhThu = rs.getInt("sl");
+                result.put("soLuongMon", rs.getInt("soLuongMon"));
             }
             JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
-            System.out.println("getSLMonToday" + e.getMessage());
+            System.out.println("getSLMonToday: " + e.getMessage());
         }
-        return doanhThu;
+        return result;
     }
 
-    public int getSLKhachHangToday(String maCN) {
-        int doanhThu = 0;
-        String sql = "select count(*) as sl\n"
-                + "from KhachHang as kh\n"
-                + "join HoaDon as hd on kh.MaKhachHang = hd.MaKhachHang \n"
-                + "where kh.NgayDangKy = convert(date,getDate()) and hd.MaChiNhanh = ?";
+    public HashMap<String, Integer> getSLKhachHangToday(String maCN) {
+        HashMap<String, Integer> result = new HashMap<>  ();
+        String sql = "SELECT COUNT(*) AS soKhach "
+                + "FROM LINK.QuanCaPhe.dbo.KhachHang AS kh "
+                + "JOIN LINK.QuanCaPhe.dbo.HoaDon AS hd ON kh.MaKhachHang = hd.MaKhachHang "
+                + "WHERE kh.NgayDangKy = CONVERT(date, GETDATE())";
+        if (maCN != null) {
+            sql += " AND hd.MaChiNhanh = ?";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                doanhThu = rs.getInt("sl");
+                result.put("soKhach", rs.getInt("soKhach"));
             }
             JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
-            System.out.println("getSLKhachHangToday" + e.getMessage());
+            System.out.println("getSLKhachHangToday: " + e.getMessage());
         }
-        return doanhThu;
+        return result;
     }
 
     // DOANH THU
@@ -174,11 +212,17 @@ public class n12_ThongKeDAO {
                 + "FROM HoaDon\n"
                 + "WHERE \n"
                 + "	NgayLapHoaDon >= DATEADD(DAY, 1 - DATEPART(WEEKDAY, GETDATE()), CONVERT(DATE, GETDATE()))\n"
-                + "	AND NgayLapHoaDon <= DATEADD(DAY, 7 - DATEPART(WEEKDAY, GETDATE()), CONVERT(DATE, GETDATE())) AND MaChiNhanh = ?";
+                + "	AND NgayLapHoaDon <= DATEADD(DAY, 7 - DATEPART(WEEKDAY, GETDATE()), CONVERT(DATE, GETDATE())) ";
+        if (maCN != null) {
+            sql = sql + " AND MaChiNhanh = ? ";
+        }
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 ds.add(rs.getLong("Thu2"));
@@ -212,11 +256,17 @@ public class n12_ThongKeDAO {
                 + "    SUM(CASE WHEN DATEPART(MONTH, NgayLapHoaDon) = 11 THEN TongTienHoaDon ELSE 0 END) AS t11,\n"
                 + "	SUM(CASE WHEN DATEPART(MONTH, NgayLapHoaDon) = 12 THEN TongTienHoaDon ELSE 0 END) AS t12\n"
                 + "FROM HoaDon\n"
-                + "WHERE NgayLapHoaDon >= DATEFROMPARTS(year(getdate()), 1, 1) and NgayLapHoaDon <= DATEFROMPARTS(year(getdate()), 12, 31) AND MaChiNhanh = ?\n";
+                + "WHERE NgayLapHoaDon >= DATEFROMPARTS(year(getdate()), 1, 1) and NgayLapHoaDon <= DATEFROMPARTS(year(getdate()), 12, 31) \n";
+        if (maCN != null) {
+            sql += " AND MaChiNhanh = ?";
+        }
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 ds.add(rs.getLong("t1"));
@@ -264,11 +314,16 @@ public class n12_ThongKeDAO {
         Long doanhThu = null;
         String sql = "SELECT SUM(TongTienPhieuNhap) AS chiPhi\n"
                 + "from PhieuNhap\n"
-                + "where MaChiNhanh = ? AND NgayLapPhieuNhap >= DATEFROMPARTS(YEAR(getdate()),MONTH(getdate()),1) and NgayLapPhieuNhap <= eomonth(getdate())";
+                + "where NgayLapPhieuNhap >= DATEFROMPARTS(YEAR(getdate()),MONTH(getdate()),1) and NgayLapPhieuNhap <= eomonth(getdate())";
+        if (maCN != null) {
+            sql += " and MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getLong("chiPhi");
@@ -284,11 +339,16 @@ public class n12_ThongKeDAO {
         Long doanhThu = null;
         String sql = "select sum(LuongNhanVien) as luong\n"
                 + "from NhanVien\n"
-                + "where MaChiNhanh = ? and NgayNghiViec is null";
+                + "where NgayNghiViec is null";
+        if (maCN != null) {
+            sql += " and MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getLong("luong");
@@ -316,11 +376,16 @@ public class n12_ThongKeDAO {
                 + "    SUM(CASE WHEN DATEPART(MONTH, NgayLapPhieuNhap) = 11 THEN TongTienPhieuNhap ELSE 0 END) AS t11,\n"
                 + "	SUM(CASE WHEN DATEPART(MONTH, NgayLapPhieuNhap) = 12 THEN TongTienPhieuNhap ELSE 0 END) AS t12\n"
                 + "FROM PhieuNhap\n"
-                + "WHERE NgayLapPhieuNhap >= DATEFROMPARTS(year(getdate()), 1, 1) and NgayLapPhieuNhap <= DATEFROMPARTS(year(getdate()), 12, 31) AND MaChiNhanh = ?\n";
+                + "WHERE NgayLapPhieuNhap >= DATEFROMPARTS(year(getdate()), 1, 1) and NgayLapPhieuNhap <= DATEFROMPARTS(year(getdate()), 12, 31) \n";
+        if (maCN != null) {
+            sql += " and MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 ds.add(rs.getLong("t1"));
@@ -358,12 +423,16 @@ public class n12_ThongKeDAO {
                 + "	SUM(CASE WHEN getDate() >= DATEFROMPARTS(year(GETDATE()), 10, 1) and (NgayNghiViec is null or NgayNghiViec > DATEFROMPARTS(year(GETDATE()), 10, 1)) THEN LuongNhanVien ELSE 0 END) AS t10,\n"
                 + "	SUM(CASE WHEN getDate() >= DATEFROMPARTS(year(GETDATE()), 11, 1) and (NgayNghiViec is null or NgayNghiViec > DATEFROMPARTS(year(GETDATE()), 11, 1)) THEN LuongNhanVien ELSE 0 END) AS t11,\n"
                 + "	SUM(CASE WHEN getDate() >= DATEFROMPARTS(year(GETDATE()), 12, 1) and (NgayNghiViec is null or NgayNghiViec > DATEFROMPARTS(year(GETDATE()), 12, 1)) THEN LuongNhanVien ELSE 0 END) AS t12\n"
-                + "from NhanVien\n"
-                + "where MaChiNhanh = ?";
+                + "from NhanVien\n";
+        if (maCN != null) {
+            sql += " where MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 ds.add(rs.getLong("t1"));
@@ -426,12 +495,17 @@ public class n12_ThongKeDAO {
     public int getSLPhieuNhapThang(String maCN) {
         int doanhThu = 0;
         String sql = "select count(*) as sl from PhieuNhap\n"
-                + "where MaChiNhanh = ? and NgayLapPhieuNhap >= DATEFROMPARTS(year(GETDATE()), month(getDate()), 1) "
+                + "where NgayLapPhieuNhap >= DATEFROMPARTS(year(GETDATE()), month(getDate()), 1) "
                 + "and NgayLapPhieuNhap <= EOMONTH(GETDATE())";
+        if (maCN != null) {
+            sql += "and MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getInt("sl");
@@ -446,12 +520,17 @@ public class n12_ThongKeDAO {
     public int getSLPhieuXuatKhoThang(String maCN) {
         int doanhThu = 0;
         String sql = "select count(*) as sl from PhieuXuatKho\n"
-                + "where MaChiNhanh = ? and NgayLap >= DATEFROMPARTS(year(GETDATE()), month(getDate()), 1) "
+                + "where NgayLap >= DATEFROMPARTS(year(GETDATE()), month(getDate()), 1) "
                 + "and NgayLap <= EOMONTH(GETDATE())";
+        if (maCN != null) {
+            sql += "and MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 doanhThu = rs.getInt("sl");
@@ -491,20 +570,23 @@ public class n12_ThongKeDAO {
                 + "          AND pxk.MaChiNhanh = nlk.MaChiNhanh\n"
                 + "          AND pxk.NgayLap >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)\n"
                 + "          AND pxk.NgayLap <= EOMONTH(GETDATE())\n"
-                + "    ), 0) AS slXuat\n"
+                + "    ), 0) AS slXuat\n, nlk.MaChiNhanh as ChiNhanh"
                 + "\n"
                 + "FROM \n"
                 + "    NguyenLieu nl\n"
                 + "JOIN \n"
-                + "    NguyenLieuKho nlk ON nl.MaNguyenLieu = nlk.MaNguyenLieu\n"
-                + "WHERE \n"
-                + "    nlk.MaChiNhanh = ?\n"
-                + "ORDER BY \n"
-                + "    nl.MaNguyenLieu;";
+                + "    NguyenLieuKho nlk ON nl.MaNguyenLieu = nlk.MaNguyenLieu\n";
+        if (maCN != null) {
+            sql += "WHERE nlk.MaChiNhanh = ?\n";
+        }
+        sql += "ORDER BY \n"
+                + "    nlk.MaChiNhanh, nl.MaNguyenLieu";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, maCN);
+            if (maCN != null) {
+                st.setString(1, maCN);
+            }
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Object[] row = {
@@ -512,7 +594,8 @@ public class n12_ThongKeDAO {
                     rs.getString("TenNguyenLieu"),
                     rs.getFloat("KhoiLuong"),
                     rs.getFloat("slNhap"),
-                    rs.getFloat("slXuat")
+                    rs.getFloat("slXuat"),
+                    rs.getString("ChiNhanh")
                 };
                 ds.add(row);
             }

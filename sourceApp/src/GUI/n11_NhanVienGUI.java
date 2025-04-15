@@ -384,7 +384,7 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
         jPanel20.setPreferredSize(new java.awt.Dimension(300, 40));
         jPanel20.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING, 0, 9));
 
-        chiNhanh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None" }));
+        chiNhanh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tổng" }));
         chiNhanh.setPreferredSize(new java.awt.Dimension(160, 22));
         jPanel20.add(chiNhanh);
 
@@ -608,8 +608,8 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
         chucVu.setText("");
         luong.setText("");
         TimKiem.setText("Tìm kiếm nhanh theo tên");
-        n11_NhanVienBUS.getInstance().comboBoxChiNhanh(chiNhanh);
-        n11_NhanVienBUS.getInstance().listAll(table);
+        n11_NhanVienBUS.getInstance().comboBoxChiNhanh(chiNhanh, frame.maCN);
+        n11_NhanVienBUS.getInstance().listAll(table, frame.maCN);
         Utils.getInstance().timKiem(TimKiem);
     }
 
@@ -720,10 +720,13 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
 
                     if (response == JOptionPane.YES_OPTION) {
                         Long luongTryCatch = Util.Utils.getInstance().MoneyToLongNoneVND(luong.getText());
-
+                        String maChiNhanh = chiNhanh.getSelectedItem().toString();
+                        if (maChiNhanh.equals("Tổng")) {
+                            maChiNhanh = null;
+                        }
                         boolean i = n11_NhanVienBUS.getInstance().insert(ma.getText(), ten.getText(), gioiTinh.getSelectedItem().toString(),
                                 sdt.getText(), new java.sql.Date(ngaySinh.getDate().getTime()), chucVu.getText(), diaChi.getText(),
-                                luongTryCatch, true, chiNhanh.getSelectedItem().toString());
+                                luongTryCatch, true, maChiNhanh);
                         if (i) {
                             reset();
                         }
@@ -740,6 +743,7 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
                 } else {
                     int selectedRow = table.getSelectedRow();
                     DefaultTableModel model = (DefaultTableModel) table.getModel();
+
                     Boolean trangThai;
                     if (model.getValueAt(selectedRow, 8).toString().equals("Đang làm")) {
                         trangThai = true;
@@ -758,9 +762,14 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
                         if (response == JOptionPane.YES_OPTION) {
                             Long luongTryCatch = Util.Utils.getInstance().MoneyToLongNoneVND(luong.getText());
 
+                            String maChiNhanh = chiNhanh.getSelectedItem().toString();
+                            if (maChiNhanh.equals("Tổng")) {
+                                maChiNhanh = null;
+                            }
+
                             int i = n11_NhanVienBUS.getInstance().update(ma.getText(), ten.getText(), gioiTinh.getSelectedItem().toString(),
                                     sdt.getText(), new java.sql.Date(ngaySinh.getDate().getTime()), chucVu.getText(), diaChi.getText(),
-                                    luongTryCatch, trangThai, chiNhanh.getSelectedItem().toString(),
+                                    luongTryCatch, trangThai, maChiNhanh,
                                     ngayNghi);
                             if (i == 1 || i == 0) {
                                 reset();
@@ -830,12 +839,13 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
                 String chiNhanhTryCatch = null;
                 try {
                     chiNhanhTryCatch = chiNhanh.getSelectedItem().toString();
-                    if (chiNhanhTryCatch.equals("None")) {
+                    if (chiNhanhTryCatch.equals("Tổng")) {
                         chiNhanhTryCatch = null;
                     }
                 } catch (Exception e) {
 
                 }
+
                 n11_NhanVienBUS.getInstance().search(table, ma.getText(), ten.getText(), gioiTinhTryCatch,
                         sdt.getText(), ngaySinhTryCatch, chucVu.getText(), diaChi.getText(), luongTryCatch,
                         null, chiNhanhTryCatch);
@@ -856,12 +866,18 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
                     gioiTinh.setSelectedIndex(2);
                 }
                 sdt.setText(model.getValueAt(count, 3).toString());
-                ngaySinh.setDate((java.sql.Date) model.getValueAt(count, 4));
+                ngaySinh.setDate(Util.Utils.getInstance().normalDateString_Transform_SQLDate(model.getValueAt(count, 4).toString()));
                 chucVu.setText(model.getValueAt(count, 5).toString());
                 diaChi.setText(model.getValueAt(count, 6).toString());
                 String giaTien = model.getValueAt(count, 7).toString().replace(" VNĐ", "");
                 luong.setText(giaTien);
-                chiNhanh.setSelectedItem(model.getValueAt(count, 9).toString());
+                String tenCN = null;
+                try {
+                    tenCN = model.getValueAt(count, 9).toString();
+                } catch (Exception e) {
+                    tenCN = "Tổng";
+                }
+                chiNhanh.setSelectedItem(tenCN);
             }
         });
 
@@ -873,7 +889,7 @@ public class n11_NhanVienGUI extends javax.swing.JPanel {
                 if (selectedRow == -1) {
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 nhân viên trong danh sách để xem tài khoản!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    n11_TaiKhoanGUI a = new n11_TaiKhoanGUI(model.getValueAt(selectedRow, 0).toString(), frame.getMaCN());
+                    n11_TaiKhoanGUI a = new n11_TaiKhoanGUI(model.getValueAt(selectedRow, 0).toString(), frame.getMaCN(), frame.maNV);
                     a.setVisible(true);
                     a.setLocationRelativeTo(null);
                 }

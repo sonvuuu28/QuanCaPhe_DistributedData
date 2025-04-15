@@ -3,9 +3,13 @@ package DAO;
 import DTO.ChiTietPhieuNhapDTO;
 import DTO.PhieuNhapDTO;
 import DTO.NguyenLieuDTO;
+import DTO.NhaCungCapDTO;
+import DTO.NhanVienDTO;
 import Util.JDBCUtil;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class n04_PhieuNhapDAO {
 
@@ -16,7 +20,7 @@ public class n04_PhieuNhapDAO {
     public ArrayList<ChiTietPhieuNhapDTO> listAllCtpn(String ma) {
         ArrayList<ChiTietPhieuNhapDTO> list = new ArrayList<>();
         String sql = "SELECT *\n"
-                + "  FROM ChiTietPhieuNhap"
+                + "  FROM LINK.QuanCaPhe.dbo.ChiTietPhieuNhap"
                 + " where MaPhieuNhap = ?";
         try {
             Connection c = JDBCUtil.getConnection();
@@ -37,18 +41,22 @@ public class n04_PhieuNhapDAO {
         return list;
     }
 
-    public ArrayList<PhieuNhapDTO> listAll(String ma) {
+    public ArrayList<PhieuNhapDTO> listAll(String maCN) {
         ArrayList<PhieuNhapDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM PhieuNhap"
-                + " where MaChiNhanh = ?"
-                + " order by MaPhieuNhap desc";
+
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.PhieuNhap ";
+        if (maCN != null) {
+            sql += " where MaChiNhanh = ? ";
+        }
+        sql = sql + " order by MaPhieuNhap desc ";
 
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
 
-            ps.setString(1, ma);
+            if (maCN != null) {
+                ps.setString(1, maCN);
+            }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 PhieuNhapDTO a = new PhieuNhapDTO(rs.getString("MaPhieuNhap"), rs.getDate("NgayLapPhieuNhap"),
@@ -67,8 +75,8 @@ public class n04_PhieuNhapDAO {
     public ArrayList<PhieuNhapDTO> search(String ma, Date ngayBD, Date ngayKT, Long giaTu, Long giaDen, String maCN) {
         ArrayList<PhieuNhapDTO> list = new ArrayList<>();
         ArrayList<Object> params = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("select * from PhieuNhap where MaChiNhanh = ?");
-        params.add(maCN);
+        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.PhieuNhap WHERE 1=1");
+
         if (ma != null && !ma.trim().isEmpty()) {
             sql.append(" AND MaPhieuNhap LIKE ?");
             params.add("%" + ma + "%");
@@ -89,26 +97,32 @@ public class n04_PhieuNhapDAO {
             sql.append(" AND TongTienPhieuNhap <= ?");
             params.add(giaDen);
         }
-        sql.append(" order by MaPhieuNhap desc");
-        try {
-            Connection c = JDBCUtil.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql.toString());
+        if (maCN != null && !maCN.trim().isEmpty()) {
+            sql.append(" AND MaChiNhanh = ?");
+            params.add(maCN);
+        }
+        sql.append(" ORDER BY MaPhieuNhap DESC");
+        try (Connection c = JDBCUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
 
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                PhieuNhapDTO a = new PhieuNhapDTO(rs.getString("MaPhieuNhap"), rs.getDate("NgayLapPhieuNhap"),
-                        rs.getLong("TongTienPhieuNhap"), rs.getString("MaNhanVien"), rs.getString("MaNCC"),
-                        rs.getString("MaChiNhanh"));
-                list.add(a);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PhieuNhapDTO a = new PhieuNhapDTO(
+                            rs.getString("MaPhieuNhap"),
+                            rs.getDate("NgayLapPhieuNhap"),
+                            rs.getLong("TongTienPhieuNhap"),
+                            rs.getString("MaNhanVien"),
+                            rs.getString("MaNCC"),
+                            rs.getString("MaChiNhanh")
+                    );
+                    list.add(a);
+                }
             }
-            JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
-            System.out.println(e);
-            System.out.println("search error");
+            System.out.println("search error: " + e.getMessage());
         }
         return list;
     }
@@ -169,4 +183,48 @@ public class n04_PhieuNhapDAO {
         return pn;
     }
 
+    public Map<String, NhanVienDTO> getAllNhanVien() {
+        Map<String, NhanVienDTO> map = new HashMap<>();
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhanVien";
+
+        try (Connection c = JDBCUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                NhanVienDTO nv = new NhanVienDTO(
+                        rs.getString("MaNhanVien"),
+                        rs.getString("TenNhanVien"),
+                        rs.getString("GioiTinhNhanVien"),
+                        rs.getString("SoDienThoaiNhanVien"),
+                        rs.getDate("NgaySinhNhanVien"),
+                        rs.getString("ChucVuNhanVien"),
+                        rs.getString("DiaChi"),
+                        rs.getLong("LuongNhanVien"),
+                        rs.getBoolean("TrangThaiNhanVien"),
+                        rs.getString("MaChiNhanh"),
+                        rs.getDate("NgayNghiViec")
+                );
+                map.put(nv.getMa(), nv);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllNhanVien error: " + e);
+        }
+        return map;
+    }
+
+    public Map<String, NhaCungCapDTO> getAllKhachHang() {
+        Map<String, NhaCungCapDTO> map = new HashMap<>();
+        String sql = "SELECT * FROM NhaCungCap";
+
+        try (Connection c = JDBCUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                NhaCungCapDTO ncc = new NhaCungCapDTO(rs.getString("MaNCC"), rs.getString("TenNCC"),
+                        rs.getString("DiaChi"), rs.getString("SDT"));
+                map.put(ncc.getMaNCC(), ncc);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllKhachHang error: " + e);
+        }
+        return map;
+    }
 }

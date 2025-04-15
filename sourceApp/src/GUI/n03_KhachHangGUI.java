@@ -239,6 +239,7 @@ public class n03_KhachHangGUI extends javax.swing.JPanel {
         jPanel39.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel39.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
+        chitieu.setBackground(new java.awt.Color(238, 238, 238));
         chitieu.setBorder(null);
         chitieu.setFocusable(false);
         chitieu.setMaximumSize(new java.awt.Dimension(200, 25));
@@ -577,7 +578,7 @@ public class n03_KhachHangGUI extends javax.swing.JPanel {
                 ten.setText(model.getValueAt(count, 1).toString());
                 gioitinh.setSelectedItem(model.getValueAt(count, 2).toString());
                 sdt.setText(model.getValueAt(count, 3).toString());
-                ngaysinh.setDate((java.sql.Date) model.getValueAt(count, 4));
+                ngaysinh.setDate(Utils.getInstance().normalDateString_Transform_SQLDate(model.getValueAt(count, 4).toString()));
                 chitieu.setText(model.getValueAt(count, 5).toString());
             }
         });

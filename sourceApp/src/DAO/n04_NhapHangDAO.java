@@ -15,7 +15,7 @@ public class n04_NhapHangDAO {
 
     public boolean insert(PhieuNhapDTO hd) {
         boolean result = true;
-        String sql = "INSERT INTO PhieuNhap(MaPhieuNhap, NgayLapPhieuNhap, TongTienPhieuNhap, MaNhanVien, MaNCC, MaChiNhanh) "
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.PhieuNhap(MaPhieuNhap, NgayLapPhieuNhap, TongTienPhieuNhap, MaNhanVien, MaNCC, MaChiNhanh) "
                 + "VALUES(?, ?, ?, ?, ?, ?)";
 
         try {
@@ -37,9 +37,10 @@ public class n04_NhapHangDAO {
         return result;
     }
 
-    public boolean insertCTPN(ArrayList<ChiTietPhieuNhapDTO> dsChiTiet) {
+    public boolean insertCTPN(ArrayList<ChiTietPhieuNhapDTO> dsChiTiet, String maCN) {
         boolean result = false;
-        String sql = "INSERT INTO ChiTietPhieuNhap(MaPhieuNhap, MaNguyenLieu, KhoiLuong, DonGia, ThanhTien) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.ChiTietPhieuNhap(MaPhieuNhap, MaNguyenLieu, KhoiLuong, DonGia, ThanhTien) "
+                + " VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = JDBCUtil.getConnection(); PreparedStatement prep = c.prepareStatement(sql)) {
 
@@ -55,7 +56,7 @@ public class n04_NhapHangDAO {
 
             int[] rows = prep.executeBatch(); // Chạy batch một lần
             result = Arrays.stream(rows).allMatch(row -> row > 0); // Kiểm tra tất cả đều thành công
-            upDateNguyenLieuUp(dsChiTiet);
+            upDateNguyenLieuUp(dsChiTiet, maCN);
         } catch (SQLException ex) {
             System.out.println("Lỗi insertCTPN: " + ex);
         }
@@ -63,11 +64,10 @@ public class n04_NhapHangDAO {
         return result;
     }
 
-    
-    public void upDateNguyenLieuUp(ArrayList<ChiTietPhieuNhapDTO> dsChiTiet) {
-        String sql = "UPDATE NguyenLieuKho "
+    public void upDateNguyenLieuUp(ArrayList<ChiTietPhieuNhapDTO> dsChiTiet, String maCN) {
+        String sql = "UPDATE LINK.QuanCaPhe.dbo.NguyenLieuKho "
                 + "SET KhoiLuong = KhoiLuong + CAST(? AS DECIMAL(18, 6)) "
-                + "WHERE MaNguyenLieu = ?";
+                + "WHERE MaNguyenLieu = ? and MaChiNhanh = ? ";
 
         try (Connection c = JDBCUtil.getConnection(); PreparedStatement prep = c.prepareStatement(sql)) {
 
@@ -76,7 +76,8 @@ public class n04_NhapHangDAO {
 
                 prep.setBigDecimal(1, kl);
                 prep.setString(2, cthd.getMaNL());
-                prep.addBatch(); // Thêm vào batch
+                prep.setString(3, maCN);
+                prep.addBatch();
             }
 
             int[] rows = prep.executeBatch(); // Chạy batch một lần
@@ -87,13 +88,10 @@ public class n04_NhapHangDAO {
             System.out.println("Lỗi insert upDateNguyenLieuUp: " + ex);
         }
     }
-    
+
     public ArrayList<NguyenLieuDTO> listAll_KhoHang(String maCN) {
         ArrayList<NguyenLieuDTO> list = new ArrayList<>();
-        String sql = "select * \n"
-                + "from NguyenLieu nl \n"
-                + "join NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
-                + "where kho.MaChiNhanh = ? and nl.TrangThai = 1\n";
+        String sql = "exec spud_listAll_NguyenLieu ?";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -102,7 +100,7 @@ public class n04_NhapHangDAO {
             while (rs.next()) {
                 NguyenLieuDTO a = new NguyenLieuDTO(rs.getString("MaNguyenLieu"), rs.getString("TenNguyenLieu"),
                         rs.getFloat("KhoiLuong"), rs.getString("DonVi"), rs.getBoolean("TrangThai"),
-                        rs.getString("MaChiNhanh"));
+                        null);
                 list.add(a);
             }
             JDBCUtil.closeConnection(c);
@@ -118,7 +116,7 @@ public class n04_NhapHangDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM PhieuNhap";
+            String sql = "SELECT COUNT(*) AS total FROM  LINK.QuanCaPhe.dbo.PhieuNhap";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -146,7 +144,7 @@ public class n04_NhapHangDAO {
 
     public NhanVienDTO searchNhanVienByMa(String maNV) {
         NhanVienDTO nv = null;
-        String sql = "SELECT * FROM NhanVien WHERE MaNhanVien = ?";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhanVien WHERE MaNhanVien = ?";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -181,7 +179,7 @@ public class n04_NhapHangDAO {
 
     public NhaCungCapDTO searchNCCByMa(String ma) {
         NhaCungCapDTO ncc = null;
-        String sql = "SELECT * FROM NhaCungCap WHERE MaNCC = ?";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhaCungCap WHERE MaNCC = ?";
 
         try {
             Connection c = JDBCUtil.getConnection();

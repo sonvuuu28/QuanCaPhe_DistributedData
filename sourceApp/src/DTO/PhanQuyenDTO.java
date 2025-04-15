@@ -15,9 +15,10 @@ public class PhanQuyenDTO {
     private Boolean NhaCungCap;
     private Boolean NhanVien;
     private Boolean ThongKe;
+    private int DoUuTien;
     private Boolean trangThai;
 
-    public PhanQuyenDTO(String ma, String ten, Boolean BanHang, Boolean KhachHang, Boolean NhapHang, Boolean XuatKho, Boolean Mon, Boolean NguyenLieu, Boolean LichLam, Boolean KhuyenMaiUuDai, Boolean NhaCungCap, Boolean NhanVien, Boolean ThongKe, Boolean trangThai) {
+    public PhanQuyenDTO(String ma, String ten, Boolean BanHang, Boolean KhachHang, Boolean NhapHang, Boolean XuatKho, Boolean Mon, Boolean NguyenLieu, Boolean LichLam, Boolean KhuyenMaiUuDai, Boolean NhaCungCap, Boolean NhanVien, Boolean ThongKe, int DoUuTien, Boolean trangThai) {
         this.ma = ma;
         this.ten = ten;
         this.BanHang = BanHang;
@@ -31,10 +32,8 @@ public class PhanQuyenDTO {
         this.NhaCungCap = NhaCungCap;
         this.NhanVien = NhanVien;
         this.ThongKe = ThongKe;
+        this.DoUuTien = DoUuTien;
         this.trangThai = trangThai;
-    }
-
-    public PhanQuyenDTO() {
     }
 
     public String getMa() {
@@ -53,7 +52,7 @@ public class PhanQuyenDTO {
         this.ten = ten;
     }
 
-    public Boolean isBanHang() {
+    public Boolean getBanHang() {
         return BanHang;
     }
 
@@ -61,7 +60,7 @@ public class PhanQuyenDTO {
         this.BanHang = BanHang;
     }
 
-    public Boolean isKhachHang() {
+    public Boolean getKhachHang() {
         return KhachHang;
     }
 
@@ -69,7 +68,7 @@ public class PhanQuyenDTO {
         this.KhachHang = KhachHang;
     }
 
-    public Boolean isNhapHang() {
+    public Boolean getNhapHang() {
         return NhapHang;
     }
 
@@ -77,7 +76,7 @@ public class PhanQuyenDTO {
         this.NhapHang = NhapHang;
     }
 
-    public Boolean isXuatKho() {
+    public Boolean getXuatKho() {
         return XuatKho;
     }
 
@@ -85,7 +84,7 @@ public class PhanQuyenDTO {
         this.XuatKho = XuatKho;
     }
 
-    public Boolean isMon() {
+    public Boolean getMon() {
         return Mon;
     }
 
@@ -93,7 +92,7 @@ public class PhanQuyenDTO {
         this.Mon = Mon;
     }
 
-    public Boolean isNguyenLieu() {
+    public Boolean getNguyenLieu() {
         return NguyenLieu;
     }
 
@@ -101,7 +100,7 @@ public class PhanQuyenDTO {
         this.NguyenLieu = NguyenLieu;
     }
 
-    public Boolean isLichLam() {
+    public Boolean getLichLam() {
         return LichLam;
     }
 
@@ -109,7 +108,7 @@ public class PhanQuyenDTO {
         this.LichLam = LichLam;
     }
 
-    public Boolean isKhuyenMaiUuDai() {
+    public Boolean getKhuyenMaiUuDai() {
         return KhuyenMaiUuDai;
     }
 
@@ -117,7 +116,7 @@ public class PhanQuyenDTO {
         this.KhuyenMaiUuDai = KhuyenMaiUuDai;
     }
 
-    public Boolean isNhaCungCap() {
+    public Boolean getNhaCungCap() {
         return NhaCungCap;
     }
 
@@ -125,7 +124,7 @@ public class PhanQuyenDTO {
         this.NhaCungCap = NhaCungCap;
     }
 
-    public Boolean isNhanVien() {
+    public Boolean getNhanVien() {
         return NhanVien;
     }
 
@@ -133,7 +132,7 @@ public class PhanQuyenDTO {
         this.NhanVien = NhanVien;
     }
 
-    public Boolean isThongKe() {
+    public Boolean getThongKe() {
         return ThongKe;
     }
 
@@ -141,12 +140,20 @@ public class PhanQuyenDTO {
         this.ThongKe = ThongKe;
     }
 
-    public Boolean isTrangThai() {
+    public int getDoUuTien() {
+        return DoUuTien;
+    }
+
+    public void setDoUuTien(int DoUuTien) {
+        this.DoUuTien = DoUuTien;
+    }
+
+    public Boolean getTrangThai() {
         return trangThai;
     }
 
     public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
     }
-
+    
 }

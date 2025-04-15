@@ -1,7 +1,9 @@
 package GUI;
 
 public class n11_TaiKhoanGUI extends javax.swing.JFrame {
-
+    
+    public String maNhanVienDangNhap;
+    
     private String maNV;
     private String maCN;
 
@@ -21,9 +23,10 @@ public class n11_TaiKhoanGUI extends javax.swing.JFrame {
         this.maNV = maNV;
     }
 
-    public n11_TaiKhoanGUI(String maNV, String maCN) {
+    public n11_TaiKhoanGUI(String maNV, String maCN, String maNhanVienDangNhap) {
         this.maNV = maNV;
         this.maCN = maCN;
+        this.maNhanVienDangNhap = maNhanVienDangNhap;
         initComponents();
         buttonEvents();
     }

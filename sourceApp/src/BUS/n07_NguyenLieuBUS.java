@@ -32,8 +32,6 @@ public class n07_NguyenLieuBUS {
     }
 
     public int update(String Ma, String Ten, Float kl, String donVi, Boolean TrangThai, String maCN) {
-        System.out.println(kl);
-
         NguyenLieuDTO dto = new NguyenLieuDTO(Ma, Ten, kl, donVi, TrangThai, maCN);
         int dao = n07_NguyenLieuDAO.getInstance().update(dto);
         switch (dao) {
@@ -66,7 +64,7 @@ public class n07_NguyenLieuBUS {
             } else {
                 status = "Tắt";
             }
-            model.addRow(new Object[]{dto.getMa(), dto.getTen(), dto.getKl(), dto.getDv(), status});
+            model.addRow(new Object[]{dto.getMa(), dto, dto.getKl(), dto.getDv(), status});
             i++;
         }
     }
@@ -83,7 +81,7 @@ public class n07_NguyenLieuBUS {
             } else {
                 status = "Tắt";
             }
-            model.addRow(new Object[]{dto.getMa(), dto.getTen(), dto.getKl(), dto.getDv(), status});
+            model.addRow(new Object[]{dto.getMa(), dto, dto.getKl(), dto.getDv(), status});
             i++;
         }
         if (ds.isEmpty()) {
@@ -99,7 +97,7 @@ public class n07_NguyenLieuBUS {
     public void searchByName(JTable table, String ten, String maCN) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
-        ArrayList<NguyenLieuDTO> ds = n07_NguyenLieuDAO.getInstance().search(null, ten, null, null, null, maCN);
+        ArrayList<NguyenLieuDTO> ds = n07_NguyenLieuDAO.getInstance().search("", ten, null, "", null, maCN);
         int i = 1;
         for (NguyenLieuDTO dto : ds) {
             String status;
@@ -108,7 +106,7 @@ public class n07_NguyenLieuBUS {
             } else {
                 status = "Tắt";
             }
-            model.addRow(new Object[]{dto.getMa(), dto.getTen(), dto.getKl(), dto.getDv(), status});
+            model.addRow(new Object[]{dto.getMa(), dto, dto.getKl(), dto.getDv(), status});
             i++;
         }
         if (ds.isEmpty()) {

@@ -82,26 +82,31 @@ public class n11_NhanVienBUS {
         return result;
     }
 
-    public void listAll(JTable table) {
+    public void listAll(JTable table, String MaChiNhanh) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        ArrayList<NhanVienDTO> ds = n11_NhanVienDAO.getInstance().listAll();
+        ArrayList<NhanVienDTO> ds = n11_NhanVienDAO.getInstance().listAll(MaChiNhanh);
 
         for (NhanVienDTO dto : ds) {
             String luong = Util.Utils.getInstance().LongToMoney(dto.getLuong());
+            String ngaySinh = Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgaySinh().toString());
+            String ngayNghiViec = (dto.getNgayNghiViec() != null)
+                    ? Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayNghiViec().toString())
+                    : "";
+
             model.addRow(new Object[]{
                 dto.getMa(),
                 dto.getTen(),
                 dto.getGioiTinh(),
                 dto.getSdt(),
-                dto.getNgaySinh(),
+                ngaySinh,
                 dto.getChucVu(),
                 dto.getDiaChi(),
                 luong,
                 dto.getTrangThai() ? "Đang làm" : "Nghỉ việc",
                 dto.getMaCN(),
-                dto.getNgayNghiViec()
+                ngayNghiViec
             });
         }
     }
@@ -116,18 +121,22 @@ public class n11_NhanVienBUS {
 
         for (NhanVienDTO dto : ds) {
             String luongg = Util.Utils.getInstance().LongToMoney(dto.getLuong());
+            String NgaySinh = Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgaySinh().toString());
+            String ngayNghiViec = (dto.getNgayNghiViec() != null)
+                    ? Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayNghiViec().toString())
+                    : "";
             model.addRow(new Object[]{
                 dto.getMa(),
                 dto.getTen(),
                 dto.getGioiTinh(),
                 dto.getSdt(),
-                dto.getNgaySinh(),
+                NgaySinh,
                 dto.getChucVu(),
                 dto.getDiaChi(),
                 luongg,
                 dto.getTrangThai() ? "Đang làm" : "Nghỉ việc",
                 dto.getMaCN(),
-                dto.getNgayNghiViec()
+                ngayNghiViec
             });
         }
 
@@ -149,18 +158,22 @@ public class n11_NhanVienBUS {
 
         for (NhanVienDTO dto : ds) {
             String luongg = Util.Utils.getInstance().LongToMoney(dto.getLuong());
+            String NgaySinh = Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgaySinh().toString());
+            String ngayNghiViec = (dto.getNgayNghiViec() != null)
+                    ? Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayNghiViec().toString())
+                    : "";
             model.addRow(new Object[]{
                 dto.getMa(),
                 dto.getTen(),
                 dto.getGioiTinh(),
                 dto.getSdt(),
-                dto.getNgaySinh(),
+                NgaySinh,
                 dto.getChucVu(),
                 dto.getDiaChi(),
                 luongg,
                 dto.getTrangThai() ? "Đang làm" : "Nghỉ việc",
                 dto.getMaCN(),
-                dto.getNgayNghiViec()
+                ngayNghiViec
             });
         }
 
@@ -212,13 +225,13 @@ public class n11_NhanVienBUS {
             check = false;
         }
 
-        if (ngaySinh.getDate().getTime() > System.currentTimeMillis()) {
+        if (ngaySinh.getDate().getTime() > System.currentTimeMillis() && check) {
             JOptionPane.showMessageDialog(null, "Ngày sinh không được lớn hơn ngày hiện tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             check = false;
         }
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -18);
-        if (ngaySinh.getDate().getTime() > cal.getTimeInMillis()) {
+        if (ngaySinh.getDate().getTime() > cal.getTimeInMillis() && check) {
             JOptionPane.showMessageDialog(null, "Nhân viên phải đủ 18 tuổi!!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             check = false;
         }
@@ -243,7 +256,7 @@ public class n11_NhanVienBUS {
 
         if (check) {
             try {
-                Long a = Long.valueOf(luong.getText());
+                Long a = Util.Utils.getInstance().MoneyToLongNoneVND(luong.getText());
                 if (a < 0) {
                     JOptionPane.showMessageDialog(null, "Vui lòng điền lương là số dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     luong.requestFocus();
@@ -256,20 +269,30 @@ public class n11_NhanVienBUS {
             }
         }
 
-        if (chiNhanh.getSelectedItem().toString().equals("None") && check) {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn chi nhánh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            check = false;
-        }
-
+//        if (chiNhanh.getSelectedItem().toString().equals("None") && check) {
+//            JOptionPane.showMessageDialog(null, "Vui lòng chọn chi nhánh!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            check = false;
+//        }
         return check;
     }
 
-    public void comboBoxChiNhanh(JComboBox<String> ChiNhanh) {
+    public void comboBoxChiNhanh(JComboBox<String> ChiNhanh, String MaChiNhanh) {
         ChiNhanh.removeAllItems();
 
         ArrayList<String> ds = n11_NhanVienDAO.getInstance().listChiNhanh();
 
-        ChiNhanh.addItem("None");
+        if (MaChiNhanh == null) {
+            ChiNhanh.addItem("Tổng");
+        }
+        for (String chiNhanh : ds) {
+            ChiNhanh.addItem(chiNhanh);
+        }
+    }
+    
+    public void comboBoxChiNhanh_khongTong(JComboBox<String> ChiNhanh, String MaChiNhanh) {
+        ChiNhanh.removeAllItems();
+
+        ArrayList<String> ds = n11_NhanVienDAO.getInstance().listChiNhanh();
 
         for (String chiNhanh : ds) {
             ChiNhanh.addItem(chiNhanh);

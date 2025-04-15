@@ -16,7 +16,7 @@ public class n11_PhanQuyenDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM PhanQuyen";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.PhanQuyen";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -43,7 +43,7 @@ public class n11_PhanQuyenDAO {
     }
 
     public int insert(PhanQuyenDTO a) {
-        String sql = "INSERT INTO PhanQuyen \n"
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.PhanQuyen \n"
                 + "           (MaPhanQuyen\n"
                 + "           ,TenQuyen\n"
                 + "           ,BanHang\n"
@@ -57,9 +57,10 @@ public class n11_PhanQuyenDAO {
                 + "           ,NhaCungCap\n"
                 + "           ,NhanVien\n"
                 + "           ,ThongKe\n"
+                + "           ,DoUuTien\n"
                 + "           ,TrangThai)\n"
                 + "     VALUES\n"
-                + "           (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "           (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -67,21 +68,22 @@ public class n11_PhanQuyenDAO {
 
             st.setString(1, a.getMa());
             st.setString(2, a.getTen());
-            st.setBoolean(3, a.isBanHang());
-            st.setBoolean(4, a.isKhachHang());
+            st.setBoolean(3, a.getBanHang());
+            st.setBoolean(4, a.getKhachHang());
 
-            st.setBoolean(5, a.isNhapHang());
-            st.setBoolean(6, a.isXuatKho());
-            st.setBoolean(7, a.isMon());
-            st.setBoolean(8, a.isNguyenLieu());
+            st.setBoolean(5, a.getNhapHang());
+            st.setBoolean(6, a.getXuatKho());
+            st.setBoolean(7, a.getMon());
+            st.setBoolean(8, a.getNguyenLieu());
 
-            st.setBoolean(9, a.isLichLam());
-            st.setBoolean(10, a.isKhuyenMaiUuDai());
-            st.setBoolean(11, a.isNhaCungCap());
-            st.setBoolean(12, a.isNhanVien());
+            st.setBoolean(9, a.getLichLam());
+            st.setBoolean(10, a.getKhuyenMaiUuDai());
+            st.setBoolean(11, a.getNhaCungCap());
+            st.setBoolean(12, a.getNhanVien());
 
-            st.setBoolean(13, a.isThongKe());
-            st.setBoolean(14, a.isTrangThai());
+            st.setBoolean(13, a.getThongKe());
+            st.setInt(14, a.getDoUuTien());
+            st.setBoolean(15, a.getTrangThai());
 
             st.executeUpdate();
             System.out.println("insert success");
@@ -94,7 +96,7 @@ public class n11_PhanQuyenDAO {
     }
 
     public int update(PhanQuyenDTO a) {
-        String sqlUpdate = "UPDATE PhanQuyen "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.PhanQuyen "
                 + "SET TenQuyen = ?, "
                 + "    BanHang = ?, "
                 + "    KhachHang = ?, "
@@ -107,16 +109,16 @@ public class n11_PhanQuyenDAO {
                 + "    NhaCungCap = ?, "
                 + "    NhanVien = ?, "
                 + "    ThongKe = ?, "
+                + "    DoUuTien = ?, "
                 + "    TrangThai = ? "
                 + "WHERE MaPhanQuyen = ?";
 
-        String sqlSelect = "SELECT TenQuyen, BanHang, KhachHang, NhapHang, XuatKho, Mon, NguyenLieu, LichLam, KhuyenMaiUuDai, NhaCungCap, NhanVien, ThongKe, TrangThai "
+        String sqlSelect = "SELECT TenQuyen, BanHang, KhachHang, NhapHang, XuatKho, Mon, NguyenLieu, LichLam, KhuyenMaiUuDai, NhaCungCap, NhanVien, ThongKe, TrangThai, DoUuTien "
                 + "FROM PhanQuyen WHERE MaPhanQuyen = ?";
 
         try {
             Connection c = JDBCUtil.getConnection();
 
-            // Truy vấn dữ liệu cũ
             PreparedStatement stSelect = c.prepareStatement(sqlSelect);
             stSelect.setString(1, a.getMa());
             ResultSet rs = stSelect.executeQuery();
@@ -134,46 +136,47 @@ public class n11_PhanQuyenDAO {
                 Boolean previousNhaCungCap = rs.getBoolean("NhaCungCap");
                 Boolean previousNhanVien = rs.getBoolean("NhanVien");
                 Boolean previousThongKe = rs.getBoolean("ThongKe");
+                int previousDoUuTien = rs.getInt("DoUuTien");
                 Boolean previousTrangThai = rs.getBoolean("TrangThai");
 
-                // So sánh dữ liệu
                 if (previousTen.equals(a.getTen())
-                        && previousBanHang.equals(a.isBanHang())
-                        && previousKhachHang.equals(a.isKhachHang())
-                        && previousNhapHang.equals(a.isNhapHang())
-                        && previousXuatKho.equals(a.isXuatKho())
-                        && previousMon.equals(a.isMon())
-                        && previousNguyenLieu.equals(a.isNguyenLieu())
-                        && previousLichLam.equals(a.isLichLam())
-                        && previousKhuyenMaiUuDai.equals(a.isKhuyenMaiUuDai())
-                        && previousNhaCungCap.equals(a.isNhaCungCap())
-                        && previousNhanVien.equals(a.isNhanVien())
-                        && previousThongKe.equals(a.isThongKe())
-                        && previousTrangThai.equals(a.isTrangThai())) {
+                        && previousBanHang.equals(a.getBanHang())
+                        && previousKhachHang.equals(a.getKhachHang())
+                        && previousNhapHang.equals(a.getNhapHang())
+                        && previousXuatKho.equals(a.getXuatKho())
+                        && previousMon.equals(a.getMon())
+                        && previousNguyenLieu.equals(a.getNguyenLieu())
+                        && previousLichLam.equals(a.getLichLam())
+                        && previousKhuyenMaiUuDai.equals(a.getKhuyenMaiUuDai())
+                        && previousNhaCungCap.equals(a.getNhaCungCap())
+                        && previousNhanVien.equals(a.getNhanVien())
+                        && previousThongKe.equals(a.getThongKe())
+                        && previousDoUuTien == a.getDoUuTien()
+                        && previousTrangThai.equals(a.getTrangThai())) {
                     JDBCUtil.closeConnection(c);
-                    return 2; // Trùng dữ liệu
+                    return 2;
                 }
             } else {
                 JDBCUtil.closeConnection(c);
                 return 0;
             }
 
-            // Thực hiện cập nhật
             PreparedStatement stUpdate = c.prepareStatement(sqlUpdate);
             stUpdate.setString(1, a.getTen());
-            stUpdate.setBoolean(2, a.isBanHang());
-            stUpdate.setBoolean(3, a.isKhachHang());
-            stUpdate.setBoolean(4, a.isNhapHang());
-            stUpdate.setBoolean(5, a.isXuatKho());
-            stUpdate.setBoolean(6, a.isMon());
-            stUpdate.setBoolean(7, a.isNguyenLieu());
-            stUpdate.setBoolean(8, a.isLichLam());
-            stUpdate.setBoolean(9, a.isKhuyenMaiUuDai());
-            stUpdate.setBoolean(10, a.isNhaCungCap());
-            stUpdate.setBoolean(11, a.isNhanVien());
-            stUpdate.setBoolean(12, a.isThongKe());
-            stUpdate.setBoolean(13, a.isTrangThai());
-            stUpdate.setString(14, a.getMa());
+            stUpdate.setBoolean(2, a.getBanHang());
+            stUpdate.setBoolean(3, a.getKhachHang());
+            stUpdate.setBoolean(4, a.getNhapHang());
+            stUpdate.setBoolean(5, a.getXuatKho());
+            stUpdate.setBoolean(6, a.getMon());
+            stUpdate.setBoolean(7, a.getNguyenLieu());
+            stUpdate.setBoolean(8, a.getLichLam());
+            stUpdate.setBoolean(9, a.getKhuyenMaiUuDai());
+            stUpdate.setBoolean(10, a.getNhaCungCap());
+            stUpdate.setBoolean(11, a.getNhanVien());
+            stUpdate.setBoolean(12, a.getThongKe());
+            stUpdate.setInt(13, a.getDoUuTien());
+            stUpdate.setBoolean(14, a.getTrangThai());
+            stUpdate.setString(15, a.getMa());
 
             int kq = stUpdate.executeUpdate();
             JDBCUtil.closeConnection(c);
@@ -190,14 +193,13 @@ public class n11_PhanQuyenDAO {
     }
 
     public int batTat(String ma, Boolean trangThai) {
-        String sqlUpdate = "UPDATE PhanQuyen "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.PhanQuyen "
                 + "SET TrangThai = ? "
-                + "WHERE MaPhanQuyen = ?";
+                + "WHERE MaPhanQuyen = ? ";
 
         try {
             Connection c = JDBCUtil.getConnection();
 
-            // Truy vấn dữ liệu cũ
             PreparedStatement ps = c.prepareStatement(sqlUpdate);
             ps.setBoolean(1, trangThai);
             ps.setString(2, ma);
@@ -216,10 +218,11 @@ public class n11_PhanQuyenDAO {
         }
     }
 
-    public ArrayList<PhanQuyenDTO> listAll() {
+    public ArrayList<PhanQuyenDTO> listAll(int myLevel) {
         ArrayList<PhanQuyenDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM PhanQuyen";
+        String sql = "declare @myLevel int = " + myLevel
+                + " select * from LINK.QuanCaPhe.dbo.PhanQuyen where DoUuTien >= @myLevel "
+                + " order by TrangThai desc, DoUuTien ";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -229,7 +232,9 @@ public class n11_PhanQuyenDAO {
                         rs.getBoolean("BanHang"), rs.getBoolean("KhachHang"), rs.getBoolean("NhapHang"),
                         rs.getBoolean("XuatKho"), rs.getBoolean("Mon"), rs.getBoolean("NguyenLieu"),
                         rs.getBoolean("LichLam"), rs.getBoolean("KhuyenMaiUuDai"), rs.getBoolean("NhaCungCap"),
-                        rs.getBoolean("NhanVien"), rs.getBoolean("ThongKe"), rs.getBoolean("TrangThai"));
+                        rs.getBoolean("NhanVien"), rs.getBoolean("ThongKe"),
+                        rs.getInt("DoUuTien"), rs.getBoolean("TrangThai")
+                );
                 list.add(a);
             }
             JDBCUtil.closeConnection(c);
@@ -242,7 +247,7 @@ public class n11_PhanQuyenDAO {
 
     public String searchMaPQByName(String ten) {
         String ma = null;
-        String sql = "SELECT MaPhanQuyen FROM PhanQuyen WHERE TenQuyen LIKE ?";
+        String sql = "SELECT MaPhanQuyen FROM LINK.QuanCaPhe.dbo.PhanQuyen WHERE TenQuyen LIKE ?";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -261,5 +266,31 @@ public class n11_PhanQuyenDAO {
             System.out.println(e);
         }
         return ma;
+    }
+
+    public int searchDoUuTienByMaNV(String maNV) {
+        Integer doUuTien = null;
+        String sql = "select tk.MaNhanVien, pq.DoUuTien \n"
+                + "from LINK.QuanCaPhe.dbo.TaiKhoan as tk \n"
+                + "join LINK.QuanCaPhe.dbo.PhanQuyen as pq on pq.MaPhanQuyen = tk.MaPhanQuyen\n"
+                + "where tk.MaNhanVien = ?";
+
+        try {
+            Connection c = JDBCUtil.getConnection();
+            PreparedStatement st = c.prepareStatement(sql);
+            st.setString(1, maNV);
+
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                doUuTien = rs.getInt("DoUuTien");
+            }
+
+            JDBCUtil.closeConnection(c);
+        } catch (SQLException e) {
+            System.out.println("searchDoUuTienByMaNV error");
+            System.out.println(e);
+        }
+        return doUuTien;
     }
 }

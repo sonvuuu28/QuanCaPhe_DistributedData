@@ -33,6 +33,7 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
         nv = new javax.swing.JLabel();
         ncc = new javax.swing.JLabel();
         tongTien = new javax.swing.JLabel();
+        cn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -112,6 +113,7 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
         nv.setForeground(new java.awt.Color(0, 102, 204));
         nv.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         nv.setText("NV: Vũ Thiên Sơn");
+        nv.setPreferredSize(new java.awt.Dimension(150, 16));
 
         ncc.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
         ncc.setForeground(new java.awt.Color(255, 102, 0));
@@ -123,6 +125,11 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
         tongTien.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         tongTien.setText("1.000.000 VNĐ");
 
+        cn.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        cn.setForeground(new java.awt.Color(0, 102, 204));
+        cn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        cn.setPreferredSize(new java.awt.Dimension(150, 16));
+
         javax.swing.GroupLayout PanelNoiDungLayout = new javax.swing.GroupLayout(PanelNoiDung);
         PanelNoiDung.setLayout(PanelNoiDungLayout);
         PanelNoiDungLayout.setHorizontalGroup(
@@ -132,14 +139,18 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
             .addGroup(PanelNoiDungLayout.createSequentialGroup()
                 .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelNoiDungLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(PanelNoiDungLayout.createSequentialGroup()
-                                .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(14, 14, 14)
+                                .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ncc, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 28, Short.MAX_VALUE))
+                            .addGroup(PanelNoiDungLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(cn, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 6, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -158,7 +169,9 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(33, 33, 33))
         );
 
@@ -183,7 +196,7 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonEvents() {
-        n02_HoaDonBUS.getInstance().setUpCTHD(table, frame.getHD(), nv, ncc, tongTien, ngayLap);
+        n02_HoaDonBUS.getInstance().setUpCTHD(table, frame.getHD(), nv, ncc, tongTien, ngayLap, cn);
         n02_HoaDonBUS.getInstance().listCTHD(table, frame.getHD());
 
         labelCancel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -215,6 +228,7 @@ public class n02_HoaDon_CTHDGUI extends javax.swing.JFrame {
     private javax.swing.JPanel BtnCancel;
     private javax.swing.JPanel PanelNoiDung;
     private javax.swing.JLabel Title;
+    private javax.swing.JLabel cn;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel labelCancel;

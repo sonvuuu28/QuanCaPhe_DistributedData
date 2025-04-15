@@ -11,7 +11,7 @@ import javax.swing.*;
 
 public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
 
-    private n08_LichLamGUI frame;
+    public n08_LichLamGUI frame;
     private Date date;
 
     public n08_LichLam_XepLichGUI(n08_LichLamGUI frame) {
@@ -160,7 +160,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel30.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel30.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        nv.setPreferredSize(new java.awt.Dimension(130, 23));
+        nv.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel30.add(nv);
 
         jPanel8.add(jPanel30);
@@ -180,7 +180,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel29.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel29.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        t2.setPreferredSize(new java.awt.Dimension(130, 23));
+        t2.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel29.add(t2);
 
         thu2.add(jPanel29);
@@ -200,7 +200,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel31.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel31.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        t3.setPreferredSize(new java.awt.Dimension(130, 23));
+        t3.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel31.add(t3);
 
         thu3.add(jPanel31);
@@ -220,7 +220,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel35.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel35.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        t4.setPreferredSize(new java.awt.Dimension(130, 23));
+        t4.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel35.add(t4);
 
         thu4.add(jPanel35);
@@ -240,7 +240,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel33.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel33.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        t5.setPreferredSize(new java.awt.Dimension(130, 23));
+        t5.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel33.add(t5);
 
         thu5.add(jPanel33);
@@ -260,7 +260,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel36.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel36.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        t6.setPreferredSize(new java.awt.Dimension(130, 23));
+        t6.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel36.add(t6);
 
         thu6.add(jPanel36);
@@ -280,7 +280,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel37.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel37.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        t7.setPreferredSize(new java.awt.Dimension(130, 23));
+        t7.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel37.add(t7);
 
         thu7.add(jPanel37);
@@ -300,7 +300,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
         jPanel38.setPreferredSize(new java.awt.Dimension(150, 37));
         jPanel38.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 4));
 
-        cn.setPreferredSize(new java.awt.Dimension(130, 23));
+        cn.setPreferredSize(new java.awt.Dimension(150, 23));
         jPanel38.add(cn);
 
         chuNhat.add(jPanel38);
@@ -526,7 +526,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
                             + "không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
                     if (response == JOptionPane.YES_OPTION) {
-                        if (n08_LichLamBUS.getInstance().insert(date)) {
+                        if (n08_LichLamBUS.getInstance().insert(date, frame.frame.maCN)) {
                             frame.resetXepLich(date);
                             reset(date);
                         }
@@ -559,7 +559,7 @@ public class n08_LichLam_XepLichGUI extends javax.swing.JFrame {
     }
 
     public void addOrUpdateBtn(Date date) {
-        Boolean bus = n08_LichLamBUS.getInstance().checkExistLichLam(date);
+        Boolean bus = n08_LichLamBUS.getInstance().checkExistLichLam(date, frame.frame.maCN);
         if (bus) {
             BtnThem.setVisible(false);
             BtnUpdate.setVisible(true);

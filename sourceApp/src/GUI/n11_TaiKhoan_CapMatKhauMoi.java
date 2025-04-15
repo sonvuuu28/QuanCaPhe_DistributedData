@@ -336,7 +336,7 @@ public class n11_TaiKhoan_CapMatKhauMoi extends javax.swing.JPanel {
 
             mk.setFocusable(false);
             mk.setText("Tạo mật khẩu");
-            n11_TaiKhoanBUS.getInstance().comboboxPhanQuyen(phanQuyen);
+            n11_TaiKhoanBUS.getInstance().comboboxPhanQuyen(phanQuyen, frame.maNhanVienDangNhap);
         } else {
             BtnSua.setVisible(false);
             PanelTaiLai.setVisible(false);
@@ -361,13 +361,19 @@ public class n11_TaiKhoan_CapMatKhauMoi extends javax.swing.JPanel {
 
         BtnSua.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int response = JOptionPane.showConfirmDialog(null, "Bạn có muốn điều chỉnh tài khoản không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-                String MatKhau = mk.getText();
-                String PhanQuyen = n11_TaiKhoanBUS.getInstance().searchMaPQByName(phanQuyen.getSelectedItem().toString());
+                if (!mk.getText().equals("Tạo mật khẩu")) {
+                    int response = JOptionPane.showConfirmDialog(null, "Bạn có muốn điều chỉnh tài khoản không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                    String MatKhau = mk.getText();
+                    String PhanQuyen = n11_TaiKhoanBUS.getInstance().searchMaPQByName(phanQuyen.getSelectedItem().toString());
 
-                String maTK = n11_TaiKhoanBUS.getInstance().searchTaiKhoanTheoMaNhanVien(frame.getMaNV()).getMa();
-                if (response == JOptionPane.YES_OPTION) {
-                    int i = n11_TaiKhoanBUS.getInstance().update(maTK, PhanQuyen, MatKhau);
+                    String maTK = n11_TaiKhoanBUS.getInstance().searchTaiKhoanTheoMaNhanVien(frame.getMaNV()).getMa();
+                    if (response == JOptionPane.YES_OPTION) {
+                        int i = n11_TaiKhoanBUS.getInstance().update(maTK, PhanQuyen, MatKhau);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Nhấn tự động tạo mật khẩu!",
+                            "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });

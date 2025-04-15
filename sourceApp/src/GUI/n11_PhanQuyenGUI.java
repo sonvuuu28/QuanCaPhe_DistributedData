@@ -47,6 +47,9 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
         NCC = new javax.swing.JCheckBox();
         NV = new javax.swing.JCheckBox();
         TK = new javax.swing.JCheckBox();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        DoUuTien = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         BtnThem = new javax.swing.JButton();
         BtnSua = new javax.swing.JButton();
@@ -95,11 +98,11 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã", "Tên", "Bán hàng", "Khách", "Nhập hàng", "Xuất kho", "Món", "NgLiệu", "Lịch làm", "KM-UD", "NCC", "NViên", "Thkê", "Trạng thái"
+                "Mã", "Tên", "Bán", "Khách", "Nhập", "Xuất", "Món", "NgLiệu", "Lịch", "KM-UD", "NCC", "NViên", "Thkê", "Level", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -108,20 +111,18 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
         });
         scrollPaneTable.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
-            table.getColumnModel().getColumn(0).setPreferredWidth(30);
-            table.getColumnModel().getColumn(3).setPreferredWidth(40);
-            table.getColumnModel().getColumn(6).setPreferredWidth(30);
-            table.getColumnModel().getColumn(7).setPreferredWidth(45);
-            table.getColumnModel().getColumn(10).setPreferredWidth(30);
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+            table.getColumnModel().getColumn(1).setPreferredWidth(100);
+            table.getColumnModel().getColumn(14).setPreferredWidth(100);
         }
 
         jPanel2.setBackground(new java.awt.Color(219, 189, 142));
-        jPanel2.setPreferredSize(new java.awt.Dimension(1000, 230));
+        jPanel2.setPreferredSize(new java.awt.Dimension(1000, 260));
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(850, 220));
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING, 20, 20));
+        jPanel1.setPreferredSize(new java.awt.Dimension(850, 250));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING, 20, 18));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(260, 30));
@@ -215,11 +216,26 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
         TK.setPreferredSize(new java.awt.Dimension(260, 30));
         jPanel1.add(TK);
 
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setPreferredSize(new java.awt.Dimension(260, 30));
+        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING, 5, 3));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("Độ ưu tiên");
+        jLabel2.setPreferredSize(new java.awt.Dimension(95, 20));
+        jPanel5.add(jLabel2);
+
+        DoUuTien.setText("PQ001");
+        DoUuTien.setPreferredSize(new java.awt.Dimension(50, 22));
+        jPanel5.add(DoUuTien);
+
+        jPanel1.add(jPanel5);
+
         jPanel2.add(jPanel1);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setPreferredSize(new java.awt.Dimension(136, 220));
-        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 23));
+        jPanel3.setPreferredSize(new java.awt.Dimension(136, 250));
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 28));
 
         BtnThem.setBackground(new java.awt.Color(0, 0, 0));
         BtnThem.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
@@ -278,11 +294,11 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
             BiggestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BiggestLayout.createSequentialGroup()
                 .addComponent(Biggest_Header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addGap(0, 0, 0)
                 .addComponent(LabelMenu)
-                .addGap(30, 30, 30)
+                .addGap(25, 25, 25)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -318,12 +334,22 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
         NCC.setSelected(false);
         NV.setSelected(false);
         TK.setSelected(false);
+        DoUuTien.setText("");
 
-        n11_PhanQuyenBUS.getInstance().listAll(table);
+        n11_PhanQuyenBUS.getInstance().listAll(table, frame.maNV);
     }
 
     private void buttonEvents() {
         reset();
+
+        DoUuTien.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                String text = DoUuTien.getText();
+                text = text.replaceAll("[^\\d]", "");
+                DoUuTien.setText(text);
+            }
+        });
 
         PanelNV.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -360,13 +386,13 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
 
         BtnThem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (n11_PhanQuyenBUS.getInstance().checkInput(Ten) == true) {
+                if (n11_PhanQuyenBUS.getInstance().checkInput(Ten, DoUuTien, frame.getMaNV()) == true) {
                     int response = JOptionPane.showConfirmDialog(null, "Bạn có muốn thêm phân quyền không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
                     if (response == JOptionPane.YES_OPTION) {
                         boolean a = n11_PhanQuyenBUS.getInstance().insert(Ten.getText(), BanHang.isSelected(), KH.isSelected(), NhapHang.isSelected(),
                                 XuatKho.isSelected(), Mon.isSelected(), NguyenLieu.isSelected(), LichLam.isSelected(), KM.isSelected(), NCC.isSelected(),
-                                NV.isSelected(), TK.isSelected());
+                                NV.isSelected(), TK.isSelected(), Integer.parseInt(DoUuTien.getText()));
                         if (a == true) {
                             reset();
                         }
@@ -385,15 +411,15 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 phân quyền trong danh sách để sửa!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     String ma = model.getValueAt(selectedRow, 0).toString();
-                    boolean trangThai = n11_PhanQuyenBUS.getInstance().stringToBoolean(model.getValueAt(selectedRow, 13).toString());
+                    boolean trangThai = n11_PhanQuyenBUS.getInstance().stringToBoolean(model.getValueAt(selectedRow, 14).toString());
 
-                    if (n11_PhanQuyenBUS.getInstance().checkInput(Ten) == true) {
+                    if (n11_PhanQuyenBUS.getInstance().checkInput(Ten, DoUuTien, frame.getMaNV()) == true) {
                         int response = JOptionPane.showConfirmDialog(null, "Bạn có muốn sửa thông tin phân quyền không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
                         if (response == JOptionPane.YES_OPTION) {
                             int a = n11_PhanQuyenBUS.getInstance().update(ma, Ten.getText(), BanHang.isSelected(), KH.isSelected(), NhapHang.isSelected(),
                                     XuatKho.isSelected(), Mon.isSelected(), NguyenLieu.isSelected(), LichLam.isSelected(), KM.isSelected(), NCC.isSelected(),
-                                    NV.isSelected(), TK.isSelected(), trangThai);
+                                    NV.isSelected(), TK.isSelected(), Integer.parseInt(DoUuTien.getText()), trangThai);
                             if (a == 1) {
                                 reset();
                             }
@@ -420,7 +446,7 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
                 } else {
                     String thongBao;
                     String ma = model.getValueAt(selectedRow, 0).toString();
-                    boolean trangThai = n11_PhanQuyenBUS.getInstance().stringToBoolean(model.getValueAt(selectedRow, 13).toString());
+                    boolean trangThai = n11_PhanQuyenBUS.getInstance().stringToBoolean(model.getValueAt(selectedRow, 14).toString());
                     if (trangThai == true) {
                         trangThai = false;
                         thongBao = "tắt";
@@ -428,14 +454,12 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
                         trangThai = true;
                         thongBao = "bật";
                     }
-                    if (n11_PhanQuyenBUS.getInstance().checkInput(Ten) == true) {
-                        int response = JOptionPane.showConfirmDialog(null, "Bạn có muốn " + thongBao + " phân quyền này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                    int response = JOptionPane.showConfirmDialog(null, "Bạn có muốn " + thongBao + " phân quyền này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
-                        if (response == JOptionPane.YES_OPTION) {
-                            int a = n11_PhanQuyenBUS.getInstance().batTat(ma, trangThai);
-                            if (a == 1) {
-                                reset();
-                            }
+                    if (response == JOptionPane.YES_OPTION) {
+                        int a = n11_PhanQuyenBUS.getInstance().batTat(ma, trangThai);
+                        if (a == 1) {
+                            reset();
                         }
                     }
                 }
@@ -504,6 +528,7 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
                 } else {
                     TK.setSelected(false);
                 }
+                DoUuTien.setText(model.getValueAt(count, 13).toString());
             }
         });
     }
@@ -516,6 +541,7 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
     private javax.swing.JButton BtnSua;
     private javax.swing.JButton BtnTaiLai;
     private javax.swing.JButton BtnThem;
+    private javax.swing.JTextField DoUuTien;
     private javax.swing.JCheckBox KH;
     private javax.swing.JCheckBox KM;
     private javax.swing.JLabel LabelBanHang;
@@ -533,10 +559,12 @@ public class n11_PhanQuyenGUI extends javax.swing.JPanel {
     private javax.swing.JTextField Ten;
     private javax.swing.JCheckBox XuatKho;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane scrollPaneTable;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables

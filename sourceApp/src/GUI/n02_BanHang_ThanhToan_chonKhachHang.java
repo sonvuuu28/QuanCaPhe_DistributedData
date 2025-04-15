@@ -131,7 +131,7 @@ public class n02_BanHang_ThanhToan_chonKhachHang extends javax.swing.JFrame {
                 ten.setText(model.getValueAt(count, 1).toString());
                 gioitinh.setSelectedItem(model.getValueAt(count, 2).toString());
                 sdt.setText(model.getValueAt(count, 3).toString());
-                ngaysinh.setDate((java.sql.Date) model.getValueAt(count, 4));
+                ngaysinh.setDate(Utils.getInstance().normalDateString_Transform_SQLDate(model.getValueAt(count, 4).toString()));
                 chitieu.setText(model.getValueAt(count, 5).toString());
             }
         });

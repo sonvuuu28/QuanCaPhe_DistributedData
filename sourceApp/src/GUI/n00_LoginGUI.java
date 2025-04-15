@@ -3,10 +3,13 @@ package GUI;
 import BUS.n00_LoginBUS;
 import DTO.NhanVienDTO;
 import DTO.PhanQuyenDTO;
+import Util.JDBCUtil;
 import java.awt.*;
 import javax.swing.JOptionPane;
 
 public class n00_LoginGUI extends javax.swing.JFrame {
+
+    public static boolean serverTongValid;
 
     public n00_LoginGUI() {
         initComponents();
@@ -34,6 +37,7 @@ public class n00_LoginGUI extends javax.swing.JFrame {
         log = new javax.swing.JPanel();
         LabelNutDangNhap = new javax.swing.JLabel();
         mk = new javax.swing.JPasswordField();
+        server = new javax.swing.JComboBox<>();
         PanelLeft = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -164,6 +168,9 @@ public class n00_LoginGUI extends javax.swing.JFrame {
                 .addGap(66, 66, 66))
         );
 
+        server.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tổng", "Tp. Hồ Chí Minh", "Hà Nội" }));
+        server.setPreferredSize(new java.awt.Dimension(150, 22));
+
         javax.swing.GroupLayout PanelRightLayout = new javax.swing.GroupLayout(PanelRight);
         PanelRight.setLayout(PanelRightLayout);
         PanelRightLayout.setHorizontalGroup(
@@ -171,14 +178,18 @@ public class n00_LoginGUI extends javax.swing.JFrame {
             .addGroup(PanelRightLayout.createSequentialGroup()
                 .addGap(65, 65, 65)
                 .addComponent(PanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(266, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addComponent(PanelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         PanelRightLayout.setVerticalGroup(
             PanelRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelRightLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(PanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(PanelRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addComponent(PanelInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(84, Short.MAX_VALUE))
@@ -239,7 +250,56 @@ public class n00_LoginGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setChiNhanh() {
+        int index = server.getSelectedIndex();
+        String nameWithPorts = "";
+
+        switch (index) {
+            case 0:
+                nameWithPorts = "LAPTOP-VNOPB5Q7\\SERVER:1433";
+                serverTongValid = true;
+                break;
+            case 1:
+                nameWithPorts = "LAPTOP-VNOPB5Q7\\NODE1:1434";
+                serverTongValid = false;
+                break;
+            default:
+                System.out.println("server set lỗi");
+        }
+
+        JDBCUtil.setServer(nameWithPorts);
+    }
+
+    public void login() {
+        NhanVienDTO nv = n00_LoginBUS.getInstance().getNhanVienFromTaiKhoan(tk.getText(), mk.getText());
+        PhanQuyenDTO pq = n00_LoginBUS.getInstance().getPhanQuyenFromTaiKhoan(tk.getText(), mk.getText());
+
+        if (nv == null) {
+            JOptionPane.showMessageDialog(null, "Tài khoản không tồn tại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (serverTongValid) {
+            if (nv.getMaCN() == null) {
+                dispose();
+                new n01_TrangChuGUI(nv.getMa(), nv.getMaCN(), pq).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Tài khoản không tồn tại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            dispose();
+            new n01_TrangChuGUI(nv.getMa(), nv.getMaCN(), pq).setVisible(true);
+        }
+    }
+
     public void buttonEvents() {
+        setChiNhanh();
+
+        server.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                setChiNhanh();
+            }
+        });
 
         log.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -254,30 +314,14 @@ public class n00_LoginGUI extends javax.swing.JFrame {
 
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                NhanVienDTO nv = n00_LoginBUS.getInstance().getNhanVienFromTaiKhoan(tk.getText(), mk.getText());
-                PhanQuyenDTO pq = n00_LoginBUS.getInstance().getPhanQuyenFromTaiKhoan(tk.getText(), mk.getText());
-
-                if (nv == null) {
-                    JOptionPane.showMessageDialog(null, "Tài khoản hoặc mật khẩu sai!", "Thông báo", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    dispose();
-                    new n01_TrangChuGUI(nv.getMa(), nv.getMaCN(), pq).setVisible(true);
-                }
+                login();
             }
         });
 
         mk.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                    NhanVienDTO nv = n00_LoginBUS.getInstance().getNhanVienFromTaiKhoan(tk.getText(), mk.getText());
-                    PhanQuyenDTO pq = n00_LoginBUS.getInstance().getPhanQuyenFromTaiKhoan(tk.getText(), mk.getText());
-
-                    if (nv == null) {
-                        JOptionPane.showMessageDialog(null, "Tài khoản hoặc mật khẩu sai!", "Thông báo", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        dispose();
-                        new n01_TrangChuGUI(nv.getMa(), nv.getMaCN(), pq).setVisible(true);
-                    }
+                    login();
                 }
             }
         });
@@ -332,6 +376,7 @@ public class n00_LoginGUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel log;
     private javax.swing.JPasswordField mk;
+    private javax.swing.JComboBox<String> server;
     private javax.swing.JTextField tk;
     // End of variables declaration//GEN-END:variables
 }

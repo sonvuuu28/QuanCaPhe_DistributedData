@@ -17,7 +17,7 @@ public class n03_KhachHangDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM KhachHang";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.KhachHang";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -44,7 +44,7 @@ public class n03_KhachHangDAO {
     }
 
     public int insert(KhachHangDTO a) {
-        String sql = "INSERT INTO KhachHang\n"
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.KhachHang\n"
                 + "           (MaKhachHang\n"
                 + "           ,TenKhachHang\n"
                 + "           ,NgaySinh\n"
@@ -83,7 +83,7 @@ public class n03_KhachHangDAO {
     }
 
     public int update(KhachHangDTO a) {
-        String sqlUpdate = "UPDATE KhachHang "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.KhachHang "
                 + "SET TenKhachHang = ?, "
                 + "    NgaySinh = ?, "
                 + "    GioiTinh = ?, "
@@ -132,21 +132,20 @@ public class n03_KhachHangDAO {
             JDBCUtil.closeConnection(c);
 
             if (kq > 0) {
-                return 1; // Thành công
+                return 1; 
             } else {
-                return 0; // Thất bại
+                return 0; 
             }
         } catch (SQLException e) {
             System.out.println("update error");
             System.out.println(e);
-            return 0; // Thất bại
+            return 0; 
         }
     }
 
     public ArrayList<KhachHangDTO> listAll() {
         ArrayList<KhachHangDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM KhachHang";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.KhachHang";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -167,7 +166,7 @@ public class n03_KhachHangDAO {
     public ArrayList<KhachHangDTO> search(String ma, String ten, Date ngaysinh, String gioitinh, Long chitieu, String sdt) {
         ArrayList<KhachHangDTO> list = new ArrayList<>();
         ArrayList<Object> params = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM KhachHang WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.KhachHang WHERE 1=1");
 
         if (ma != null && !ma.trim().isEmpty()) {
             sql.append(" AND MaKhachHang LIKE ?");
@@ -224,27 +223,4 @@ public class n03_KhachHangDAO {
         return list;
     }
 
-    public static void main(String[] args) {
-//        KhachHangDTO a = new KhachHangDTO(n03_KhachHangDAO.getInstance().createID(), "Tên khách 2", Date.valueOf("2004-01-28"), "nam", 0, "0825122222");
-//        n03_KhachHangDAO.getInstance().insert(a);
-//        KhachHangDTO a1 = new KhachHangDTO("KH002", "Tên khách 3", Date.valueOf("2004-01-27"), "nữ", 0, "0825123690");
-//        int i = n03_KhachHangDAO.getInstance().update(a1);
-//        if (i == 2) {
-//            System.out.println("KO CÓ J ĐỂ SỬA");
-//        }
-//
-//        if (i == 0) {
-//            System.out.println("FAIL");
-//        }
-//
-//        if (i == 1) {
-//            System.out.println("SỬA THÀNH CÔNG");
-//        }
-//        for (KhachHangDTO a : n03_KhachHangDAO.getInstance().listAll()) {
-//            System.out.println(a.getMaKhachHang()+ "\n");
-//        }
-        for (KhachHangDTO a : n03_KhachHangDAO.getInstance().search("", "", Date.valueOf("2004-01-27"), "", 0L, "")) {
-            System.out.println(a.getMaKhachHang() + " " + a.getTenKhachHang() + " " + a.getNgaySinh() + " " + a.getSDT() + "\n");
-        }
-    }
 }

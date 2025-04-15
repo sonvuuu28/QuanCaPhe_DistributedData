@@ -732,11 +732,11 @@ public class n12_ThongKeGUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã nguyên liệu", "Tên nguyên liệu", "Số lượng nhập kho", "Số lượng xuất kho", "Số lượng tồn kho"
+                "Mã nguyên liệu", "Tên nguyên liệu", "Số lượng nhập kho", "Số lượng xuất kho", "Số lượng tồn kho", "Chi nhánh"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

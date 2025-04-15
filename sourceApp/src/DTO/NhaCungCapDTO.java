@@ -47,7 +47,7 @@ public class NhaCungCapDTO {
 
     @Override
     public String toString() {
-        return TenNCC;
+        return MaNCC + " - " + TenNCC;
     }
 
 }

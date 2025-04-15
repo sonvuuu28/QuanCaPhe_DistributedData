@@ -458,7 +458,7 @@ public class n11_TaiKhoan_Them extends javax.swing.JPanel {
             n11_TaiKhoanBUS.getInstance().searchNhanVienByMa(nv, frame.getMaNV());
             ma.setText(n11_TaiKhoanBUS.getInstance().createID());
             mk.setText(Utils.getInstance().createRandomNumbers() + "");
-            n11_TaiKhoanBUS.getInstance().comboboxPhanQuyen(phanQuyen);
+            n11_TaiKhoanBUS.getInstance().comboboxPhanQuyen(phanQuyen, frame.maNhanVienDangNhap);
             BtnKhoa.setVisible(false);
             BtnMoLai.setVisible(false);
         }

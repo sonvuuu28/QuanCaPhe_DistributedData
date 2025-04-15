@@ -66,7 +66,9 @@ public class n09_KhuyenMaiBUS {
                 hieuLuc = "Không hiệu lực";
             }
 
-            model.addRow(new Object[]{dto.getMa(), dto.getTen(), dto.getNgayBatDau(), dto.getNgayKetThuc(), dto.getPhanTram(),
+            model.addRow(new Object[]{dto.getMa(), dto.getTen(),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayBatDau().toString()),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayKetThuc().toString()), dto.getPhanTram(),
                 Utils.getInstance().LongToMoney(dto.getChiTieu()), hieuLuc});
             i++;
         }
@@ -84,7 +86,8 @@ public class n09_KhuyenMaiBUS {
             } else {
                 hieuLuc = "Không hiệu lực";
             }
-            model.addRow(new Object[]{dto.getMa(), dto.getTen(), dto.getNgayBatDau(), dto.getNgayKetThuc(), dto.getPhanTram(),
+            model.addRow(new Object[]{dto.getMa(), dto.getTen(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayBatDau().toString()),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayKetThuc().toString()), dto.getPhanTram(),
                 Utils.getInstance().LongToMoney(dto.getChiTieu()), hieuLuc});
             i++;
         }
@@ -110,7 +113,9 @@ public class n09_KhuyenMaiBUS {
             } else {
                 hieuLuc = "Không hiệu lực";
             }
-            model.addRow(new Object[]{dto.getMa(), dto.getTen(), dto.getNgayBatDau(), dto.getNgayKetThuc(), dto.getPhanTram(),
+            model.addRow(new Object[]{dto.getMa(), dto.getTen(),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayBatDau().toString()),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayKetThuc().toString()), dto.getPhanTram(),
                 Utils.getInstance().LongToMoney(dto.getChiTieu()), hieuLuc});
             i++;
         }

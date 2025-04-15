@@ -20,8 +20,8 @@ public class n11_PhanQuyenBUS {
 
     public boolean insert(String ten, boolean BanHang, boolean KhachHang, boolean NhapHang, boolean XuatKho, boolean Mon,
             boolean NguyenLieu, boolean LichLam, boolean KM, boolean NCC, boolean NV,
-            boolean TK) {
-        PhanQuyenDTO dto = new PhanQuyenDTO(createID(), ten, BanHang, KhachHang, NhapHang, XuatKho, Mon, NguyenLieu, LichLam, KM, NCC, NV, TK, true);
+            boolean TK, int DoUuTien) {
+        PhanQuyenDTO dto = new PhanQuyenDTO(createID(), ten, BanHang, KhachHang, NhapHang, XuatKho, Mon, NguyenLieu, LichLam, KM, NCC, NV, TK, DoUuTien, true);
         int dao = n11_PhanQuyenDAO.getInstance().insert(dto);
         switch (dao) {
             case 1:
@@ -35,8 +35,8 @@ public class n11_PhanQuyenBUS {
 
     public int update(String ma, String ten, boolean BanHang, boolean KhachHang, boolean NhapHang, boolean XuatKho, boolean Mon,
             boolean NguyenLieu, boolean LichLam, boolean KM, boolean NCC, boolean NV,
-            boolean TK, boolean trangThai) {
-        PhanQuyenDTO dto = new PhanQuyenDTO(ma, ten, BanHang, KhachHang, NhapHang, XuatKho, Mon, NguyenLieu, LichLam, KM, NCC, NV, TK, trangThai);
+            boolean TK, int DoUuTien, boolean trangThai) {
+        PhanQuyenDTO dto = new PhanQuyenDTO(ma, ten, BanHang, KhachHang, NhapHang, XuatKho, Mon, NguyenLieu, LichLam, KM, NCC, NV, TK, DoUuTien, trangThai);
 
         int dao = n11_PhanQuyenDAO.getInstance().update(dto);
         switch (dao) {
@@ -88,28 +88,20 @@ public class n11_PhanQuyenBUS {
         return dao;
     }
 
-    public void listAll(JTable table) {
+    public void listAll(JTable table, String maNV) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
-        ArrayList<PhanQuyenDTO> ds = n11_PhanQuyenDAO.getInstance().listAll();
+
+        int myLevel = n11_PhanQuyenDAO.getInstance().searchDoUuTienByMaNV(maNV);
+        ArrayList<PhanQuyenDTO> ds = n11_PhanQuyenDAO.getInstance().listAll(myLevel);
         int i = 1;
         for (PhanQuyenDTO dto : ds) {
             model.addRow(new Object[]{dto.getMa(),
-                dto.getTen(), booleanToString(dto.isBanHang()
-                ), booleanToString(dto.isKhachHang()
-                ), booleanToString(dto.isNhapHang()
-                ), booleanToString(dto.isXuatKho()
-                ),
-                booleanToString(dto.isMon()
-                ), booleanToString(dto.isNguyenLieu()
-                ), booleanToString(dto.isLichLam()
-                ), booleanToString(dto.isKhuyenMaiUuDai()
-                ),
-                booleanToString(dto.isNhaCungCap()
-                ), booleanToString(dto.isNhanVien()
-                ), booleanToString(dto.isThongKe()
-                ), booleanToString(dto.isTrangThai()
-                )}
+                dto.getTen(), booleanToString(dto.getBanHang()), booleanToString(dto.getKhachHang()),
+                booleanToString(dto.getNhapHang()), booleanToString(dto.getXuatKho()), booleanToString(dto.getMon()),
+                booleanToString(dto.getNguyenLieu()), booleanToString(dto.getLichLam()), booleanToString(dto.getKhuyenMaiUuDai()),
+                booleanToString(dto.getNhaCungCap()), booleanToString(dto.getNhanVien()), booleanToString(dto.getThongKe()),
+                dto.getDoUuTien(), booleanToString(dto.getTrangThai())}
             );
             i++;
         }
@@ -135,7 +127,7 @@ public class n11_PhanQuyenBUS {
         return bool;
     }
 
-    public boolean checkInput(JTextField ten) {
+    public boolean checkInput(JTextField ten, JTextField doUuTien, String maNV) {
         boolean check = true;
 
         if (ten.getText().equals("") && check) {
@@ -144,6 +136,19 @@ public class n11_PhanQuyenBUS {
             check = false;
         }
 
+        if (doUuTien.getText().equals("") && check) {
+            doUuTien.requestFocus();
+            JOptionPane.showMessageDialog(null, "Vui lòng điền độ ưu tiên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            check = false;
+        }
+
+        int myLevel = n11_PhanQuyenDAO.getInstance().searchDoUuTienByMaNV(maNV);
+        if (Integer.parseInt(doUuTien.getText()) < myLevel) {
+            doUuTien.requestFocus();
+            JOptionPane.showMessageDialog(null, "Không được nhập độ ưu tiên cao hơn quyền của bạn!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            check = false;
+        }
+        
         return check;
     }
 

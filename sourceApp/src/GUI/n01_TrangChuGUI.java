@@ -2,6 +2,7 @@ package GUI;
 
 import BUS.n01_TrangChuBUS;
 import DTO.PhanQuyenDTO;
+import Util.ChonCN;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -468,37 +469,37 @@ public class n01_TrangChuGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void setUp_LeftBar() {
-        if (pq.isBanHang() == false) {
+        if (pq.getBanHang() == false) {
             BtnBanHang.setVisible(false);
         }
-        if (pq.isKhachHang() == false) {
+        if (pq.getKhachHang() == false) {
             BtnKH.setVisible(false);
         }
-        if (pq.isNhapHang() == false) {
+        if (pq.getNhapHang() == false) {
             BtnNhapHang.setVisible(false);
         }
-        if (pq.isXuatKho() == false) {
+        if (pq.getXuatKho() == false) {
             BtnXuatKho.setVisible(false);
         }
-        if (pq.isMon() == false) {
+        if (pq.getMon() == false) {
             BtnMon.setVisible(false);
         }
-        if (pq.isNguyenLieu() == false) {
+        if (pq.getNguyenLieu() == false) {
             BtnNL.setVisible(false);
         }
-        if (pq.isLichLam() == false) {
+        if (pq.getLichLam() == false) {
             BtnLichLam.setVisible(false);
         }
-        if (pq.isKhuyenMaiUuDai() == false) {
+        if (pq.getKhuyenMaiUuDai() == false) {
             BtnKM.setVisible(false);
         }
-        if (pq.isNhaCungCap() == false) {
+        if (pq.getNhaCungCap() == false) {
             BtnNCC.setVisible(false);
         }
-        if (pq.isNhanVien() == false) {
+        if (pq.getNhanVien() == false) {
             BtnNV.setVisible(false);
         }
-        if (pq.isThongKe() == false) {
+        if (pq.getThongKe() == false) {
             BtnTK.setVisible(false);
         }
     }
@@ -657,7 +658,7 @@ public class n01_TrangChuGUI extends javax.swing.JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 PanelNoiDung.removeAll();
-                n08_LichLamGUI kh = new n08_LichLamGUI();
+                n08_LichLamGUI kh = new n08_LichLamGUI(n01_TrangChuGUI.this);
                 PanelNoiDung.add(kh, BorderLayout.CENTER);
                 PanelNoiDung.revalidate();
                 PanelNoiDung.repaint();
@@ -737,16 +738,6 @@ public class n01_TrangChuGUI extends javax.swing.JFrame {
                 PanelNoiDung.add(kh, BorderLayout.CENTER);
                 PanelNoiDung.revalidate();
                 PanelNoiDung.repaint();
-            }
-        });
-    }
-
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                PhanQuyenDTO pq = new PhanQuyenDTO("", "", true, true, true, true, true, true, true, true, true, true, true, true);
-                new n01_TrangChuGUI("NV001", "CN002", pq).setVisible(true);
             }
         });
     }

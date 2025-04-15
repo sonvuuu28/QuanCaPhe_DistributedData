@@ -69,11 +69,11 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="Biggest_Header" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="LabelMenu" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="28" max="32767" attributes="0"/>
+                  <EmptySpace pref="15" max="32767" attributes="0"/>
                   <Component id="scrollPaneTable" min="-2" pref="237" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -186,76 +186,32 @@
             <Component class="javax.swing.JTable" name="table">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="14" rowCount="0">
+                  <Table columnCount="15" rowCount="0">
                     <Column editable="false" title="M&#xe3;" type="java.lang.Object"/>
                     <Column editable="false" title="T&#xea;n" type="java.lang.Object"/>
-                    <Column editable="false" title="B&#xe1;n h&#xe0;ng" type="java.lang.Object"/>
+                    <Column editable="false" title="B&#xe1;n" type="java.lang.Object"/>
                     <Column editable="false" title="Kh&#xe1;ch" type="java.lang.Object"/>
-                    <Column editable="false" title="Nh&#x1ead;p h&#xe0;ng" type="java.lang.Object"/>
-                    <Column editable="false" title="Xu&#x1ea5;t kho" type="java.lang.Object"/>
+                    <Column editable="false" title="Nh&#x1ead;p" type="java.lang.Object"/>
+                    <Column editable="false" title="Xu&#x1ea5;t" type="java.lang.Object"/>
                     <Column editable="false" title="M&#xf3;n" type="java.lang.Object"/>
                     <Column editable="false" title="NgLi&#x1ec7;u" type="java.lang.Object"/>
-                    <Column editable="false" title="L&#x1ecb;ch l&#xe0;m" type="java.lang.Object"/>
+                    <Column editable="false" title="L&#x1ecb;ch" type="java.lang.Object"/>
                     <Column editable="false" title="KM-UD" type="java.lang.Object"/>
                     <Column editable="false" title="NCC" type="java.lang.Object"/>
                     <Column editable="false" title="NVi&#xea;n" type="java.lang.Object"/>
                     <Column editable="false" title="Thk&#xea;" type="java.lang.Object"/>
+                    <Column editable="false" title="Level" type="java.lang.Object"/>
                     <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
                       <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="40" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="45" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="true">
                       <Title/>
                       <Editor/>
                       <Renderer/>
@@ -271,6 +227,56 @@
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="true">
                       <Title/>
                       <Editor/>
                       <Renderer/>
@@ -290,7 +296,7 @@
               <Color blue="8e" green="bd" red="db" type="rgb"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[1000, 230]"/>
+              <Dimension value="[1000, 260]"/>
             </Property>
           </Properties>
 
@@ -304,14 +310,14 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[850, 220]"/>
+                  <Dimension value="[850, 250]"/>
                 </Property>
               </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                 <Property name="alignment" type="int" value="3"/>
                 <Property name="horizontalGap" type="int" value="20"/>
-                <Property name="verticalGap" type="int" value="20"/>
+                <Property name="verticalGap" type="int" value="18"/>
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="jPanel4">
@@ -515,6 +521,42 @@
                     </Property>
                   </Properties>
                 </Component>
+                <Container class="javax.swing.JPanel" name="jPanel5">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[260, 30]"/>
+                    </Property>
+                  </Properties>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+                    <Property name="alignment" type="int" value="3"/>
+                    <Property name="verticalGap" type="int" value="3"/>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel2">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="&#x110;&#x1ed9; &#x1b0;u ti&#xea;n"/>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[95, 20]"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="DoUuTien">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="PQ001"/>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[50, 22]"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -523,12 +565,12 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[136, 220]"/>
+                  <Dimension value="[136, 250]"/>
                 </Property>
               </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
-                <Property name="verticalGap" type="int" value="23"/>
+                <Property name="verticalGap" type="int" value="28"/>
               </Layout>
               <SubComponents>
                 <Component class="javax.swing.JButton" name="BtnThem">

@@ -2,6 +2,7 @@ package GUI;
 
 import BUS.n06_MonBUS;
 import Util.TableCustom;
+import Util.Utils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JOptionPane;

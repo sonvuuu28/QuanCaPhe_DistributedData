@@ -32,6 +32,7 @@ public class n04_PhieuNhap_CTPNGUI extends javax.swing.JFrame {
         nv = new javax.swing.JLabel();
         ncc = new javax.swing.JLabel();
         tongTien = new javax.swing.JLabel();
+        cn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -122,6 +123,11 @@ public class n04_PhieuNhap_CTPNGUI extends javax.swing.JFrame {
         tongTien.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         tongTien.setText("1.000.000 VNĐ");
 
+        cn.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        cn.setForeground(new java.awt.Color(0, 102, 204));
+        cn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        cn.setText("NV: Vũ Thiên Sơn");
+
         javax.swing.GroupLayout PanelNoiDungLayout = new javax.swing.GroupLayout(PanelNoiDung);
         PanelNoiDung.setLayout(PanelNoiDungLayout);
         PanelNoiDungLayout.setHorizontalGroup(
@@ -134,14 +140,15 @@ public class n04_PhieuNhap_CTPNGUI extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(PanelNoiDungLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(PanelNoiDungLayout.createSequentialGroup()
-                                .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ncc, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 28, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(cn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ncc, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         PanelNoiDungLayout.setVerticalGroup(
@@ -151,13 +158,15 @@ public class n04_PhieuNhap_CTPNGUI extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ncc, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
-                    .addComponent(nv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ncc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(33, 33, 33))
         );
 
@@ -182,7 +191,7 @@ public class n04_PhieuNhap_CTPNGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonEvents() {
-        n04_PhieuNhapBUS.getInstance().setUpCTPN(table, frame.getMaPN(), nv, ncc, tongTien, ngayLap);
+        n04_PhieuNhapBUS.getInstance().setUpCTPN(table, frame.getMaPN(), nv, ncc, tongTien, ngayLap, cn);
         n04_PhieuNhapBUS.getInstance().listCTPN(table, frame.getMaPN());
         labelCancel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -213,6 +222,7 @@ public class n04_PhieuNhap_CTPNGUI extends javax.swing.JFrame {
     private javax.swing.JPanel BtnCancel;
     private javax.swing.JPanel PanelNoiDung;
     private javax.swing.JLabel Title;
+    private javax.swing.JLabel cn;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel labelCancel;

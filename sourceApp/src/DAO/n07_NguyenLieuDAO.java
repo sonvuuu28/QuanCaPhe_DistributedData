@@ -14,15 +14,19 @@ public class n07_NguyenLieuDAO {
     public NguyenLieuDTO searchNguyenLieuByMa(String ma, String maCN) {
         NguyenLieuDTO pn = null;
         String sql = "select * \n"
-                + "from NguyenLieu nl \n"
-                + "join NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
-                + "where nl.MaNguyenLieu = ? and MaChiNhanh = ?";
-
+                + "from LINK.QuanCaPhe.dbo.NguyenLieu nl \n"
+                + "join LINK.QuanCaPhe.dbo.NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
+                + "where nl.MaNguyenLieu = ? ";
+        if (maCN != null) {
+            sql += " and MaChiNhanh = ? ";
+        }
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setString(1, ma);
-            st.setString(2, maCN);
+            if (maCN != null) {
+                st.setString(2, maCN);
+            }
 
             ResultSet rs = st.executeQuery();
 
@@ -45,7 +49,7 @@ public class n07_NguyenLieuDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM NguyenLieu";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.NguyenLieu";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -72,13 +76,8 @@ public class n07_NguyenLieuDAO {
     }
 
     public int insert(NguyenLieuDTO a) {
-        String sql = "INSERT INTO NguyenLieu\n"
-                + "           (MaNguyenLieu\n"
-                + "           ,TenNguyenLieu\n"
-                + "           ,DonVi\n"
-                + "           ,TrangThai)\n"
-                + "     VALUES\n"
-                + "           (?,?,?,?)";
+        String sql = "insert into LINK.QuanCaPhe.dbo.NguyenLieu(MaNguyenLieu, TenNguyenLieu, DonVi, TrangThai)	\n"
+                + "		values(?,?,?,?)";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -99,12 +98,11 @@ public class n07_NguyenLieuDAO {
     }
 
     public int update(NguyenLieuDTO a) {
-        String sqlUpdate = "UPDATE NguyenLieu "
-                + "SET TenNguyenLieu = ?, "
-                //                + "    KhoiLuong = ?, "
-                + "    DonVi = ?, "
-                + "    TrangThai = ? "
-                + "WHERE MaNguyenLieu = ?";
+        String sqlUpdate = "update LINK.QuanCaPhe.dbo.NguyenLieu\n"
+                + "		set TenNguyenLieu = ?, \n"
+                + "			Donvi = ?, \n"
+                + "			TrangThai = ?\n"
+                + "		where MaNguyenLieu = ?";
 
         String sqlSelect = "SELECT TenNguyenLieu, DonVi, TrangThai "
                 + "FROM NguyenLieu WHERE MaNguyenLieu = ?";
@@ -118,33 +116,28 @@ public class n07_NguyenLieuDAO {
 
             if (rs.next()) {
                 String previousTenNguyenLieu = rs.getString("TenNguyenLieu");
-//                Float previousKhoiLuong = rs.getFloat("KhoiLuong");
                 String previousDonVi = rs.getString("DonVi");
                 Boolean previousTrangThai = rs.getBoolean("TrangThai");
 
                 if (previousTenNguyenLieu.equals(a.getTen())
-                        //                        && Math.abs(previousKhoiLuong - a.getKl()) < 0.0001
                         && previousDonVi.equals(a.getDv())
                         && previousTrangThai.equals(a.getTrangThai())) {
                     JDBCUtil.closeConnection(c);
-                    return 2; // Trùng dữ liệu
+                    return 2;
                 }
             } else {
                 JDBCUtil.closeConnection(c);
-                return 0; // Không tìm thấy mã CaLam
+                return 0;
             }
 
-            // Thực hiện cập nhật
             PreparedStatement stUpdate = c.prepareStatement(sqlUpdate);
             stUpdate.setString(1, a.getTen());
-//            stUpdate.setFloat(2, a.getKl());
             stUpdate.setString(2, a.getDv());
             stUpdate.setBoolean(3, a.getTrangThai());
             stUpdate.setString(4, a.getMa());
 
             int kq = stUpdate.executeUpdate();
             JDBCUtil.closeConnection(c);
-
             if (kq > 0) {
                 return 1;
             } else {
@@ -160,11 +153,7 @@ public class n07_NguyenLieuDAO {
 
     public ArrayList<NguyenLieuDTO> listAll(String maCN) {
         ArrayList<NguyenLieuDTO> list = new ArrayList<>();
-        String sql = "select * \n"
-                + "from NguyenLieu nl \n"
-                + "join NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
-                + "where kho.MaChiNhanh = ?\n"
-                + "order by nl.TrangThai desc, nl.MaNguyenLieu asc";
+        String sql = "exec spud_listAll_NguyenLieu ?";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -173,7 +162,7 @@ public class n07_NguyenLieuDAO {
             while (rs.next()) {
                 NguyenLieuDTO a = new NguyenLieuDTO(rs.getString("MaNguyenLieu"), rs.getString("TenNguyenLieu"),
                         rs.getFloat("KhoiLuong"), rs.getString("DonVi"), rs.getBoolean("TrangThai"),
-                        rs.getString("MaChiNhanh"));
+                        null);
                 list.add(a);
             }
             JDBCUtil.closeConnection(c);
@@ -186,47 +175,19 @@ public class n07_NguyenLieuDAO {
 
     public ArrayList<NguyenLieuDTO> search(String Ma, String Ten, Float kl, String donVi, Boolean TrangThai, String maCN) {
         ArrayList<NguyenLieuDTO> list = new ArrayList<>();
-        ArrayList<Object> params = new ArrayList<>();
-
-        StringBuilder sql = new StringBuilder(
-                "SELECT nl.MaNguyenLieu, nl.TenNguyenLieu, nk.KhoiLuong, nl.DonVi, nl.TrangThai, nk.MaChiNhanh "
-                + "FROM NguyenLieu nl "
-                + "JOIN NguyenLieuKho nk ON nl.MaNguyenLieu = nk.MaNguyenLieu "
-                + "WHERE nk.MaChiNhanh = ? "
-        );
-
-        params.add(maCN);  // MaChiNhanh là tham số đầu tiên
-
-        if (Ma != null && !Ma.trim().isEmpty()) {
-            sql.append(" AND nl.MaNguyenLieu LIKE ?");
-            params.add("%" + Ma + "%");
-        }
-        if (Ten != null && !Ten.trim().isEmpty()) {
-            sql.append(" AND nl.TenNguyenLieu LIKE ?");
-            params.add("%" + Ten + "%");
-        }
-        if (kl != null) {
-            sql.append(" AND nk.KhoiLuong = ?");
-            params.add(kl);
-        }
-        if (donVi != null && !donVi.trim().isEmpty()) {
-            sql.append(" AND nl.DonVi LIKE ?");
-            params.add("%" + donVi + "%");
-        }
-        if (TrangThai != null) {
-            sql.append(" AND nl.TrangThai = ?");
-            params.add(TrangThai);
-        }
-
-        sql.append(" ORDER BY nl.TrangThai DESC, nl.MaNguyenLieu ASC");
-
+        String sql = "exec spud_search_NguyenLieu ?, ?, ?, ?, ?";
         try {
             Connection c = JDBCUtil.getConnection();
-            PreparedStatement st = c.prepareStatement(sql.toString());
+            PreparedStatement st = c.prepareStatement(sql);
 
-            // Gán giá trị tham số động
-            for (int i = 0; i < params.size(); i++) {
-                st.setObject(i + 1, params.get(i));
+            st.setString(1, maCN);
+            st.setString(2, Ma);
+            st.setString(3, Ten);
+            st.setString(4, donVi);
+            if (TrangThai == null) {
+                st.setNull(5, java.sql.Types.BIT);
+            } else {
+                st.setBoolean(5, TrangThai);
             }
 
             ResultSet rs = st.executeQuery();
@@ -236,8 +197,8 @@ public class n07_NguyenLieuDAO {
                         rs.getString("TenNguyenLieu"),
                         rs.getFloat("KhoiLuong"),
                         rs.getString("DonVi"),
-                        rs.getBoolean("TrangThai"),
-                        rs.getString("MaChiNhanh")
+                    rs.getBoolean("TrangThai"),
+                   null
                 );
                 list.add(a);
             }

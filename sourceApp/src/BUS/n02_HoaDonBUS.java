@@ -8,6 +8,7 @@ import DTO.KhuyenMaiDTO;
 import DTO.NhanVienDTO;
 import com.toedter.calendar.JDateChooser;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -23,7 +24,7 @@ public class n02_HoaDonBUS {
         return n02_HoaDonDAO.getInstance().createID();
     }
 
-    public void setUpCTHD(JTable table, HoaDonDTO hd, JLabel nv, JLabel kh, JLabel tongTienLbl, JLabel ngayLap) {
+    public void setUpCTHD(JTable table, HoaDonDTO hd, JLabel nv, JLabel kh, JLabel tongTienLbl, JLabel ngayLap, JLabel cn) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
@@ -31,8 +32,13 @@ public class n02_HoaDonBUS {
         KhachHangDTO khachHang = n02_HoaDonDAO.getInstance().searchKhachHangByMa(hd.getMaKH());
         Long tongTien = hd.getTongTien();
         ngayLap.setText("Ngày lập: " + Util.Utils.getInstance().SQLDateString_Transform_normalDateString(hd.getNgayLap() + ""));
-        nv.setText("NV: " + nhanVien);
-        kh.setText("KH: " + khachHang);
+        nv.setText(nhanVien.toString());
+        try {
+            kh.setText(khachHang.toString());
+        } catch (Exception e) {
+            kh.setText("");
+        }
+        cn.setText(hd.getMaCN());
         tongTienLbl.setText("Tổng tiền: " + Util.Utils.getInstance().LongToMoney(tongTien) + "");
     }
 
@@ -48,19 +54,43 @@ public class n02_HoaDonBUS {
         }
     }
 
+//    public void listAll(JTable table, String ma) {
+//        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//        model.setRowCount(0);
+//        ArrayList<HoaDonDTO> ds = n02_HoaDonDAO.getInstance().listAll(ma);
+//
+//        for (HoaDonDTO dto : ds) {
+//            NhanVienDTO nv = n02_HoaDonDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
+//            KhachHangDTO kh = n02_HoaDonDAO.getInstance().searchKhachHangByMa(dto.getMaKH());
+//            KhuyenMaiDTO km = n02_HoaDonDAO.getInstance().searchKhuyenMaiByMa(dto.getMaKM());
+//            KhuyenMaiDTO kmMember = n02_HoaDonDAO.getInstance().searchKhuyenMaiByMa(dto.getMaKMMember());
+//
+//            model.addRow(new Object[]{dto.getMa(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap().toString()),
+//                nv, kh, km, kmMember, Util.Utils.getInstance().LongToMoney(dto.getTongTien())});
+//        }
+//    }
     public void listAll(JTable table, String ma) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         ArrayList<HoaDonDTO> ds = n02_HoaDonDAO.getInstance().listAll(ma);
 
-        for (HoaDonDTO dto : ds) {
-            NhanVienDTO nv = n02_HoaDonDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
-            KhachHangDTO kh = n02_HoaDonDAO.getInstance().searchKhachHangByMa(dto.getMaKH());
-            KhuyenMaiDTO km = n02_HoaDonDAO.getInstance().searchKhuyenMaiByMa(dto.getMaKM());
-            KhuyenMaiDTO kmMember = n02_HoaDonDAO.getInstance().searchKhuyenMaiByMa(dto.getMaKMMember());
+        // Tải map cache
+        Map<String, NhanVienDTO> mapNV = n02_HoaDonDAO.getInstance().getAllNhanVien();
+        Map<String, KhachHangDTO> mapKH = n02_HoaDonDAO.getInstance().getAllKhachHang();
+        Map<String, KhuyenMaiDTO> mapKM = n02_HoaDonDAO.getInstance().getAllKhuyenMai();
 
-            model.addRow(new Object[]{dto.getMa(), dto.getNgayLap(), nv, kh, km, kmMember,
-                Util.Utils.getInstance().LongToMoney(dto.getTongTien())});
+        for (HoaDonDTO dto : ds) {
+            NhanVienDTO nv = mapNV.get(dto.getMaNV());
+            KhachHangDTO kh = mapKH.get(dto.getMaKH());
+            KhuyenMaiDTO km = mapKM.get(dto.getMaKM());
+            KhuyenMaiDTO kmMember = mapKM.get(dto.getMaKMMember());
+
+            model.addRow(new Object[]{
+                dto.getMa(),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap().toString()),
+                nv, kh, km, kmMember,
+                Util.Utils.getInstance().LongToMoney(dto.getTongTien())
+            });
         }
     }
 

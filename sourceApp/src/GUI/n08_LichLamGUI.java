@@ -1,13 +1,15 @@
 package GUI;
 
 import BUS.n08_LichLamBUS;
+import BUS.n11_NhanVienBUS;
 import Util.TableCustom;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class n08_LichLamGUI extends javax.swing.JPanel {
-
+    public n01_TrangChuGUI frame;
     private Date date;
 
     public Date getDate() {
@@ -18,7 +20,8 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
         this.date = date;
     }
 
-    public n08_LichLamGUI() {
+    public n08_LichLamGUI(n01_TrangChuGUI frame) {
+        this.frame = frame;
         initComponents();
         buttonEvents();
     }
@@ -41,6 +44,7 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
         end = new javax.swing.JLabel();
         PanelTaiLai = new javax.swing.JPanel();
         LabelTaiLai = new javax.swing.JLabel();
+        boxCN = new javax.swing.JComboBox<>();
         Biggest_Left_Header = new javax.swing.JPanel();
         PanelLichLam = new javax.swing.JPanel();
         LabelBanHang = new javax.swing.JLabel();
@@ -140,6 +144,8 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
 
         jPanel2.add(PanelTaiLai);
 
+        boxCN.setPreferredSize(new java.awt.Dimension(140, 22));
+
         javax.swing.GroupLayout functionBarLayout = new javax.swing.GroupLayout(functionBar);
         functionBar.setLayout(functionBarLayout);
         functionBarLayout.setHorizontalGroup(
@@ -147,17 +153,21 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
             .addGroup(functionBarLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(boxCN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         functionBarLayout.setVerticalGroup(
             functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(functionBarLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, functionBarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(boxCN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         Biggest_Left_Header.setBackground(new java.awt.Color(255, 255, 255));
@@ -267,7 +277,7 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(scr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(functionBar, javax.swing.GroupLayout.DEFAULT_SIZE, 968, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
         BiggestLayout.setVerticalGroup(
             BiggestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,25 +311,27 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
     private void reset() {
         n08_LichLamBUS.getInstance().listAllCa(tableCa);
         TimKiem.setText("Tìm tuần theo ngày");
-        n08_LichLamBUS.getInstance().setUp(start, end, table);
+        n08_LichLamBUS.getInstance().setUp(start, end, table, frame.maCN);
     }
 
     public void resetXepLich(Date ngay) {
         n08_LichLamBUS.getInstance().setLabel_StartEndDate(start, end, ngay);
-        n08_LichLamBUS.getInstance().listAll(table, ngay);
+        n08_LichLamBUS.getInstance().listAll(table, ngay, frame.maCN);
         n08_LichLamBUS.getInstance().setHeaderTable_StartEndDate(table, ngay);
     }
 
     private void buttonEvents() {
+        comboboxCN(frame.maCN);
         reset();
 
         ngay.getDateEditor().addPropertyChangeListener("date", evt -> {
             if (ngay.getDate() != null) {
                 date = new Date(ngay.getDate().getTime());
                 TimKiem.setText(Util.Utils.getInstance().SQLDateString_Transform_normalDateString(date + "") + "");
-                n08_LichLamBUS.getInstance().setLabel_StartEndDate(start, end, date);
-                n08_LichLamBUS.getInstance().listAll(table, date);
-                n08_LichLamBUS.getInstance().setHeaderTable_StartEndDate(table, date);
+//                n08_LichLamBUS.getInstance().setLabel_StartEndDate(start, end, date);
+//                n08_LichLamBUS.getInstance().listAll(table, date, frame.maCN);
+//                n08_LichLamBUS.getInstance().setHeaderTable_StartEndDate(table, date);
+                resetXepLich(date);
             }
         });
 
@@ -343,7 +355,7 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
 
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Biggest.removeAll();
-                n08_CaLamGUI bh = new n08_CaLamGUI();
+                n08_CaLamGUI bh = new n08_CaLamGUI(frame);
                 Biggest.setLayout(new BorderLayout());
                 Biggest.add(bh, BorderLayout.CENTER); // Adjust the layout constraint as needed
                 Biggest.revalidate();
@@ -374,6 +386,16 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
                 a.setLocationRelativeTo(null);
             }
         });
+        
+    }
+    
+    private void comboboxCN(String maCN) {
+        if (maCN != null) {
+            boxCN.setVisible(false);
+        } else {
+            n11_NhanVienBUS.getInstance().comboBoxChiNhanh_khongTong(boxCN, null);
+            resetXepLich(Date.valueOf(LocalDate.now()));
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -389,6 +411,7 @@ public class n08_LichLamGUI extends javax.swing.JPanel {
     private javax.swing.JPanel PanelTaiLai;
     private javax.swing.JPanel PanelTimKiem;
     private javax.swing.JTextField TimKiem;
+    private javax.swing.JComboBox<String> boxCN;
     private javax.swing.JLabel end;
     private javax.swing.JPanel functionBar;
     private javax.swing.JLabel jLabel1;

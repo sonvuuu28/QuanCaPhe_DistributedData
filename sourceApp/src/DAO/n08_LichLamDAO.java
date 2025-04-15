@@ -5,7 +5,6 @@ import DTO.NhanVienDTO;
 import java.sql.PreparedStatement;
 import java.sql.*;
 import Util.JDBCUtil;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +35,20 @@ public class n08_LichLamDAO {
         return list;
     }
 
-    public boolean checkExistLichLam(Date date) {
+    public boolean checkExistLichLam(Date date, String MaCN) {
         Date chuNhat = Util.Utils.getInstance().getDate_DaysInWeek(date).get(6);
-        String sql = "select count(*) as sl from LichLam where NgayLam = ? ";
+        String sql = "select count(*) as sl from LINK.QuanCaPhe.dbo.LichLam where NgayLam = ? ";
+        if (MaCN != null) {
+            sql += " and MaChiNhanh = ? ";
+        }
         boolean exists = false;
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setDate(1, chuNhat);
+            if (MaCN != null) {
+                st.setString(2, MaCN);
+            }
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
@@ -118,7 +123,7 @@ public class n08_LichLamDAO {
         return ds;
     }
 
-    public ArrayList<String> listAll(Date Ngay) {
+    public ArrayList<String> listAll(Date Ngay, String MaCN) {
         ArrayList<String> list = new ArrayList<>();
         String sql = "DECLARE @start DATE = ?;\n"
                 + "\n"
@@ -132,30 +137,34 @@ public class n08_LichLamDAO {
                 + "    COALESCE(c7.TenCaLam, '') AS thu7,\n"
                 + "    COALESCE(c8.TenCaLam, '') AS chunhat\n"
                 + "FROM \n"
-                + "    NhanVien nv\n"
+                + "    LINK.QuanCaPhe.dbo.NhanVien nv\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = @start) AS t2 ON nv.MaNhanVien = t2.MaNhanVien\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = @start) AS t2 ON nv.MaNhanVien = t2.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = DATEADD(DAY, 1, @start)) AS t3 ON nv.MaNhanVien = t3.MaNhanVien\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 1, @start)) AS t3 ON nv.MaNhanVien = t3.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = DATEADD(DAY, 2, @start)) AS t4 ON nv.MaNhanVien = t4.MaNhanVien\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 2, @start)) AS t4 ON nv.MaNhanVien = t4.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = DATEADD(DAY, 3, @start)) AS t5 ON nv.MaNhanVien = t5.MaNhanVien\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 3, @start)) AS t5 ON nv.MaNhanVien = t5.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = DATEADD(DAY, 4, @start)) AS t6 ON nv.MaNhanVien = t6.MaNhanVien\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 4, @start)) AS t6 ON nv.MaNhanVien = t6.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = DATEADD(DAY, 5, @start)) AS t7 ON nv.MaNhanVien = t7.MaNhanVien\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 5, @start)) AS t7 ON nv.MaNhanVien = t7.MaNhanVien\n"
                 + "LEFT JOIN \n"
-                + "    (SELECT * FROM LichLam WHERE NgayLam = DATEADD(DAY, 6, @start)) AS cn ON nv.MaNhanVien = cn.MaNhanVien\n"
-                + "LEFT JOIN CaLam AS c2 ON t2.MaCaLam = c2.MaCaLam\n"
-                + "LEFT JOIN CaLam AS c3 ON t3.MaCaLam = c3.MaCaLam\n"
-                + "LEFT JOIN CaLam AS c4 ON t4.MaCaLam = c4.MaCaLam\n"
-                + "LEFT JOIN CaLam AS c5 ON t5.MaCaLam = c5.MaCaLam\n"
-                + "LEFT JOIN CaLam AS c6 ON t6.MaCaLam = c6.MaCaLam\n"
-                + "LEFT JOIN CaLam AS c7 ON t7.MaCaLam = c7.MaCaLam\n"
-                + "LEFT JOIN CaLam AS c8 ON cn.MaCaLam = c8.MaCaLam\n"
-                + "WHERE \n"
-                + "    -- Nếu xem lịch tương lai, chỉ lấy nhân viên chưa nghỉ\n"
+                + "    (SELECT * FROM LINK.QuanCaPhe.dbo.LichLam WHERE NgayLam = DATEADD(DAY, 6, @start)) AS cn ON nv.MaNhanVien = cn.MaNhanVien\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c2 ON t2.MaCaLam = c2.MaCaLam\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c3 ON t3.MaCaLam = c3.MaCaLam\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c4 ON t4.MaCaLam = c4.MaCaLam\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c5 ON t5.MaCaLam = c5.MaCaLam\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c6 ON t6.MaCaLam = c6.MaCaLam\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c7 ON t7.MaCaLam = c7.MaCaLam\n"
+                + "LEFT JOIN LINK.QuanCaPhe.dbo.CaLam AS c8 ON cn.MaCaLam = c8.MaCaLam\n"
+                + "WHERE \n";
+        if (MaCN != null) {
+            sql += " nv.MaChiNhanh = ? and ";
+        }
+        sql
+                += "    -- Nếu xem lịch tương lai, chỉ lấy nhân viên chưa nghỉ\n"
                 + "    (@start >= GETDATE() AND nv.NgayNghiViec IS NULL)\n"
                 + "    -- Nếu xem lịch quá khứ, vẫn lấy nhân viên đã nghỉ nhưng có ca làm\n"
                 + "    OR (@start < GETDATE() AND EXISTS (\n"
@@ -167,6 +176,9 @@ public class n08_LichLamDAO {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setDate(1, Ngay);
+            if (MaCN != null) {
+                st.setString(2, MaCN);
+            }
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 // Lấy dữ liệu từ các cột trong kết quả truy vấn
@@ -191,14 +203,14 @@ public class n08_LichLamDAO {
         return list;
     }
 
-    public boolean insert(Date date) {
+    public boolean insert(Date date, String MaChiNhanh) {
         List<Date> weeks = Util.Utils.getInstance().getDate_DaysInWeek(date);
         ArrayList<NhanVienDTO> dsNV = listAllNhanVien();
         StringBuilder sql = new StringBuilder();
         for (NhanVienDTO nv : dsNV) {
             for (int i = 6; i >= 0; i--) {
                 sql.append("EXEC insertLichLam '").append(nv.getMa()).append("', '").append("CLOFF")
-                        .append("', '").append(weeks.get(i)).append("'\n");
+                        .append("', '").append(weeks.get(i)).append("', '").append(MaChiNhanh).append("'\n");
             }
         }
 

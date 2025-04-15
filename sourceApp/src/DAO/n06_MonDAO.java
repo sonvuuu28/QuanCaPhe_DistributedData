@@ -17,7 +17,7 @@ public class n06_MonDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM Mon";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.Mon";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -44,15 +44,9 @@ public class n06_MonDAO {
     }
 
     public int insert(MonDTO a) {
-        String sql = "INSERT INTO Mon\n"
-                + "           (MaMon\n"
-                + "           ,TenMon\n"
-                + "           ,HinhAnh\n"
-                + "           ,Gia\n"
-                + "           ,TrangThai\n"
-                + "           ,MaLoaiMon)\n"
-                + "     VALUES\n"
-                + "           (?,?,?,?,?,?)";
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.Mon   "
+                + "(MaMon, TenMon, HinhAnh, Gia, TrangThai, MaLoaiMon)    "
+                + "VALUES(?,?,?,?,?,?)   ";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -76,7 +70,7 @@ public class n06_MonDAO {
     }
 
     public int update(MonDTO a) {
-        String sqlUpdate = "UPDATE Mon "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.Mon "
                 + "SET TenMon = ?, "
                 + "    HinhAnh = ?, "
                 + "    Gia = ?, "
@@ -90,7 +84,6 @@ public class n06_MonDAO {
         try {
             Connection c = JDBCUtil.getConnection();
 
-            // Truy vấn dữ liệu cũ
             PreparedStatement stSelect = c.prepareStatement(sqlSelect);
             stSelect.setString(1, a.getMa());
             ResultSet rs = stSelect.executeQuery();
@@ -140,8 +133,7 @@ public class n06_MonDAO {
 
     public ArrayList<MonDTO> listAll() {
         ArrayList<MonDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM Mon order by TrangThai desc";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.Mon order by TrangThai desc";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -161,7 +153,7 @@ public class n06_MonDAO {
 
     public ArrayList<MonDTO> search(String Ma, String Ten, Long DonGia, Boolean TrangThai, String MaLoaiMon) {
         ArrayList<MonDTO> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM Mon WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.Mon WHERE 1=1");
 
         if (Ma != null && !Ma.isEmpty()) {
             sql.append(" AND MaMon LIKE ?");
@@ -218,7 +210,7 @@ public class n06_MonDAO {
 
     public ArrayList<MonDTO> searchByName(String ten) {
         ArrayList<MonDTO> ds = new ArrayList<>();
-        String sql = "SELECT * FROM Mon WHERE MaMon LIKE ? order by TrangThai desc";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.Mon WHERE MaMon LIKE ? order by TrangThai desc";
 
         try {
             Connection c = JDBCUtil.getConnection();

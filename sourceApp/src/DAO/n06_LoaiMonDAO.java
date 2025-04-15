@@ -16,7 +16,7 @@ public class n06_LoaiMonDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM LoaiMon";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.LoaiMon";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -43,12 +43,8 @@ public class n06_LoaiMonDAO {
     }
 
     public int insert(LoaiMonDTO a) {
-        String sql = "INSERT INTO LoaiMon\n"
-                + "           (MaLoaiMon\n"
-                + "           ,TenLoaiMon\n"
-                + "           ,TrangThai)\n"
-                + "     VALUES\n"
-                + "           (?,?,?)";
+        String sql = "insert into LINK.QuanCaPhe.dbo.LoaiMon(MaLoaiMon, TenLoaiMon, TrangThai) "
+                + "values(?, ?, ?) ";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -69,7 +65,7 @@ public class n06_LoaiMonDAO {
     }
 
     public int update(LoaiMonDTO a) {
-        String sqlUpdate = "UPDATE LoaiMon "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.LoaiMon "
                 + "SET TenLoaiMon = ?, "
                 + "    TrangThai = ? "
                 + "WHERE MaLoaiMon = ?";
@@ -89,18 +85,16 @@ public class n06_LoaiMonDAO {
                 String previousTenLoaiMon = rs.getString("TenLoaiMon");
                 String previousTrangThai = rs.getString("TrangThai");
 
-                // So sánh dữ liệu
                 if (previousTenLoaiMon.equals(a.getTen())
                         && previousTrangThai.equals(a.isTrangThai())) {
                     JDBCUtil.closeConnection(c);
-                    return 2; // Trùng dữ liệu
+                    return 2; 
                 }
             } else {
                 JDBCUtil.closeConnection(c);
-                return 0; // Không tìm thấy mã LoaiMon
+                return 0; 
             }
-
-            // Thực hiện cập nhật
+            
             PreparedStatement stUpdate = c.prepareStatement(sqlUpdate);
             stUpdate.setString(1, a.getTen());
             stUpdate.setBoolean(2, a.isTrangThai());
@@ -110,9 +104,9 @@ public class n06_LoaiMonDAO {
             JDBCUtil.closeConnection(c);
 
             if (kq > 0) {
-                return 1; // Thành công
+                return 1; 
             } else {
-                return 0; // Thất bại
+                return 0;
             }
         } catch (SQLException e) {
             String message = e.getMessage();
@@ -122,8 +116,7 @@ public class n06_LoaiMonDAO {
 
     public ArrayList<LoaiMonDTO> listAll() {
         ArrayList<LoaiMonDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM LoaiMon";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.LoaiMon";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -142,7 +135,7 @@ public class n06_LoaiMonDAO {
 
     public ArrayList<LoaiMonDTO> search(String Ma, String Ten, Boolean TrangThai) {
         ArrayList<LoaiMonDTO> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM LoaiMon WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.LoaiMon WHERE 1=1");
 
         if (Ma != null && !Ma.isEmpty()) {
             sql.append(" AND MaLoaiMon LIKE ?");

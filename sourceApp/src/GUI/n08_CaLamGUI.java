@@ -9,7 +9,10 @@ import javax.swing.table.TableModel;
 
 public class n08_CaLamGUI extends javax.swing.JPanel {
 
-    public n08_CaLamGUI() {
+    public n01_TrangChuGUI frame;
+
+    public n08_CaLamGUI(n01_TrangChuGUI frame) {
+        this.frame = frame;
         initComponents();
         buttonEvents();
     }
@@ -575,7 +578,7 @@ public class n08_CaLamGUI extends javax.swing.JPanel {
 
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Biggest.removeAll();
-                n08_LichLamGUI bh = new n08_LichLamGUI();
+                n08_LichLamGUI bh = new n08_LichLamGUI(frame);
                 Biggest.setLayout(new BorderLayout());
                 Biggest.add(bh, BorderLayout.CENTER); // Adjust the layout constraint as needed
                 Biggest.revalidate();

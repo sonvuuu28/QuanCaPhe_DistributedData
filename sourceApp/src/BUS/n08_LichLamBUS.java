@@ -18,8 +18,8 @@ public class n08_LichLamBUS {
         return new n08_LichLamBUS();
     }
 
-    public boolean checkExistLichLam(Date date) {
-        boolean dao = n08_LichLamDAO.getInstance().checkExistLichLam(date);
+    public boolean checkExistLichLam(Date date, String MaCN) {
+        boolean dao = n08_LichLamDAO.getInstance().checkExistLichLam(date, MaCN);
         return dao;
     }
 
@@ -35,11 +35,11 @@ public class n08_LichLamBUS {
     }
 
     //JFrame XẾP LỊCH LÀM 
-    public void setUp_XepLichLamGUI(JLabel start, JLabel end, JTable table) {
+    public void setUp_XepLichLamGUI(JLabel start, JLabel end, JTable table, String MaCN) {
         Date date = Date.valueOf(LocalDate.now());
         setLabel_StartEndDate(start, end, date);
         setHeaderTable_StartEndDate(table, date);
-        listAll(table, date);
+        listAll(table, date, MaCN);
     }
 
     public void setUp_XepLichLamGUI_combobox(JComboBox nv, JComboBox<CaLamDTO> t2, JComboBox<CaLamDTO> t3, JComboBox<CaLamDTO> t4,
@@ -59,8 +59,8 @@ public class n08_LichLamBUS {
         }
     }
 
-    public boolean insert(Date date) {
-        boolean dao = n08_LichLamDAO.getInstance().insert(date);
+    public boolean insert(Date date, String MaCN) {
+        boolean dao = n08_LichLamDAO.getInstance().insert(date, MaCN);
         if (dao) {
             JOptionPane.showMessageDialog(null, "Tạo tuần làm thành công!");
             return true;
@@ -102,11 +102,11 @@ public class n08_LichLamBUS {
     }
 
     //JFrame LỊCH LÀM 
-    public void setUp(JLabel start, JLabel end, JTable table) {
+    public void setUp(JLabel start, JLabel end, JTable table, String MaCN) {
         Date date = Date.valueOf(LocalDate.now());
         setLabel_StartEndDate(start, end, date);
         setHeaderTable_StartEndDate(table, date);
-        listAll(table, date);
+        listAll(table, date, MaCN);
     }
 
     public void setLabel_StartEndDate(JLabel start, JLabel end, Date date) {
@@ -139,9 +139,9 @@ public class n08_LichLamBUS {
         model.setColumnIdentifiers(columnNames);
     }
 
-    public void listAll(JTable table, Date date) {
+    public void listAll(JTable table, Date date, String MaCN) {
         Date Monday = Util.Utils.getInstance().getDate_DaysInWeek(date).get(0);
-        ArrayList<String> ds = n08_LichLamDAO.getInstance().listAll(Monday);
+        ArrayList<String> ds = n08_LichLamDAO.getInstance().listAll(Monday, MaCN);
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);

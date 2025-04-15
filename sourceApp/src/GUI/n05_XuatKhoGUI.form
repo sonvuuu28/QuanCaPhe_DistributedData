@@ -165,7 +165,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[558, 550]"/>
+                  <Dimension value="[558, 552]"/>
                 </Property>
               </Properties>
 
@@ -174,15 +174,14 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="LabelMenu" alignment="1" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="281" max="-2" attributes="0"/>
+                                  <Component id="boxCN" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
                                   <Component id="PanelTimKiem" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="scrollPaneTable" min="-2" pref="537" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="scrollPaneTable" alignment="0" min="-2" pref="537" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
                       </Group>
@@ -192,8 +191,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="LabelMenu" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="21" max="32767" attributes="0"/>
-                          <Component id="PanelTimKiem" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="23" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="PanelTimKiem" min="-2" max="-2" attributes="0"/>
+                              <Component id="boxCN" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="scrollPaneTable" min="-2" pref="447" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -224,7 +226,7 @@
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="5" rowCount="0">
                             <Column editable="false" title="M&#xe3;" type="java.lang.Object"/>
-                            <Column editable="false" title="T&#xea;n nguy&#xea;n li&#x1ec7;u" type="java.lang.Object"/>
+                            <Column editable="false" title="T&#xea;n NL" type="java.lang.Object"/>
                             <Column editable="false" title="Kh&#x1ed1;i l&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
                             <Column editable="false" title="&#x110;&#x1a1;n v&#x1ecb;" type="java.lang.Object"/>
                             <Column editable="false" title="T&#xec;nh tr&#x1ea1;ng" type="java.lang.Object"/>
@@ -237,7 +239,7 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>
@@ -247,7 +249,7 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="40" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>
@@ -334,6 +336,19 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JComboBox" name="boxCN">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[140, 22]"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="PanelGioHang">
@@ -342,7 +357,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[558, 550]"/>
+                  <Dimension value="[558, 552]"/>
                 </Property>
               </Properties>
 
@@ -371,7 +386,7 @@
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                           <Component id="PanelTaiLai" min="-2" pref="35" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="scrollPaneTable1" pref="349" max="32767" attributes="0"/>
+                          <Component id="scrollPaneTable1" pref="351" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -488,7 +503,7 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="40" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>

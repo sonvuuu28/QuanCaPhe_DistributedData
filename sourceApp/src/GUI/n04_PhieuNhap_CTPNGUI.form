@@ -74,16 +74,16 @@
                               <Component id="scrollPaneTable" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="tongTien" min="-2" pref="250" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="nv" min="-2" pref="176" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="ncc" min="-2" pref="244" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace min="0" pref="28" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Component id="cn" min="-2" pref="141" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="tongTien" min="-2" pref="230" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="14" max="32767" attributes="0"/>
+                              <Component id="nv" min="-2" pref="210" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="ncc" min="-2" pref="232" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -97,14 +97,17 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="Title" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="26" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="ncc" pref="22" max="32767" attributes="0"/>
-                          <Component id="nv" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="nv" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="ncc" alignment="3" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="scrollPaneTable" min="-2" pref="255" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="tongTien" min="-2" pref="24" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="tongTien" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="cn" alignment="3" max="32767" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -295,6 +298,18 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="1.000.000 VN&#x110;"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="cn">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="3"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="cc" green="66" red="0" type="rgb"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="text" type="java.lang.String" value="NV: V&#x169; Thi&#xea;n S&#x1a1;n"/>
               </Properties>
             </Component>
           </SubComponents>

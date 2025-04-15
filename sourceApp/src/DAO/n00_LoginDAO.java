@@ -18,7 +18,7 @@ public class n00_LoginDAO {
         NhanVienDTO tk = null;
         String sql = "select * from NhanVien \n"
                 + "where MaNhanVien = ( select MaNhanVien "
-                + "from TaiKhoan where TenDangNhap = ? and MatKhau = ? )";
+                + "from TaiKhoan where TenDangNhap = ? and MatKhau = ? and TrangThai = 1)";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -62,7 +62,8 @@ public class n00_LoginDAO {
                         rs.getBoolean("BanHang"), rs.getBoolean("KhachHang"), rs.getBoolean("NhapHang"),
                         rs.getBoolean("XuatKho"), rs.getBoolean("Mon"), rs.getBoolean("NguyenLieu"),
                         rs.getBoolean("LichLam"), rs.getBoolean("KhuyenMaiUuDai"), rs.getBoolean("NhaCungCap"),
-                        rs.getBoolean("NhanVien"), rs.getBoolean("ThongKe"), rs.getBoolean("TrangThai"));
+                        rs.getBoolean("NhanVien"), rs.getBoolean("ThongKe"), rs.getInt("DoUuTien"), rs.getBoolean("TrangThai")
+                );
             }
 
             JDBCUtil.closeConnection(c);

@@ -5,6 +5,7 @@ import DTO.*;
 import Util.Utils;
 import com.toedter.calendar.JDateChooser;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,17 +15,19 @@ public class n04_PhieuNhapBUS {
         return new n04_PhieuNhapBUS();
     }
 
-    public void setUpCTPN(JTable table, String ma, JLabel nv, JLabel ncc, JLabel tongTienLbl, JLabel ngayLap) {
+    public void setUpCTPN(JTable table, String ma, JLabel nv, JLabel ncc, JLabel tongTienLbl, JLabel ngayLap, JLabel cn) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         PhieuNhapDTO pn = n04_PhieuNhapDAO.getInstance().searchPhieuNhapByMa(ma);
 
-        String tenNV = n04_NhapHangDAO.getInstance().searchNhanVienByMa(pn.getMaNV()).getTen();
-        String tenNCC = n04_NhapHangDAO.getInstance().searchNCCByMa(pn.getMaNCC()).getTenNCC();
+        NhanVienDTO tenNV = n04_NhapHangDAO.getInstance().searchNhanVienByMa(pn.getMaNV());
+        NhaCungCapDTO tenNCC = n04_NhapHangDAO.getInstance().searchNCCByMa(pn.getMaNCC());
         Long tongTien = pn.getTongTien();
         ngayLap.setText("Ngày lập: " + Util.Utils.getInstance().SQLDateString_Transform_normalDateString(pn.getNgayLap() + ""));
-        nv.setText("NV: " + tenNV);
-        ncc.setText("NCC: " + tenNCC);
+        nv.setText(tenNV.toString());
+        ncc.setText(tenNCC.toString());
+        cn.setText(pn.getMaCN());
+
         tongTienLbl.setText("Tổng tiền: " + Utils.getInstance().LongToMoney(tongTien) + "");
     }
 
@@ -40,17 +43,35 @@ public class n04_PhieuNhapBUS {
         }
     }
 
+//    public void listAll(JTable table, String ma) {
+//        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//        model.setRowCount(0);
+//        ArrayList<PhieuNhapDTO> ds = n04_PhieuNhapDAO.getInstance().listAll(ma);
+//
+//        for (PhieuNhapDTO dto : ds) {
+//            NhanVienDTO nv = n04_NhapHangDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
+//            NhaCungCapDTO ncc = n04_NhapHangDAO.getInstance().searchNCCByMa(dto.getMaNCC());
+//
+//            model.addRow(new Object[]{dto.getMaPN(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap() + ""),
+//                nv, ncc,  Utils.getInstance().LongToMoney(dto.getTongTien())});
+//        }
+//    }
+//    
     public void listAll(JTable table, String ma) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         ArrayList<PhieuNhapDTO> ds = n04_PhieuNhapDAO.getInstance().listAll(ma);
 
+        // Tải map cache
+        Map<String, NhanVienDTO> mapNV = n04_PhieuNhapDAO.getInstance().getAllNhanVien();
+        Map<String, NhaCungCapDTO> mapNCC = n04_PhieuNhapDAO.getInstance().getAllKhachHang();
+
         for (PhieuNhapDTO dto : ds) {
-            NhanVienDTO nv = n04_NhapHangDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
-            NhaCungCapDTO ncc = n04_NhapHangDAO.getInstance().searchNCCByMa(dto.getMaNCC());
+            NhanVienDTO nv = mapNV.get(dto.getMaNV());
+            NhaCungCapDTO ncc = mapNCC.get(dto.getMaNCC());
 
             model.addRow(new Object[]{dto.getMaPN(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap() + ""),
-                nv, ncc,  Utils.getInstance().LongToMoney(dto.getTongTien())});
+                nv, ncc, Utils.getInstance().LongToMoney(dto.getTongTien())});
         }
     }
 
@@ -65,14 +86,14 @@ public class n04_PhieuNhapBUS {
 
         if (!giaTu.getText().isEmpty()) {
             try {
-                giaTuL = Long.valueOf(giaTu.getText());
+                giaTuL = Util.Utils.getInstance().MoneyToLongNoneVND(giaTu.getText());
             } catch (Exception e) {
             }
         }
 
         if (!giaDen.getText().isEmpty()) {
             try {
-                giaDenL = Long.valueOf(giaDen.getText());
+                giaDenL = Util.Utils.getInstance().MoneyToLongNoneVND(giaDen.getText());
             } catch (Exception e) {
             }
         }
@@ -85,7 +106,7 @@ public class n04_PhieuNhapBUS {
             NhaCungCapDTO ncc = n04_NhapHangDAO.getInstance().searchNCCByMa(dto.getMaNCC());
 
             model.addRow(new Object[]{dto.getMaPN(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap() + ""),
-                nv, ncc,  Utils.getInstance().LongToMoney(dto.getTongTien())});
+                nv, ncc, Utils.getInstance().LongToMoney(dto.getTongTien())});
         }
     }
 

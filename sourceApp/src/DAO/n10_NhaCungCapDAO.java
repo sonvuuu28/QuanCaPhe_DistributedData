@@ -16,7 +16,7 @@ public class n10_NhaCungCapDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM NhaCungCap";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.NhaCungCap";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -43,13 +43,8 @@ public class n10_NhaCungCapDAO {
     }
 
     public int insert(NhaCungCapDTO a) {
-        String sql = "INSERT INTO NhaCungCap\n"
-                + "           (MaNCC\n"
-                + "           ,TenNCC\n"
-                + "           ,DiaChi\n"
-                + "           ,SDT)\n"
-                + "     VALUES\n"
-                + "           (?,?,?,?)";
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.NhaCungCap(MaNCC, TenNCC, DiaChi, SDT) "
+                + "  VALUES(?,?,?,?)";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -66,17 +61,17 @@ public class n10_NhaCungCapDAO {
             String message = ex.getMessage();
             if (message.contains("PRIMARY KEY constraint")) {
                 System.out.println("Lỗi: Mã nhà cung cấp đã tồn tại!");
-                return 0; 
-            } else if (message.contains("UNIQUE KEY constraint")) { 
+                return 0;
+            } else if (message.contains("UNIQUE KEY constraint")) {
                 System.out.println("Lỗi: Số điện thoại đã tồn tại!");
-                return 2; 
+                return 2;
             }
         }
         return 1;
     }
 
     public int update(NhaCungCapDTO a) {
-        String sqlUpdate = "UPDATE NhaCungCap "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.NhaCungCap "
                 + "SET TenNCC = ?, "
                 + "    DiaChi = ?, "
                 + "    SDT = ? "
@@ -88,7 +83,6 @@ public class n10_NhaCungCapDAO {
         try {
             Connection c = JDBCUtil.getConnection();
 
-            // Truy vấn dữ liệu cũ
             PreparedStatement stSelect = c.prepareStatement(sqlSelect);
             stSelect.setString(1, a.getMaNCC());
             ResultSet rs = stSelect.executeQuery();
@@ -98,7 +92,6 @@ public class n10_NhaCungCapDAO {
                 String previousDiaChi = rs.getString("DiaChi");
                 String previousSDT = rs.getString("SDT");
 
-                // So sánh dữ liệu
                 if (previousTenNCC.equals(a.getTenNCC())
                         && previousDiaChi.equals(a.getDiaChi())
                         && previousSDT.equals(a.getSDT())) {
@@ -107,10 +100,9 @@ public class n10_NhaCungCapDAO {
                 }
             } else {
                 JDBCUtil.closeConnection(c);
-                return 0; // Không tìm thấy mã CaLam
+                return 0; 
             }
 
-            // Thực hiện cập nhật
             PreparedStatement stUpdate = c.prepareStatement(sqlUpdate);
             stUpdate.setString(1, a.getTenNCC());
             stUpdate.setString(2, a.getDiaChi());
@@ -133,8 +125,7 @@ public class n10_NhaCungCapDAO {
 
     public ArrayList<NhaCungCapDTO> listAll() {
         ArrayList<NhaCungCapDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM NhaCungCap";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhaCungCap";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -154,7 +145,7 @@ public class n10_NhaCungCapDAO {
 
     public ArrayList<NhaCungCapDTO> search(String Ma, String Ten, String DiaChi, String SDT) {
         ArrayList<NhaCungCapDTO> list = new ArrayList<>();
-        String sql = "select * from NhaCungCap where MaNCC like ? and TenNCC like ? and "
+        String sql = "select * from LINK.QuanCaPhe.dbo.NhaCungCap where MaNCC like ? and TenNCC like ? and "
                 + "DiaChi like ? AND SDT like ?";
         try {
             Connection c = JDBCUtil.getConnection();
@@ -173,31 +164,7 @@ public class n10_NhaCungCapDAO {
             System.out.println("search error");
             System.out.println(e);
         }
-
         return list;
     }
 
-    public static void main(String[] args) {
-//        NhaCungCapDTO a = new NhaCungCapDTO(null, "Tên nhà cc", "địa 1234", "0825123790");
-//        n10_NhaCungCapDAO.getInstance().insert(a);
-//        NhaCungCapDTO a1 = new NhaCungCapDTO("NCC002", "Tên nhà cc mới", "địa mới", "0000000000");
-//        int i = n10_NhaCungCapDAO.getInstance().update(a1);
-//        if ( i == 2 ) {
-//            System.out.println("KO CÓ J ĐỂ SỬA");
-//        }
-//        
-//        if ( i == 0 ) {
-//            System.out.println("FAIL");
-//        }
-//        
-//        if ( i == 1 ) {
-//            System.out.println("SỬA THÀNH CÔNG");
-//        }
-//        for (NhaCungCapDTO a : n10_NhaCungCapDAO.getInstance().listAll()) {
-//            System.out.println(a.getMaNCC() + "\n");
-//        }
-        for (NhaCungCapDTO a : n10_NhaCungCapDAO.getInstance().search("", "m", "", "")) {
-            System.out.println(a.getMaNCC() + " " + a.getTenNCC() + " " + a.getDiaChi() + " " + a.getSDT() + "\n");
-        }
-    }
 }

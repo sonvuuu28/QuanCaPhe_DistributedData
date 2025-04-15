@@ -2,9 +2,9 @@ package BUS;
 
 import DAO.*;
 import DTO.*;
-import Util.JDBCUtil;
 import com.toedter.calendar.JDateChooser;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -16,12 +16,13 @@ public class n05_PhieuXuatBUS {
         return new n05_PhieuXuatBUS();
     }
 
-    public void setUpCTPX(JTable table, PhieuXuatDTO hd, JLabel nv, JLabel ngayLap) {
+    public void setUpCTPX(JTable table, PhieuXuatDTO hd, JLabel nv, JLabel ngayLap, JLabel cn) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
         NhanVienDTO nhanVien = n02_HoaDonDAO.getInstance().searchNhanVienByMa(hd.getMaNV());
         ngayLap.setText("Ngày lập: " + Util.Utils.getInstance().SQLDateString_Transform_normalDateString(hd.getNgayLap() + ""));
+        cn.setText(hd.getMaCN());
         nv.setText("NV: " + nhanVien);
     }
 
@@ -36,14 +37,27 @@ public class n05_PhieuXuatBUS {
         }
     }
 
+//    public void listAll(JTable table, String ma) {
+//        DefaultTableModel model = (DefaultTableModel) table.getModel();
+//        model.setRowCount(0);
+//        ArrayList<PhieuXuatDTO> ds = n05_XuatKhoDAO.getInstance().listAll(ma);
+//
+//        for (PhieuXuatDTO dto : ds) {
+//            NhanVienDTO nv = n02_HoaDonDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
+//            model.addRow(new Object[]{dto.getMa(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap()+""), nv});
+//        }
+//    }
     public void listAll(JTable table, String ma) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         ArrayList<PhieuXuatDTO> ds = n05_XuatKhoDAO.getInstance().listAll(ma);
 
+        // Tải map cache
+        Map<String, NhanVienDTO> mapNV = n04_PhieuNhapDAO.getInstance().getAllNhanVien();
+
         for (PhieuXuatDTO dto : ds) {
-            NhanVienDTO nv = n02_HoaDonDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
-            model.addRow(new Object[]{dto.getMa(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap()+""), nv});
+            NhanVienDTO nv = mapNV.get(dto.getMaNV());
+            model.addRow(new Object[]{dto.getMa(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap() + ""), nv});
         }
     }
 
@@ -59,10 +73,10 @@ public class n05_PhieuXuatBUS {
 
         for (PhieuXuatDTO dto : ds) {
             NhanVienDTO nv = n02_HoaDonDAO.getInstance().searchNhanVienByMa(dto.getMaNV());
-            model.addRow(new Object[]{dto.getMa(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap()+""), nv});
+            model.addRow(new Object[]{dto.getMa(), Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgayLap() + ""), nv});
         }
     }
-    
+
     public PhieuXuatDTO searchPhieuXuatByMa(String ma) {
         return n05_XuatKhoDAO.getInstance().searchPhieuXuatByMa(ma);
     }

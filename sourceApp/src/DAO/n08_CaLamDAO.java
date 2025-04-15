@@ -13,7 +13,7 @@ public class n08_CaLamDAO {
 
     public CaLamDTO searchCaLamByMa(String ma) {
         CaLamDTO a = null;
-        String sql = "SELECT * FROM CaLam WHERE MaCaLam LIKE ?";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.CaLam WHERE MaCaLam LIKE ?";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -37,7 +37,7 @@ public class n08_CaLamDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM CaLam where MaCaLam != 'CLOFF' ";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.CaLam where MaCaLam != 'CLOFF' ";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -64,7 +64,7 @@ public class n08_CaLamDAO {
     }
 
     public int insert(CaLamDTO a) {
-        String sql = "INSERT INTO CaLam\n"
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.CaLam\n"
                 + "           (MaCaLam\n"
                 + "           ,TenCaLam\n"
                 + "           ,ThoiGianVao\n"
@@ -94,7 +94,7 @@ public class n08_CaLamDAO {
     }
 
     public int update(CaLamDTO a) {
-        String sqlUpdate = "UPDATE CaLam "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.CaLam "
                 + "SET TenCaLam = ?, "
                 + "    ThoiGianVao = ?, "
                 + "    ThoiGianRa = ?, "
@@ -107,7 +107,6 @@ public class n08_CaLamDAO {
         try {
             Connection c = JDBCUtil.getConnection();
 
-            // Truy vấn dữ liệu cũ
             PreparedStatement stSelect = c.prepareStatement(sqlSelect);
             stSelect.setString(1, a.getMa());
             ResultSet rs = stSelect.executeQuery();
@@ -118,20 +117,18 @@ public class n08_CaLamDAO {
                 java.sql.Time previousThoiGianRa = rs.getTime("ThoiGianRa");
                 String previousTrangThai = rs.getString("TrangThai");
 
-                // So sánh dữ liệu
                 if (previousTenCaLam.equals(a.getTen())
                         && previousThoiGianVao.equals(a.getTimeIn())
                         && previousThoiGianRa.equals(a.getTimeOut())
                         && previousTrangThai.equals(a.isTrangThai())) {
                     JDBCUtil.closeConnection(c);
-                    return 2; // Trùng dữ liệu
+                    return 2; 
                 }
             } else {
                 JDBCUtil.closeConnection(c);
-                return 0; // Không tìm thấy mã CaLam
+                return 0; 
             }
 
-            // Thực hiện cập nhật
             PreparedStatement stUpdate = c.prepareStatement(sqlUpdate);
             stUpdate.setString(1, a.getTen());
             stUpdate.setTime(2, a.getTimeIn());
@@ -143,9 +140,9 @@ public class n08_CaLamDAO {
             JDBCUtil.closeConnection(c);
 
             if (kq > 0) {
-                return 1; // Thành công
+                return 1;
             } else {
-                return 0; // Thất bại
+                return 0; 
             }
         } catch (SQLException e) {
             String message = e.getMessage();
@@ -155,8 +152,7 @@ public class n08_CaLamDAO {
 
     public ArrayList<CaLamDTO> listAll() {
         ArrayList<CaLamDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM CaLam where MaCaLam != 'CLOFF' ";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.CaLam where MaCaLam != 'CLOFF' ";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -180,7 +176,7 @@ public class n08_CaLamDAO {
 
         ArrayList<CaLamDTO> list = new ArrayList<>();
         // Khởi tạo với WHERE 1=1 để nối các điều kiện
-        StringBuilder sql = new StringBuilder("SELECT * FROM CaLam WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.CaLam WHERE 1=1");
 
         if (Ma != null && !Ma.isEmpty()) {
             sql.append(" AND MaCaLam LIKE ?");

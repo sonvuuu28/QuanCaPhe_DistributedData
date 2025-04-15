@@ -30,6 +30,7 @@ public class n05_PhieuXuat_CTPXGUI extends javax.swing.JFrame {
         scrollPaneTable = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         nv = new javax.swing.JLabel();
+        cn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -110,6 +111,11 @@ public class n05_PhieuXuat_CTPXGUI extends javax.swing.JFrame {
         nv.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         nv.setText("NV: Vũ Thiên Sơn");
 
+        cn.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        cn.setForeground(new java.awt.Color(0, 102, 204));
+        cn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        cn.setText("NV: Vũ Thiên Sơn");
+
         javax.swing.GroupLayout PanelNoiDungLayout = new javax.swing.GroupLayout(PanelNoiDung);
         PanelNoiDung.setLayout(PanelNoiDungLayout);
         PanelNoiDungLayout.setHorizontalGroup(
@@ -122,9 +128,14 @@ public class n05_PhieuXuat_CTPXGUI extends javax.swing.JFrame {
                         .addGap(14, 14, 14)
                         .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createSequentialGroup()
+                    .addGroup(PanelNoiDungLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)))
+                        .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelNoiDungLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(cn, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(scrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         PanelNoiDungLayout.setVerticalGroup(
@@ -137,7 +148,9 @@ public class n05_PhieuXuat_CTPXGUI extends javax.swing.JFrame {
                 .addComponent(nv, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cn, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
         );
 
         jPanel3.add(PanelNoiDung);
@@ -161,7 +174,7 @@ public class n05_PhieuXuat_CTPXGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonEvents() {
-        n05_PhieuXuatBUS.getInstance().setUpCTPX(table, frame.getPX(), nv, ngayLap);
+        n05_PhieuXuatBUS.getInstance().setUpCTPX(table, frame.getPX(), nv, ngayLap, cn);
         n05_PhieuXuatBUS.getInstance().listCTPX(table, frame.getPX(), frame.frame.maCN);
 
         labelCancel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -193,6 +206,7 @@ public class n05_PhieuXuat_CTPXGUI extends javax.swing.JFrame {
     private javax.swing.JPanel BtnCancel;
     private javax.swing.JPanel PanelNoiDung;
     private javax.swing.JLabel Title;
+    private javax.swing.JLabel cn;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel labelCancel;

@@ -9,22 +9,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class n01_TrangChuDAO {
-
+    
     public static n01_TrangChuDAO getInstance() {
         return new n01_TrangChuDAO();
     }
-
+    
     public ChiNhanhDTO searchChiNhanhTheoMaChiNhanh(String ma) {
         ChiNhanhDTO tk = null;
         String sql = "SELECT * FROM ChiNhanh WHERE MaChiNhanh = ?";
-
+        
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setString(1, ma);
-
+            
             ResultSet rs = st.executeQuery();
-
+            
             if (rs.next()) {
                 tk = new ChiNhanhDTO(
                         rs.getString("MaChiNhanh"),
@@ -33,7 +33,7 @@ public class n01_TrangChuDAO {
                         rs.getBoolean("TrangThai")
                 );
             }
-
+            
             JDBCUtil.closeConnection(c);
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -41,18 +41,18 @@ public class n01_TrangChuDAO {
         }
         return tk;
     }
-
+    
     public NhanVienDTO searchNhanVienByMa(String maNV) {
         NhanVienDTO nv = null;
         String sql = "SELECT * FROM NhanVien WHERE MaNhanVien = ?";
-
+        
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setString(1, maNV);
-
+            
             ResultSet rs = st.executeQuery();
-
+            
             if (rs.next()) {
                 nv = new NhanVienDTO(
                         rs.getString("MaNhanVien"),
@@ -68,7 +68,7 @@ public class n01_TrangChuDAO {
                         rs.getDate("NgayNghiViec")
                 );
             }
-
+            
             JDBCUtil.closeConnection(c);
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -76,5 +76,5 @@ public class n01_TrangChuDAO {
         }
         return nv;
     }
-
+    
 }

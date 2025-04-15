@@ -60,14 +60,14 @@ public class n05_XuatKhoBUS {
     public void searchByName(JTable table, String ten, String maCN) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
-        ArrayList<NguyenLieuDTO> ds = n07_NguyenLieuDAO.getInstance().search(null, ten, null, null, true, maCN);
+        ArrayList<NguyenLieuDTO> ds = n07_NguyenLieuDAO.getInstance().search("", ten, null, "", true, maCN);
         int i = 1;
         for (NguyenLieuDTO dto : ds) {
             String status;
-            if (dto.getKl() < 10) {
-                status = "Sắp hết";
-            } else if (dto.getKl() == 0) {
+            if (BigDecimal.valueOf(dto.getKl()).compareTo(BigDecimal.ZERO) == 0) {
                 status = "Hết";
+            } else if (dto.getKl() < 10) {
+                status = "Sắp hết";
             } else {
                 status = "Đầy đủ";
             }

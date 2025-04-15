@@ -2,6 +2,7 @@ package GUI;
 
 import BUS.n09_KhuyenMaiBUS;
 import Util.TableCustom;
+import Util.Utils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Date;
@@ -678,8 +679,8 @@ public class n09_UuDaiGUI extends javax.swing.JPanel {
 
                 ma.setText(model.getValueAt(count, 0).toString());
                 ten.setText(model.getValueAt(count, 1).toString());
-                NgayBatDau.setDate((java.sql.Date) model.getValueAt(count, 2));
-                NgayKetThuc.setDate((java.sql.Date) model.getValueAt(count, 3));
+                NgayBatDau.setDate(Utils.getInstance().normalDateString_Transform_SQLDate(model.getValueAt(count, 2).toString()));
+                NgayKetThuc.setDate(Utils.getInstance().normalDateString_Transform_SQLDate(model.getValueAt(count, 3).toString()));
                 phanTram.setText(model.getValueAt(count, 4).toString());
                 String giaTien = model.getValueAt(count, 5).toString().replace(" VNĐ", "");
                 chiTieu.setText(giaTien);

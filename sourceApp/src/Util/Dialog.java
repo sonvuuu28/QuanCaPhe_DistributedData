@@ -97,17 +97,19 @@ public class Dialog extends javax.swing.JDialog {
         textField.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                textField.requestFocus();
                 String text = textField.getText();
+                // Chỉ giữ số và dấu chấm
+                text = text.replaceAll("[^\\d.]", "");
+                // Xóa dấu chấm nếu có liên tiếp
+                text = text.replaceAll("\\.{2,}", ".");
 
-                text = text.replaceAll("[^\\d.]", ""); // Chỉ giữ số và dấu chấm
-                text = text.replaceAll("\\.{2,}", "."); // Xóa dấu chấm nếu có liên tiếp
-                text = text.replaceFirst("^0+(?!\\.)", ""); // Xóa số 0 đầu nếu không phải "0."
-
+                // Giữ lại số 0 đầu nếu là "0" hoặc "0.xxx", nên không xoá nữa
+                // Nhưng chỉ cho phép 1 dấu chấm duy nhất
                 int dotIndex = text.indexOf(".");
                 if (dotIndex != -1 && text.indexOf(".", dotIndex + 1) != -1) {
                     text = text.substring(0, dotIndex + 1) + text.substring(dotIndex + 2).replace(".", "");
                 }
+
                 textField.setText(text);
             }
         });
@@ -186,31 +188,6 @@ public class Dialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Dialog dialog = new Dialog(new javax.swing.JFrame(), true, Dialog.DataType.FLOAT, "1.6");

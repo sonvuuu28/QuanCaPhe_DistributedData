@@ -42,6 +42,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
         PanelTimKiem = new javax.swing.JPanel();
         TimKiem = new javax.swing.JTextField();
         LabelAnhTimKiem = new javax.swing.JLabel();
+        boxCN = new javax.swing.JComboBox<>();
         PanelGioHang = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         BtnXuatKho = new javax.swing.JButton();
@@ -90,7 +91,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
         Body.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING));
 
         PanelKhoHang.setBackground(new java.awt.Color(255, 255, 255));
-        PanelKhoHang.setPreferredSize(new java.awt.Dimension(558, 550));
+        PanelKhoHang.setPreferredSize(new java.awt.Dimension(558, 552));
 
         LabelMenu.setFont(new java.awt.Font("Segoe UI Black", 0, 28)); // NOI18N
         LabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -101,7 +102,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã", "Tên nguyên liệu", "Khối lượng", "Đơn vị", "Tình trạng"
+                "Mã", "Tên NL", "Khối lượng", "Đơn vị", "Tình trạng"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -115,8 +116,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
         scrollPaneTable.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setPreferredWidth(30);
-            table.getColumnModel().getColumn(1).setPreferredWidth(100);
-            table.getColumnModel().getColumn(3).setPreferredWidth(30);
+            table.getColumnModel().getColumn(3).setPreferredWidth(40);
         }
 
         PanelTimKiem.setBackground(new java.awt.Color(219, 189, 142));
@@ -153,27 +153,31 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
                 .addGap(4, 4, 4))
         );
 
+        boxCN.setPreferredSize(new java.awt.Dimension(140, 22));
+
         javax.swing.GroupLayout PanelKhoHangLayout = new javax.swing.GroupLayout(PanelKhoHang);
         PanelKhoHang.setLayout(PanelKhoHangLayout);
         PanelKhoHangLayout.setHorizontalGroup(
             PanelKhoHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(LabelMenu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(PanelKhoHangLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(PanelKhoHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelKhoHangLayout.createSequentialGroup()
-                        .addGap(281, 281, 281)
+                        .addComponent(boxCN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(135, 135, 135)
                         .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelKhoHangLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 7, Short.MAX_VALUE))
         );
         PanelKhoHangLayout.setVerticalGroup(
             PanelKhoHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelKhoHangLayout.createSequentialGroup()
                 .addComponent(LabelMenu)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(PanelKhoHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boxCN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -182,7 +186,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
         Body.add(PanelKhoHang);
 
         PanelGioHang.setBackground(new java.awt.Color(255, 255, 255));
-        PanelGioHang.setPreferredSize(new java.awt.Dimension(558, 550));
+        PanelGioHang.setPreferredSize(new java.awt.Dimension(558, 552));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 22, 30));
@@ -231,6 +235,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
         scrollPaneTable1.setViewportView(table1);
         if (table1.getColumnModel().getColumnCount() > 0) {
             table1.getColumnModel().getColumn(0).setPreferredWidth(25);
+            table1.getColumnModel().getColumn(3).setPreferredWidth(40);
         }
         TableCustom.apply(scrollPaneTable, TableCustom.TableType.MULTI_LINE);
         TableCustom.apply(scrollPaneTable1, TableCustom.TableType.MULTI_LINE);
@@ -267,7 +272,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addComponent(PanelTaiLai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPaneTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                .addComponent(scrollPaneTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -308,17 +313,34 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
 
     public void reset() {
         TimKiem.setText("Tìm tên nguyên liệu");
-        n05_XuatKhoBUS.getInstance().listAll_KhoHang(table, frame.maCN);
+        if (frame.maCN == null) {
+            n05_XuatKhoBUS.getInstance().searchByName(table, "", boxCN.getSelectedItem().toString());
+        } else {
+            n05_XuatKhoBUS.getInstance().listAll_KhoHang(table, frame.maCN);
+        }
         dsCart = new ArrayList<>();
         listCart();
     }
 
     private void buttonEvents() {
+        comboboxCN(frame.maCN);
         reset();
+
+        boxCN.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                n05_XuatKhoBUS.getInstance().searchByName(table, "", boxCN.getSelectedItem().toString());
+            }
+        });
+
         TimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                    n05_XuatKhoBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                    n05_XuatKhoBUS.getInstance().searchByName(table, TimKiem.getText(), boxCN.getSelectedItem().toString());
+                    if (frame.maCN == null) {
+                        n05_XuatKhoBUS.getInstance().searchByName(table, TimKiem.getText(), boxCN.getSelectedItem().toString());
+                    } else {
+                        n05_XuatKhoBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                    }
                 }
             }
         });
@@ -341,7 +363,11 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
 
         LabelAnhTimKiem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                if (frame.maCN == null) {
+                    n05_XuatKhoBUS.getInstance().searchByName(table, TimKiem.getText(), boxCN.getSelectedItem().toString());
+                } else {
+                    n05_XuatKhoBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                }
             }
         });
 
@@ -469,12 +495,33 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
         Dialog dialog = new Dialog(new javax.swing.JFrame(), true, Dialog.DataType.FLOAT, klKhoHang);
         dialog.setVisible(true);
 
-        Float klCanMua = Float.valueOf(dialog.result);
+        Float klCanMua = null;
+
+        try {
+            if (dialog.result != null && !dialog.result.trim().isEmpty()) {
+                klCanMua = Float.valueOf(dialog.result.trim());
+            }
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if (klCanMua == null) {
+            return;
+        }
 
         ChiTietPhieuXuatDTO cthd = new ChiTietPhieuXuatDTO(ma, nguyenLieu.getMa(), klCanMua);
         dropDuplicateCtpx(cthd);
         addToCart(cthd);
         listCart();
+    }
+
+    private void comboboxCN(String maCN) {
+        if (maCN != null) {
+            boxCN.setVisible(false);
+        } else {
+            n11_NhanVienBUS.getInstance().comboBoxChiNhanh_khongTong(boxCN, null);
+            n07_NguyenLieuBUS.getInstance().searchByName(table, "", boxCN.getSelectedItem().toString());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -497,6 +544,7 @@ public class n05_XuatKhoGUI extends javax.swing.JPanel {
     private javax.swing.JPanel PanelTimKiem;
     private javax.swing.JPanel PanelXuatKho;
     private javax.swing.JTextField TimKiem;
+    private javax.swing.JComboBox<String> boxCN;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane scrollPaneTable;
     private javax.swing.JScrollPane scrollPaneTable1;

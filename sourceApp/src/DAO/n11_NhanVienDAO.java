@@ -17,7 +17,7 @@ public class n11_NhanVienDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM NhanVien";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.NhanVien";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -44,7 +44,7 @@ public class n11_NhanVienDAO {
     }
 
     public int insert(NhanVienDTO a) {
-        String sql = "INSERT INTO NhanVien "
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.NhanVien "
                 + "(MaNhanVien, TenNhanVien, GioiTinhNhanVien, SoDienThoaiNhanVien, NgaySinhNhanVien, "
                 + "ChucVuNhanVien, DiaChi, LuongNhanVien, TrangThaiNhanVien, MaChiNhanh, NgayNghiViec) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, null)";
@@ -81,7 +81,7 @@ public class n11_NhanVienDAO {
     }
 
     public int update(NhanVienDTO a) {
-        String sqlUpdate = "UPDATE NhanVien "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.NhanVien "
                 + "SET TenNhanVien = ?, "
                 + "    GioiTinhNhanVien = ?, "
                 + "    SoDienThoaiNhanVien = ?, "
@@ -98,7 +98,6 @@ public class n11_NhanVienDAO {
         try {
             Connection c = JDBCUtil.getConnection();
 
-            // Truy vấn dữ liệu cũ
             PreparedStatement stSelect = c.prepareStatement(sqlSelect);
             stSelect.setString(1, a.getMa());
             ResultSet rs = stSelect.executeQuery();
@@ -114,7 +113,6 @@ public class n11_NhanVienDAO {
                 Boolean prevTrangThai = rs.getBoolean("TrangThaiNhanVien");
                 String prevMaCN = rs.getString("MaChiNhanh");
 
-                // So sánh dữ liệu, nếu không thay đổi thì return 2
                 if (prevTen.equals(a.getTen())
                         && prevGioiTinh.equals(a.getGioiTinh())
                         && prevSDT.equals(a.getSdt())
@@ -123,16 +121,15 @@ public class n11_NhanVienDAO {
                         && prevDiaChi.equals(a.getDiaChi())
                         && prevLuong.equals(a.getLuong())
                         && prevTrangThai.equals(a.getTrangThai())
-                        && prevMaCN.equals(a.getMaCN())) {
+                        && ((prevMaCN == null && a.getMaCN() == null) || (prevMaCN != null && prevMaCN.equals(a.getMaCN())))) {
                     JDBCUtil.closeConnection(c);
-                    return 2; // Trùng dữ liệu, không cần cập nhật
+                    return 2;
                 }
             } else {
                 JDBCUtil.closeConnection(c);
-                return 0; // Không tìm thấy nhân viên
+                return 0;
             }
 
-            // Thực hiện cập nhật
             PreparedStatement stUpdate = c.prepareStatement(sqlUpdate);
             stUpdate.setString(1, a.getTen());
             stUpdate.setString(2, a.getGioiTinh());
@@ -148,10 +145,10 @@ public class n11_NhanVienDAO {
             int kq = stUpdate.executeUpdate();
             JDBCUtil.closeConnection(c);
 
-            return (kq > 0) ? 1 : 0; // 1: Thành công, 0: Thất bại
+            return (kq > 0) ? 1 : 0;
         } catch (SQLException e) {
             System.out.println("Lỗi cập nhật nhân viên: " + e.getMessage());
-            return 0; // Thất bại
+            return 0;
         }
     }
 
@@ -162,12 +159,12 @@ public class n11_NhanVienDAO {
         } else {
             date = null;
         }
-        String sqlUpdate = "UPDATE NhanVien "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.NhanVien "
                 + "SET TrangThaiNhanVien = ?, "
                 + " NgayNghiViec = ?"
                 + "WHERE MaNhanVien = ?";
 
-        String sqlTaiKhoan = "UPDATE TaiKhoan SET TrangThai = (SELECT TrangThaiNhanVien FROM NhanVien WHERE MaNhanVien = ?) "
+        String sqlTaiKhoan = "UPDATE LINK.QuanCaPhe.dbo.TaiKhoan SET TrangThai = (SELECT TrangThaiNhanVien FROM LINK.QuanCaPhe.dbo.NhanVien WHERE MaNhanVien = ?) "
                 + "WHERE MaNhanVien = ?";
 
         try {
@@ -197,13 +194,19 @@ public class n11_NhanVienDAO {
         }
     }
 
-    public ArrayList<NhanVienDTO> listAll() {
+    public ArrayList<NhanVienDTO> listAll(String MaChiNhanh) {
         ArrayList<NhanVienDTO> list = new ArrayList<>();
-        String sql = "select * from NhanVien\n"
-                + "order by TrangThaiNhanVien desc";
+        String sql = "select * from LINK.QuanCaPhe.dbo.NhanVien\n";
+        if (MaChiNhanh != null) {
+            sql += " where MaChiNhanh = ? ";
+        }
+        sql += " order by TrangThaiNhanVien desc  ";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
+            if (MaChiNhanh != null) {
+                st.setString(1, MaChiNhanh);
+            }
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 NhanVienDTO a = new NhanVienDTO(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
@@ -225,7 +228,7 @@ public class n11_NhanVienDAO {
             String chucVu, String diaChi, Long luong, Boolean trangThai, String maCN) {
         ArrayList<NhanVienDTO> list = new ArrayList<>();
         ArrayList<Object> params = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM NhanVien WHERE 1=1 ");
+        StringBuilder sql = new StringBuilder("SELECT * FROM LINK.QuanCaPhe.dbo.NhanVien WHERE 1=1 ");
 
         if (ma != null && !ma.trim().isEmpty()) {
             sql.append(" AND MaNhanVien LIKE ?");
@@ -263,9 +266,12 @@ public class n11_NhanVienDAO {
             sql.append(" AND TrangThaiNhanVien = ?");
             params.add(trangThai);
         }
-        if (maCN != null && !maCN.trim().isEmpty()) {
+        if (maCN != null) {
             sql.append(" AND MaChiNhanh = ?");
             params.add(maCN);
+        }
+        if (maCN == null) {
+            sql.append(" AND MaChiNhanh is Null ");
         }
 
         sql.append(" order by TrangThaiNhanVien desc");
@@ -274,7 +280,6 @@ public class n11_NhanVienDAO {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql.toString());
 
-            // Gán giá trị tham số vào PreparedStatement
             for (int i = 0; i < params.size(); i++) {
                 st.setObject(i + 1, params.get(i));
             }
@@ -306,7 +311,7 @@ public class n11_NhanVienDAO {
 
     public ArrayList<NhanVienDTO> searchByName(String ten) {
         ArrayList<NhanVienDTO> ds = new ArrayList<>();
-        String sql = "SELECT * FROM NhanVien WHERE TenNhanVien LIKE ? order by TrangThaiNhanVien desc";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhanVien WHERE TenNhanVien LIKE ? order by TrangThaiNhanVien desc";
 
         try {
             Connection c = JDBCUtil.getConnection();
@@ -358,7 +363,7 @@ public class n11_NhanVienDAO {
 
     public NhanVienDTO searchNhanVienByMa(String maNV) {
         NhanVienDTO nv = null;
-        String sql = "SELECT * FROM NhanVien WHERE MaNhanVien = ?";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhanVien WHERE MaNhanVien = ?";
 
         try {
             Connection c = JDBCUtil.getConnection();

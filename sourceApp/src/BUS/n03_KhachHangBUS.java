@@ -62,7 +62,8 @@ public class n03_KhachHangBUS {
         int i = 1;
         for (KhachHangDTO dto : ds) {
             String chitieu = Util.Utils.getInstance().LongToMoney(dto.getChiTieu());
-            model.addRow(new Object[]{dto.getMaKhachHang(), dto.getTenKhachHang(), dto.getGioiTinh(), dto.getSDT(), dto.getNgaySinh(), chitieu});
+            model.addRow(new Object[]{dto.getMaKhachHang(), dto.getTenKhachHang(), dto.getGioiTinh(), dto.getSDT(),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgaySinh().toString()), chitieu});
             i++;
         }
     }
@@ -74,7 +75,8 @@ public class n03_KhachHangBUS {
         int i = 1;
         for (KhachHangDTO dto : ds) {
             String chitieu = Util.Utils.getInstance().LongToMoney(dto.getChiTieu());
-            model.addRow(new Object[]{dto.getMaKhachHang(), dto.getTenKhachHang(), dto.getGioiTinh(), dto.getSDT(), dto.getNgaySinh(), chitieu});
+            model.addRow(new Object[]{dto.getMaKhachHang(), dto.getTenKhachHang(), dto.getGioiTinh(), dto.getSDT(),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgaySinh().toString()), chitieu});
             i++;
         }
         if (ds.isEmpty()) {
@@ -94,7 +96,8 @@ public class n03_KhachHangBUS {
         int i = 1;
         for (KhachHangDTO dto : ds) {
             String chitieu = Util.Utils.getInstance().LongToMoney(dto.getChiTieu());
-            model.addRow(new Object[]{dto.getMaKhachHang(), dto.getTenKhachHang(), dto.getGioiTinh(), dto.getSDT(), dto.getNgaySinh(), chitieu});
+            model.addRow(new Object[]{dto.getMaKhachHang(), dto.getTenKhachHang(), dto.getGioiTinh(), dto.getSDT(),
+                Util.Utils.getInstance().SQLDateString_Transform_normalDateString(dto.getNgaySinh().toString()), chitieu});
             i++;
         }
         if (ds.isEmpty()) {

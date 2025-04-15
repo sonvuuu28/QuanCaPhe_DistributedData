@@ -1,6 +1,7 @@
 package GUI;
 
 import BUS.n07_NguyenLieuBUS;
+import BUS.n11_NhanVienBUS;
 import Util.TableCustom;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -57,6 +58,7 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
         LabelAnhTimKiem = new javax.swing.JLabel();
         PanelTaiLai = new javax.swing.JPanel();
         LabelTaiLai = new javax.swing.JLabel();
+        boxCN = new javax.swing.JComboBox<>();
         BtnBar = new javax.swing.JPanel();
         BtnSua = new javax.swing.JButton();
         BtnThem = new javax.swing.JButton();
@@ -254,6 +256,7 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
         scrollPaneTable.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setPreferredWidth(40);
+            table.getColumnModel().getColumn(3).setPreferredWidth(40);
         }
 
         functionBar.setBackground(new java.awt.Color(255, 255, 255));
@@ -302,23 +305,29 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
         LabelTaiLai.setOpaque(true);
         PanelTaiLai.add(LabelTaiLai);
 
+        boxCN.setPreferredSize(new java.awt.Dimension(140, 22));
+
         javax.swing.GroupLayout functionBarLayout = new javax.swing.GroupLayout(functionBar);
         functionBar.setLayout(functionBarLayout);
         functionBarLayout.setHorizontalGroup(
             functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(functionBarLayout.createSequentialGroup()
                 .addComponent(PanelTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(boxCN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(PanelTaiLai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         functionBarLayout.setVerticalGroup(
             functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(functionBarLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelTimKiem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelTaiLai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(functionBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(PanelTaiLai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(PanelTimKiem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, functionBarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(boxCN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         BtnBar.setBackground(new java.awt.Color(255, 255, 255));
@@ -432,17 +441,32 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
         donVi.setText("");
         TrangThai.setSelectedIndex(0);
         Util.Utils.getInstance().timKiem(TimKiem);
+        if (frame.maCN == null) {
+            n07_NguyenLieuBUS.getInstance().searchByName(table, "", boxCN.getSelectedItem().toString());
+        } else {
+            n07_NguyenLieuBUS.getInstance().listAll(table, frame.maCN);
+        }
+
         TimKiem.setText("Tìm kiếm nhanh theo tên");
-        n07_NguyenLieuBUS.getInstance().listAll(table, frame.maCN);
     }
 
     private void buttonEvents() {
+        comboboxCN(frame.maCN);
         reset();
 
+        boxCN.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                n07_NguyenLieuBUS.getInstance().searchByName(table, "", boxCN.getSelectedItem().toString());
+            }
+        });
         TimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                    n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                    if (frame.maCN == null) {
+                        n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), boxCN.getSelectedItem().toString());
+                    } else {
+                        n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                    }
                 }
             }
         });
@@ -465,7 +489,11 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
 
         LabelAnhTimKiem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                if (frame.maCN == null) {
+                    n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), boxCN.getSelectedItem().toString());
+                } else {
+                    n07_NguyenLieuBUS.getInstance().searchByName(table, TimKiem.getText(), frame.maCN);
+                }
             }
         });
 
@@ -477,7 +505,11 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
                 } else {
                     status = false;
                 }
-                n07_NguyenLieuBUS.getInstance().search(table, ma.getText(), ten.getText(), null, donVi.getText(), status, frame.maCN);
+                if (frame.maCN == null) {
+                    n07_NguyenLieuBUS.getInstance().search(table, ma.getText(), ten.getText(), null, donVi.getText(), status, boxCN.getSelectedItem().toString());
+                } else {
+                    n07_NguyenLieuBUS.getInstance().search(table, ma.getText(), ten.getText(), null, donVi.getText(), status, frame.maCN);
+                }
             }
         });
 
@@ -509,7 +541,7 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
                         } else {
                             status = false;
                         }
-                        boolean i = n07_NguyenLieuBUS.getInstance().insert(ma.getText(), ten.getText(), 
+                        boolean i = n07_NguyenLieuBUS.getInstance().insert(ma.getText(), ten.getText(),
                                 null, donVi.getText(), status, frame.maCN);
                         if (i) {
                             reset();
@@ -541,7 +573,7 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
                                 kl = Float.valueOf(khoiLuong.getText());
                             } catch (Exception e) {
                             }
-                            int i = n07_NguyenLieuBUS.getInstance().update(ma.getText(), ten.getText(), kl, donVi.getText(), 
+                            int i = n07_NguyenLieuBUS.getInstance().update(ma.getText(), ten.getText(), kl, donVi.getText(),
                                     status, frame.maCN);
                             if (i == 1 || i == 0) {
                                 reset();
@@ -571,6 +603,15 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
         });
     }
 
+    private void comboboxCN(String maCN) {
+        if (maCN != null) {
+            boxCN.setVisible(false);
+        } else {
+            n11_NhanVienBUS.getInstance().comboBoxChiNhanh_khongTong(boxCN, null);
+            n07_NguyenLieuBUS.getInstance().searchByName(table, "", boxCN.getSelectedItem().toString());
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Biggest;
     private javax.swing.JPanel Biggest_Wrapper;
@@ -591,6 +632,7 @@ public class n07_NguyenLieuGUI extends javax.swing.JPanel {
     private javax.swing.JTextField TimKiem;
     private javax.swing.JComboBox<String> TrangThai;
     private javax.swing.JPanel Wrapper_Inner;
+    private javax.swing.JComboBox<String> boxCN;
     private javax.swing.JTextField donVi;
     private javax.swing.JPanel functionBar;
     private javax.swing.JLabel jLabel2;

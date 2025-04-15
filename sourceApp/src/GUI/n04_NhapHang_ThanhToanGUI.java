@@ -2,6 +2,7 @@ package GUI;
 
 import BUS.n04_NhapHangBUS;
 import DTO.ChiTietPhieuNhapDTO;
+import Util.ChonCN;
 import Util.Utils;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -366,18 +367,18 @@ public class n04_NhapHang_ThanhToanGUI extends javax.swing.JFrame {
         PanelNoiDungLayout.setHorizontalGroup(
             PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BtnCancel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(Bar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Title, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(NoiDung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(BtnChonNCC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(Bar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Title, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(BtnCancel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         PanelNoiDungLayout.setVerticalGroup(
             PanelNoiDungLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -416,23 +417,31 @@ public class n04_NhapHang_ThanhToanGUI extends javax.swing.JFrame {
 
     private void buttonEvents() {
         String maNV = frame.frame.getMaNV();
-        String maCN = frame.frame.getMaCN();
 
         n04_NhapHangBUS.getInstance().setUp_n04_NhapHang_ThanhToanGUI(ma, ngayLap, nv, tongTienLbl, maNV, tinhTien());
         BtnThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (ncc.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn nhà cung cấp?", "Xác nhận", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận nhập kho?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                String maCN = null;
+                if (frame.frame.maCN == null) {
+                    ChonCN dialog = new ChonCN(new javax.swing.JFrame(), true);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
+                    maCN = dialog.maCN;
+                }
+                if (maCN != null) {
+                    if (ncc.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Vui lòng chọn nhà cung cấp?", "Xác nhận", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận nhập kho?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
-                    if (response == JOptionPane.YES_OPTION) {
-                        boolean hd = n04_NhapHangBUS.getInstance().insert(ma.getText(), tinhTien(), frame.frame.getMaNV(), maNCC, frame.frame.getMaCN());
-                        if (hd) {
-                            n04_NhapHangBUS.getInstance().insertCTPX(frame.dsCart);
-                            frame.reset();
-                            dispose();
+                        if (response == JOptionPane.YES_OPTION) {
+                            boolean hd = n04_NhapHangBUS.getInstance().insert(ma.getText(), tinhTien(), frame.frame.getMaNV(), maNCC, maCN);
+                            if (hd) {
+                                n04_NhapHangBUS.getInstance().insertCTPX(frame.dsCart, maCN);
+                                frame.reset();
+                                dispose();
+                            }
                         }
                     }
                 }

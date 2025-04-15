@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class n05_XuatKhoDAO {
-    
+
     public static n05_XuatKhoDAO getInstance() {
         return new n05_XuatKhoDAO();
     }
-    
+
     public boolean insert(PhieuXuatDTO hd) {
         boolean result = true;
-        String sql = "INSERT INTO PhieuXuatKho(MaPhieuXuatKho, NgayLap, MaNhanVien, MaChiNhanh) "
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.PhieuXuatKho(MaPhieuXuatKho, NgayLap, MaNhanVien, MaChiNhanh) "
                 + "VALUES(?, ?, ?, ?)";
-        
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -34,21 +34,21 @@ public class n05_XuatKhoDAO {
         }
         return result;
     }
-    
+
     public boolean insertChiTietPhieuXuat(ArrayList<ChiTietPhieuXuatDTO> dsChiTiet, String maCN) {
         boolean result = false;
-        String sql = "INSERT INTO ChiTietPhieuXuatKho(MaPhieuXuatKho, MaNguyenLieu, KhoiLuong) VALUES (?, ?, ?)";
-        
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.ChiTietPhieuXuatKho(MaPhieuXuatKho, MaNguyenLieu, KhoiLuong) VALUES (?, ?, ?)";
+
         try (Connection c = JDBCUtil.getConnection(); PreparedStatement prep = c.prepareStatement(sql)) {
-            
+
             for (ChiTietPhieuXuatDTO cthd : dsChiTiet) {
                 prep.setString(1, cthd.getMa());
                 prep.setString(2, cthd.getMaNL());
                 prep.setFloat(3, cthd.getKl());
-                
+
                 prep.addBatch();
             }
-            
+
             int[] rows = prep.executeBatch();
             result = Arrays.stream(rows).allMatch(row -> row > 0); // Kiểm tra tất cả đều thành công
             upDateNguyenLieuDown(dsChiTiet, maCN);
@@ -57,40 +57,42 @@ public class n05_XuatKhoDAO {
         }
         return result;
     }
-    
+
     public void upDateNguyenLieuDown(ArrayList<ChiTietPhieuXuatDTO> dsChiTiet, String maCN) {
-        String sql = "UPDATE NguyenLieuKho "
+        String sql = "UPDATE LINK.QuanCaPhe.dbo.NguyenLieuKho "
                 + "SET KhoiLuong = KhoiLuong - CAST(? AS DECIMAL(18, 6)) "
-                + "WHERE MaNguyenLieu = ?";
-        
+                + "WHERE MaNguyenLieu = ? and MaChiNhanh = ? ";
+
         try (Connection c = JDBCUtil.getConnection(); PreparedStatement prep = c.prepareStatement(sql)) {
-            
+
             for (ChiTietPhieuXuatDTO cthd : dsChiTiet) {
                 BigDecimal kl = BigDecimal.valueOf(cthd.getKl());
-                
+
                 prep.setBigDecimal(1, kl);
                 prep.setString(2, cthd.getMaNL());
+                prep.setString(3, maCN);
+
                 prep.addBatch();
             }
-            
+
             int[] rows = prep.executeBatch(); // Chạy batch một lần
             boolean allSuccess = Arrays.stream(rows).allMatch(row -> row > 0);
             System.out.println(allSuccess ? "Cập nhật thành công!" : "Có lỗi khi cập nhật!");
-            
+
         } catch (SQLException ex) {
             System.out.println("Lỗi insert upDateNguyenLieuDown: " + ex);
         }
     }
-    
+
     public ArrayList<ChiTietPhieuXuatDTO> listAllCtpx(String ma) {
         ArrayList<ChiTietPhieuXuatDTO> list = new ArrayList<>();
         String sql = "SELECT *\n"
-                + "  FROM ChiTietPhieuXuatKho"
+                + "  FROM LINK.QuanCaPhe.dbo.ChiTietPhieuXuatKho"
                 + " where MaPhieuXuatKho = ?";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
-            
+
             ps.setString(1, ma);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -105,18 +107,21 @@ public class n05_XuatKhoDAO {
         }
         return list;
     }
-    
+
     public ArrayList<PhieuXuatDTO> listAll(String ma) {
         ArrayList<PhieuXuatDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM PhieuXuatKho"
-                + " where MaChiNhanh = ?"
-                + " order by MaPhieuXuatKho desc";
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.PhieuXuatKho";
+        if (ma != null) {
+            sql += " where MaChiNhanh = ?";
+        }
+
+        sql += " order by MaPhieuXuatKho desc";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
-            
-            ps.setString(1, ma);
+            if (ma != null) {
+                ps.setString(1, ma);
+            }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 PhieuXuatDTO a = new PhieuXuatDTO(rs.getString("MaPhieuXuatKho"), rs.getDate("NgayLap"),
@@ -130,12 +135,15 @@ public class n05_XuatKhoDAO {
         }
         return list;
     }
-    
+
     public ArrayList<PhieuXuatDTO> search(String ma, Date ngayBD, Date ngayKT, String maCN) {
         ArrayList<PhieuXuatDTO> list = new ArrayList<>();
         ArrayList<Object> params = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("select * from PhieuXuatKho where MaChiNhanh = ?");
-        params.add(maCN);
+        StringBuilder sql = new StringBuilder("select * from LINK.QuanCaPhe.dbo.PhieuXuatKho where 1=1 ");
+        if (maCN != null) {
+            sql.append(" AND MaChiNhanh = ?");
+            params.add(maCN);
+        }
         if (ma != null && !ma.trim().isEmpty()) {
             sql.append(" AND MaPhieuXuatKho LIKE ?");
             params.add("%" + ma + "%");
@@ -152,11 +160,11 @@ public class n05_XuatKhoDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement ps = c.prepareStatement(sql.toString());
-            
+
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
-            
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 PhieuXuatDTO a = new PhieuXuatDTO(rs.getString("MaPhieuXuatKho"), rs.getDate("NgayLap"),
@@ -170,13 +178,10 @@ public class n05_XuatKhoDAO {
         }
         return list;
     }
-    
+
     public ArrayList<NguyenLieuDTO> listAll_KhoHang(String maCN) {
         ArrayList<NguyenLieuDTO> list = new ArrayList<>();
-        String sql = "select * \n"
-                + "from NguyenLieu nl \n"
-                + "join NguyenLieuKho kho on nl.MaNguyenLieu = kho.MaNguyenLieu\n"
-                + "where kho.MaChiNhanh = ? and nl.TrangThai = 1\n";
+        String sql = "exec spud_listAll_NguyenLieu ?";
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
@@ -185,7 +190,7 @@ public class n05_XuatKhoDAO {
             while (rs.next()) {
                 NguyenLieuDTO a = new NguyenLieuDTO(rs.getString("MaNguyenLieu"), rs.getString("TenNguyenLieu"),
                         rs.getFloat("KhoiLuong"), rs.getString("DonVi"), rs.getBoolean("TrangThai"),
-                        rs.getString("MaChiNhanh"));
+                        null);
                 list.add(a);
             }
             JDBCUtil.closeConnection(c);
@@ -195,15 +200,15 @@ public class n05_XuatKhoDAO {
         }
         return list;
     }
-    
+
     public String createID() {
         String ID = "";
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM PhieuXuatKho";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.PhieuXuatKho";
             ResultSet rs = st.executeQuery(sql);
-            
+
             int num = 0;
             if (rs.next()) {
                 if (rs.getInt("total") == 0) {
@@ -211,7 +216,7 @@ public class n05_XuatKhoDAO {
                 }
                 num = rs.getInt("total") + 1;
             }
-            
+
             if (num < 10 && num > 0) {
                 ID = "PXK00" + num;
             } else if (num < 100 && num > 9) {
@@ -226,18 +231,18 @@ public class n05_XuatKhoDAO {
         }
         return ID;
     }
-    
+
     public NhanVienDTO searchNhanVienByMa(String maNV) {
         NhanVienDTO nv = null;
-        String sql = "SELECT * FROM NhanVien WHERE MaNhanVien = ?";
-        
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.NhanVien WHERE MaNhanVien = ?";
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setString(1, maNV);
-            
+
             ResultSet rs = st.executeQuery();
-            
+
             if (rs.next()) {
                 nv = new NhanVienDTO(
                         rs.getString("MaNhanVien"),
@@ -252,7 +257,7 @@ public class n05_XuatKhoDAO {
                         rs.getString("MaChiNhanh"), rs.getDate("NgayNghiViec")
                 );
             }
-            
+
             JDBCUtil.closeConnection(c);
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -260,23 +265,23 @@ public class n05_XuatKhoDAO {
         }
         return nv;
     }
-    
+
     public PhieuXuatDTO searchPhieuXuatByMa(String ma) {
         PhieuXuatDTO pn = null;
-        String sql = "SELECT * FROM PhieuXuatKho WHERE MaPhieuXuatKho = ?";
-        
+        String sql = "SELECT * FROM LINK.QuanCaPhe.dbo.PhieuXuatKho WHERE MaPhieuXuatKho = ?";
+
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);
             st.setString(1, ma);
-            
+
             ResultSet rs = st.executeQuery();
-            
+
             if (rs.next()) {
                 pn = new PhieuXuatDTO(rs.getString("MaPhieuXuatKho"), rs.getDate("NgayLap"),
                         rs.getString("MaNhanVien"), rs.getString("MaChiNhanh"));
             }
-            
+
             JDBCUtil.closeConnection(c);
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -285,26 +290,4 @@ public class n05_XuatKhoDAO {
         return pn;
     }
     
-    public ArrayList<NguyenLieuDTO> listAll_KhoHang() {
-        ArrayList<NguyenLieuDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "  FROM NguyenLieu"
-                + " where TrangThai = 1";
-        try {
-            Connection c = JDBCUtil.getConnection();
-            PreparedStatement st = c.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                NguyenLieuDTO a = new NguyenLieuDTO(rs.getString("MaNguyenLieu"), rs.getString("TenNguyenLieu"),
-                        rs.getFloat("KhoiLuong"), rs.getString("DonVi"), rs.getBoolean("TrangThai"),
-                        rs.getString("MaChiNhanh"));
-                list.add(a);
-            }
-            JDBCUtil.closeConnection(c);
-        } catch (SQLException e) {
-            System.out.println(e);
-            System.out.println("listAll_KhoHang error");
-        }
-        return list;
-    }
 }

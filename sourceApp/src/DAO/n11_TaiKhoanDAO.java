@@ -45,15 +45,7 @@ public class n11_TaiKhoanDAO {
     }
 
     public int insert(TaiKhoanDTO a) {
-//        System.out.println("Mã tkhoan: " + a.getMa());
-//        System.out.println("Tên đăng nhập: " + a.getTen());
-//        System.out.println("Mật khẩu: " + a.getMatKhau());
-//        System.out.println("Mã phân quyền: " + a.getMaPQ());
-//        System.out.println("Mã nhân viên: " + a.getMaNV());
-//        System.out.println("Trạng thái: " + a.isTrangThai());
-//        System.out.println("Mã chi nhánh: " + a.getMaCN());
-
-        String sql = "INSERT INTO TaiKhoan\n"
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.TaiKhoan\n"
                 + "           (MaTaiKhoan\n"
                 + "           ,TenDangNhap\n"
                 + "           ,MatKhau\n"
@@ -86,10 +78,7 @@ public class n11_TaiKhoanDAO {
     }
 
     public int update(String maTK, String maPQ, String matKhau) {
-        System.out.println("Mã tkhoan: " + maTK);
-        System.out.println("Mật khẩu: " + matKhau);
-        System.out.println("Mã phân quyền: " + maPQ);
-        String sqlUpdate = "UPDATE TaiKhoan "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.TaiKhoan "
                 + "SET MaPhanQuyen = ?, "
                 + "    MatKhau = ? "
                 + "WHERE MaTaiKhoan = ?";
@@ -137,7 +126,7 @@ public class n11_TaiKhoanDAO {
     }
 
     public int batTat(String maTK, Boolean trangThai) {
-        String sqlUpdate = "UPDATE TaiKhoan "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.TaiKhoan "
                 + "SET TrangThai = ? "
                 + "WHERE MaTaiKhoan = ?";
 
@@ -171,9 +160,9 @@ public class n11_TaiKhoanDAO {
             JDBCUtil.closeConnection(c);
 
             if (kq > 0) {
-                return 1; // Thành công
+                return 1;
             } else {
-                return 0; // Thất bại
+                return 0;
             }
         } catch (SQLException e) {
             String message = e.getMessage();
@@ -181,10 +170,11 @@ public class n11_TaiKhoanDAO {
         }
     }
 
-    public ArrayList<Object[]> listPhanQuyen() {
+    public ArrayList<Object[]> listPhanQuyen(String maNV) {
         ArrayList<Object[]> list = new ArrayList<>();
-        String sql = "select MaPhanQuyen, TenQuyen from PhanQuyen\n"
-                + "order by TrangThai desc";
+        int myLevel = n11_PhanQuyenDAO.getInstance().searchDoUuTienByMaNV(maNV);
+        String sql = "select MaPhanQuyen, TenQuyen from PhanQuyen  "
+                + "  where TrangThai = 1 and DoUuTien >= " + myLevel;
         try {
             Connection c = JDBCUtil.getConnection();
             PreparedStatement st = c.prepareStatement(sql);

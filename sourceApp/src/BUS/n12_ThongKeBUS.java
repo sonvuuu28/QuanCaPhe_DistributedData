@@ -3,6 +3,7 @@ package BUS;
 import DAO.n12_ThongKeDAO;
 import Util.Utils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import org.knowm.xchart.CategoryChart;
@@ -57,17 +58,16 @@ public class n12_ThongKeBUS {
 
     // Trang mặc định
     public void setUpHeaderFirstPage(JLabel doanhThu, JLabel hd, JLabel kh, JLabel mon, String maCN) {
-        Long doanhThuLong = n12_ThongKeDAO.getInstance().getDoanhThuToday(maCN);
-        doanhThu.setText(Utils.getInstance().LongToMoney(doanhThuLong));
+        HashMap<String, Long> mapDoanhThu = n12_ThongKeDAO.getInstance().getDoanhThuToday(maCN);
+        HashMap<String, Integer> mapHoaDon = n12_ThongKeDAO.getInstance().getSLHoaDonToday(maCN);
+        HashMap<String, Integer> mapMon = n12_ThongKeDAO.getInstance().getSLMonToday(maCN);
+        HashMap<String, Integer> mapKhach = n12_ThongKeDAO.getInstance().getSLKhachHangToday(maCN);
 
-        int slHD = n12_ThongKeDAO.getInstance().getSLHoaDonToday(maCN);
-        hd.setText(slHD + " hóa đơn");
-
-        int slMon = n12_ThongKeDAO.getInstance().getSLMonToday(maCN);
-        mon.setText(slMon + " món");
-
-        int slKH = n12_ThongKeDAO.getInstance().getSLKhachHangToday(maCN);
-        kh.setText(slKH + " khách");
+        // Cập nhật giao diện
+        doanhThu.setText(Utils.getInstance().LongToMoney(mapDoanhThu.get("doanhThu")));
+        hd.setText(mapHoaDon.get("soHoaDon") + " hóa đơn");
+        mon.setText(mapMon.get("soLuongMon") + " món");
+        kh.setText(mapKhach.get("soKhach") + " khách");
     }
 
     public ArrayList<Long> ListDoanhThuTuan(String maCN) {
@@ -76,8 +76,8 @@ public class n12_ThongKeBUS {
 
     // Trang doanh thu
     public void setUpHeaderSecondPage(JLabel ngay, JLabel tuan, JLabel thang, JLabel nam, String maCN) {
-        Long doanhThuNgay = n12_ThongKeDAO.getInstance().getDoanhThuToday(maCN);
-        ngay.setText(Utils.getInstance().LongToMoney(doanhThuNgay));
+        HashMap<String, Long> mapDoanhThu = n12_ThongKeDAO.getInstance().getDoanhThuToday(maCN);
+        ngay.setText(Utils.getInstance().LongToMoney(mapDoanhThu.get("doanhThu")));
 
         Long doanhThuTuan = n12_ThongKeDAO.getInstance().getDoanhThuTuan(maCN);
         tuan.setText(Utils.getInstance().LongToMoney(doanhThuTuan));
@@ -171,11 +171,12 @@ public class n12_ThongKeBUS {
         ArrayList<Object[]> ds = n12_ThongKeDAO.getInstance().ListThongKeKho(maCN);
         for (Object[] row : ds) {
             model.addRow(new Object[]{
-                row[0], 
-                row[1], 
+                row[0],
+                row[1],
                 row[3],
                 row[4],
-                row[2]
+                row[2],
+                row[5]
             });
         }
     }

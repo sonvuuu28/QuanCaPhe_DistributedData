@@ -16,7 +16,7 @@ public class n09_KhuyenMaiDAO {
         try {
             Connection c = JDBCUtil.getConnection();
             Statement st = c.createStatement();
-            String sql = "SELECT COUNT(*) AS total FROM KhuyenMai";
+            String sql = "SELECT COUNT(*) AS total FROM LINK.QuanCaPhe.dbo.KhuyenMai";
             ResultSet rs = st.executeQuery(sql);
 
             int num = 0;
@@ -43,7 +43,7 @@ public class n09_KhuyenMaiDAO {
     }
 
     public int insert(KhuyenMaiDTO a) {
-        String sql = "INSERT INTO KhuyenMai\n"
+        String sql = "INSERT INTO LINK.QuanCaPhe.dbo.KhuyenMai\n"
                 + "           (MaKhuyenMai\n"
                 + "           ,TenKhuyenMai\n"
                 + "           ,PhanTram\n"
@@ -76,7 +76,7 @@ public class n09_KhuyenMaiDAO {
     }
 
     public int update(KhuyenMaiDTO a) {
-        String sqlUpdate = "UPDATE KhuyenMai "
+        String sqlUpdate = "UPDATE LINK.QuanCaPhe.dbo.KhuyenMai "
                 + "SET TenKhuyenMai = ?, "
                 + "    PhanTram = ?, "
                 + "    NgayBatDau = ?, "
@@ -104,18 +104,17 @@ public class n09_KhuyenMaiDAO {
                 Long previousChiTieu = rs.getLong("ChiTieu");
                 Boolean previousisMember = rs.getBoolean("isMember");
 
-                // So sánh dữ liệu
                 if (previousTen.equals(a.getTen()) && previousPhanTram == a.getPhanTram()
                         && previousNgayBatDau.equals(a.getNgayBatDau())
                         && previousNgayKetThuc.equals(a.getNgayKetThuc())
                         && previousChiTieu == a.getPhanTram()
                         && previousisMember == a.isIsMember()) {
                     JDBCUtil.closeConnection(c);
-                    return 2; // Trùng dữ liệu
+                    return 2; 
                 }
             } else {
                 JDBCUtil.closeConnection(c);
-                return 0; // Không tìm thấy mã CaLam
+                return 0; 
             }
 
             // Thực hiện cập nhật
@@ -132,9 +131,9 @@ public class n09_KhuyenMaiDAO {
             JDBCUtil.closeConnection(c);
 
             if (kq > 0) {
-                return 1; // Thành công
+                return 1; 
             } else {
-                return 0; // Thất bại
+                return 0; 
             }
         } catch (SQLException e) {
             System.out.println("update error");
@@ -145,12 +144,12 @@ public class n09_KhuyenMaiDAO {
 
     public ArrayList<KhuyenMaiDTO> listAll(Boolean isMem) {
         ArrayList<KhuyenMaiDTO> list = new ArrayList<>();
-        String sql = "SELECT *\n, \n"
+        String sql = "SELECT *, "
                 + "	case\n"
                 + "		when NgayBatDau <= GETDATE() and NgayKetThuc >= GETDATE() then 1\n"
                 + "		else 0\n"
                 + "	end as HieuLuc"
-                + "  FROM KhuyenMai where isMember = ? "
+                + "  FROM LINK.QuanCaPhe.dbo.KhuyenMai where isMember = ? "
                 + " order by HieuLuc desc";
         try {
             Connection c = JDBCUtil.getConnection();
@@ -179,7 +178,7 @@ public class n09_KhuyenMaiDAO {
                 + "		when NgayBatDau <= GETDATE() and NgayKetThuc >= GETDATE() then 1\n"
                 + "		else 0\n"
                 + "	end as HieuLuc		\n"
-                + "from KhuyenMai WHERE 1=1 ");
+                + "from LINK.QuanCaPhe.dbo.KhuyenMai WHERE 1=1 ");
 
         if (ma != null && !ma.trim().isEmpty()) {
             sql.append(" AND MaKhuyenMai LIKE ?");

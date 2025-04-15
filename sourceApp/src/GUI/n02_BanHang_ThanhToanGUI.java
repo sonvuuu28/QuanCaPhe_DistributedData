@@ -2,6 +2,7 @@ package GUI;
 
 import BUS.*;
 import DTO.*;
+import Util.ChonCN;
 import Util.Utils;
 import java.awt.*;
 import java.sql.Date;
@@ -490,38 +491,47 @@ public class n02_BanHang_ThanhToanGUI extends javax.swing.JFrame {
         BtnThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận tạo hóa đơn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                String maCN = null;
+                if (frame.getMaCN() == null) {
+                    ChonCN dialog = new ChonCN(new javax.swing.JFrame(), true);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
+                    maCN = dialog.maCN;
+                }
+                if (maCN != null) {
+                    int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận tạo hóa đơn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
-                if (response == JOptionPane.YES_OPTION) {
-                    Long tien = null;
-                    try {
-                        tien = Util.Utils.getInstance().MoneyToLong(tongTien.getText());
-                    } catch (Exception e) {
-                    }
+                    if (response == JOptionPane.YES_OPTION) {
+                        Long tien = null;
+                        try {
+                            tien = Util.Utils.getInstance().MoneyToLong(tongTien.getText());
+                        } catch (Exception e) {
+                        }
 
-                    String maKH = null;
-                    try {
-                        maKH = khachHang.getMaKhachHang();
-                    } catch (Exception e) {
-                    }
-                    String maKMMember = null;
-                    try {
-                        maKMMember = khuyenMaiMember.getMa();
-                    } catch (Exception e) {
-                    }
-                    String maKM = null;
-                    try {
-                        KhuyenMaiDTO aKm = (KhuyenMaiDTO) km.getSelectedItem();
-                        maKM = aKm.getMa();
-                    } catch (Exception e) {
-                    }
-                    boolean hd = n02_BanHangBUS.getInstance().insert(ma.getText(), tien, frame.getMaNV(), maKH,
-                            maKM, maKMMember, frame.getMaCN());
-                    if (hd) {
-                        n02_BanHangBUS.getInstance().insertCTHD(frame.dsCart);
-                        frame.dsCart = new ArrayList<>();
-                        frame.reset();
-                        dispose();
+                        String maKH = null;
+                        try {
+                            maKH = khachHang.getMaKhachHang();
+                        } catch (Exception e) {
+                        }
+                        String maKMMember = null;
+                        try {
+                            maKMMember = khuyenMaiMember.getMa();
+                        } catch (Exception e) {
+                        }
+                        String maKM = null;
+                        try {
+                            KhuyenMaiDTO aKm = (KhuyenMaiDTO) km.getSelectedItem();
+                            maKM = aKm.getMa();
+                        } catch (Exception e) {
+                        }
+                        boolean hd = n02_BanHangBUS.getInstance().insert(ma.getText(), tien, frame.getMaNV(), maKH,
+                                maKM, maKMMember, maCN);
+                        if (hd) {
+                            n02_BanHangBUS.getInstance().insertCTHD(frame.dsCart);
+                            frame.dsCart = new ArrayList<>();
+                            frame.reset();
+                            dispose();
+                        }
                     }
                 }
             }
@@ -549,7 +559,8 @@ public class n02_BanHang_ThanhToanGUI extends javax.swing.JFrame {
                 tongTien.setText(Util.Utils.getInstance().LongToMoney(tinhTienDiscount(TongTien, phanTramKhuyenMai,
                         khuyenMaiMember)));
             }
-        });
+        }
+        );
 
         BtnChonKhach.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override

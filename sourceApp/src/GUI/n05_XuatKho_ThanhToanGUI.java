@@ -1,6 +1,7 @@
 package GUI;
 
 import BUS.*;
+import Util.ChonCN;
 import Util.Utils;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -334,14 +335,23 @@ public class n05_XuatKho_ThanhToanGUI extends javax.swing.JFrame {
         BtnThanhToan.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận xuất kho?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                String maCN = null;
+                if (frame.frame.maCN == null) {
+                    ChonCN dialog = new ChonCN(new javax.swing.JFrame(), true);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
+                    maCN = dialog.maCN;
+                }
+                if (maCN != null) {
+                    int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận xuất kho?", "Xác nhận", JOptionPane.YES_NO_OPTION);
 
-                if (response == JOptionPane.YES_OPTION) {
-                    boolean hd = n05_XuatKhoBUS.getInstance().insert(ma.getText(), frame.frame.getMaNV(), frame.frame.getMaCN());
-                    if (hd) {
-                        n05_XuatKhoBUS.getInstance().insertCTPX(frame.dsCart, frame.frame.maCN);
-                        frame.reset();
-                        dispose();
+                    if (response == JOptionPane.YES_OPTION) {
+                        boolean hd = n05_XuatKhoBUS.getInstance().insert(ma.getText(), frame.frame.getMaNV(), maCN);
+                        if (hd) {
+                            n05_XuatKhoBUS.getInstance().insertCTPX(frame.dsCart, maCN);
+                            frame.reset();
+                            dispose();
+                        }
                     }
                 }
             }

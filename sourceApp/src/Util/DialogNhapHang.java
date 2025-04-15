@@ -47,7 +47,7 @@ public class DialogNhapHang extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 String text = donGia.getText();
                 text = text.replaceAll("[^\\d]", "");
-                text = text.replaceFirst("^0+", "");
+//                text = text.replaceFirst("^0+", "");
                 if (!text.isEmpty()) {
                     try {
                         Long giaDenLong = Long.valueOf(text);
@@ -99,7 +99,7 @@ public class DialogNhapHang extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 String text = textField.getText();
                 text = text.replaceAll("[^\\d]", ""); // Chỉ giữ số
-                text = text.replaceFirst("^0+", ""); // Xóa số 0 đầu (nếu có)
+//                text = text.replaceFirst("^0+", ""); // Xóa số 0 đầu (nếu có)
                 textField.setText(text);
             }
         });
@@ -109,17 +109,18 @@ public class DialogNhapHang extends javax.swing.JDialog {
         textField.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                textField.requestFocus();
                 String text = textField.getText();
-
-                text = text.replaceAll("[^\\d.]", ""); // Chỉ giữ số và dấu chấm
-                text = text.replaceAll("\\.{2,}", "."); // Xóa dấu chấm nếu có liên tiếp
-                text = text.replaceFirst("^0+(?!\\.)", ""); // Xóa số 0 đầu nếu không phải "0."
-
+                // Chỉ giữ số và dấu chấm
+                text = text.replaceAll("[^\\d.]", "");
+                // Xóa dấu chấm nếu có liên tiếp
+                text = text.replaceAll("\\.{2,}", ".");
+                // Giữ lại số 0 đầu nếu là "0" hoặc "0.xxx", nên không xoá nữa
+                // Nhưng chỉ cho phép 1 dấu chấm duy nhất
                 int dotIndex = text.indexOf(".");
                 if (dotIndex != -1 && text.indexOf(".", dotIndex + 1) != -1) {
                     text = text.substring(0, dotIndex + 1) + text.substring(dotIndex + 2).replace(".", "");
                 }
+
                 textField.setText(text);
             }
         });
