@@ -497,6 +497,8 @@ public class n02_BanHang_ThanhToanGUI extends javax.swing.JFrame {
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
                     maCN = dialog.maCN;
+                } else {
+                    maCN = frame.getMaCN();
                 }
                 if (maCN != null) {
                     int response = JOptionPane.showConfirmDialog(null, "Bạn xác nhận tạo hóa đơn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
@@ -526,6 +528,7 @@ public class n02_BanHang_ThanhToanGUI extends javax.swing.JFrame {
                         }
                         boolean hd = n02_BanHangBUS.getInstance().insert(ma.getText(), tien, frame.getMaNV(), maKH,
                                 maKM, maKMMember, maCN);
+                        System.out.println(maCN);
                         if (hd) {
                             n02_BanHangBUS.getInstance().insertCTHD(frame.dsCart);
                             frame.dsCart = new ArrayList<>();

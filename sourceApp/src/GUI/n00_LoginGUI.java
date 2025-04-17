@@ -263,6 +263,10 @@ public class n00_LoginGUI extends javax.swing.JFrame {
                 nameWithPorts = "LAPTOP-VNOPB5Q7\\NODE1:1434";
                 serverTongValid = false;
                 break;
+            case 2:
+                nameWithPorts = "LAPTOP-VNOPB5Q7\\NODE2:1435";
+                serverTongValid = false;
+                break;
             default:
                 System.out.println("server set lỗi");
         }
